@@ -1,0 +1,1896 @@
+docker build \
+--tag gcr.io/fuzzbench/builders/benchmark/libpng_libpng_read_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/benchmark/libpng_libpng_read_fuzzer \
+--file benchmarks/libpng_libpng_read_fuzzer/Dockerfile \
+benchmarks/libpng_libpng_read_fuzzer
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.45kB done
+#1 WARN: WorkdirRelativePath: Relative workdir "libpng" can have unexpected results if the base image changes (line 36)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/9] FROM gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/benchmark/libpng_libpng_read_fuzzer
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 3.84kB 0.0s done
+#6 DONE 0.0s
+
+#7 [8/9] ADD seeds /opt/seeds
+#7 CACHED
+
+#8 [2/9] RUN apt-get update &&     apt-get install -y     make     autoconf     automake     libtool     zlib1g-dev
+#8 CACHED
+
+#9 [7/9] RUN wget --no-check-certificate -qO /out/libpng_read_fuzzer.dict     https://raw.githubusercontent.com/google/fuzzing/master/dictionaries/png.dict
+#9 CACHED
+
+#10 [4/9] RUN git clone         https://github.com/glennrp/libpng.git
+#10 CACHED
+
+#11 [6/9] WORKDIR libpng
+#11 CACHED
+
+#12 [3/9] RUN git clone         --depth 1         --branch v1.2.13         https://github.com/madler/zlib.git
+#12 CACHED
+
+#13 [5/9] RUN cp libpng/contrib/oss-fuzz/build.sh /src
+#13 CACHED
+
+#14 [9/9] COPY * /src/
+#14 CACHED
+
+#15 exporting to image
+#15 exporting layers done
+#15 preparing layers for inline cache done
+#15 writing image sha256:129a4ec2f811e6e3eefb7c16bc11c59c02acfdce1a1e06a00571bb06aafa32dc done
+#15 naming to gcr.io/fuzzbench/builders/benchmark/libpng_libpng_read_fuzzer done
+#15 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - WorkdirRelativePath: Relative workdir "libpng" can have unexpected results if the base image changes (line 36)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer-intermediate \
+--build-arg parent_image=gcr.io/fuzzbench/builders/benchmark/libpng_libpng_read_fuzzer \
+--file fuzzers/aflmmbb/builder.Dockerfile \
+fuzzers/aflmmbb
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from builder.Dockerfile
+#1 transferring dockerfile: 2.90kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/builders/benchmark/libpng_libpng_read_fuzzer:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer-intermediate
+#4 DONE 0.0s
+
+#5 [ 1/13] FROM gcr.io/fuzzbench/builders/benchmark/libpng_libpng_read_fuzzer:latest
+#5 DONE 0.0s
+
+#6 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#6 CACHED
+
+#7 [ 8/13] RUN apt-get install -y python3-pip # for Unicorn mode
+#7 CACHED
+
+#8 [ 3/13] RUN apt-get install -y lld-14 llvm-14 llvm-14-dev clang-14 ||     apt-get install -y lld llvm llvm-dev clang
+#8 CACHED
+
+#9 [ 6/13] RUN apt-get install -y cpio libcapstone-dev # for Nyx mode
+#9 CACHED
+
+#10 [ 4/13] RUN apt-get install -y gcc-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-plugin-dev     libstdc++-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-dev
+#10 CACHED
+
+#11 [ 5/13] RUN apt-get install -y ninja-build # for QEMU mode
+#11 CACHED
+
+#12 [ 2/13] RUN apt-get update &&     apt-get install -y     build-essential python3-dev automake cmake git flex bison     libglib2.0-dev libpixman-1-dev python3-setuptools cargo libgtk-3-dev
+#12 CACHED
+
+#13 [11/13] RUN cd /afl &&     unset CFLAGS CXXFLAGS &&     export CC=clang AFL_NO_X86=1 &&     PYTHON_INCLUDE=/ make &&     cp utils/aflpp_driver/libAFLDriver.a /
+#13 CACHED
+
+#14 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install
+#14 CACHED
+
+#15 [ 7/13] RUN apt-get install -y wget curl # for Frida mode
+#15 CACHED
+
+#16 [ 9/13] RUN echo "dont cache3"
+#16 CACHED
+
+#17 [13/13] RUN cd /afl/custom_mutators/examples &&     cc -O3 -fPIC -shared -g -o custom_post_run.so -I../../include set.c custom_post_run.c
+#17 CACHED
+
+#18 exporting to image
+#18 exporting layers done
+#18 preparing layers for inline cache 0.0s done
+#18 writing image sha256:46c37ac7327f4c58c2901f22fd7f7283b2b4ca8b6028632291ff48edcad32720 done
+#18 naming to gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer-intermediate done
+#18 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+docker pull ubuntu:focal
+focal: Pulling from library/ubuntu
+Digest: sha256:8e5c4f0285ecbb4ead070431d29b576a530d3166df73ec44affc1cd27555141b
+Status: Image is up to date for ubuntu:focal
+docker.io/library/ubuntu:focal
+docker build \
+--tag gcr.io/fuzzbench/base-image \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/base-image \
+--file docker/base-image/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.34kB done
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:focal
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 220B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/base-image
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/ubuntu:focal
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 711B done
+#6 DONE 0.0s
+
+#7 [4/7] COPY ./requirements.txt /tmp
+#7 CACHED
+
+#8 [3/7] RUN cd /tmp/ &&     curl -O https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tar.xz &&     tar -xvf Python-3.10.8.tar.xz > /dev/null &&     cd Python-3.10.8 &&     ./configure         --enable-loadable-sqlite-extensions         --enable-optimizations         > /dev/null &&     make -j install > /dev/null &&     rm -r /tmp/Python-3.10.8.tar.xz /tmp/Python-3.10.8 &&     ln -s /usr/local/bin/python3 /usr/local/bin/python &&     ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+#8 CACHED
+
+#9 [2/7] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     build-essential     zlib1g-dev     libssl-dev     libffi-dev     libsqlite3-dev     libbz2-dev     liblzma-dev
+#9 CACHED
+
+#10 [6/7] RUN apt-get update &&     apt-get install -y     apt-transport-https     ca-certificates     rsync     gnupg
+#10 CACHED
+
+#11 [5/7] RUN pip install -r /tmp/requirements.txt
+#11 CACHED
+
+#12 [7/7] RUN echo "deb https://packages.cloud.google.com/apt cloud-sdk main"     | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg     | apt-key add - &&     apt-get update &&     apt-get install -y google-cloud-cli
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 preparing layers for inline cache done
+#13 writing image sha256:dd830f7dc82e707e33df9b6b3d8e14b247937e4b6486bcbb7c75939c3f60ea99 done
+#13 naming to gcr.io/fuzzbench/base-image done
+#13 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer \
+--build-arg benchmark=libpng_libpng_read_fuzzer \
+--build-arg fuzzer=aflmmbb \
+--build-arg parent_image=gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer-intermediate \
+--no-cache \
+--file docker/benchmark-builder/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.50kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer-intermediate:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer
+#5 DONE 0.0s
+
+#6 [stage-1  1/15] FROM gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer-intermediate:latest
+#6 CACHED
+
+#7 [base-image 1/1] FROM gcr.io/fuzzbench/base-image:latest
+#7 CACHED
+
+#8 [internal] load build context
+#8 transferring context: 979.14kB 0.1s done
+#8 DONE 0.1s
+
+#9 [stage-1  2/15] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     zlib1g-dev     libssl-dev     libffi-dev
+#9 0.296 Get:1 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+#9 0.505 Get:2 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [4252 kB]
+#9 0.529 Hit:3 http://archive.ubuntu.com/ubuntu focal InRelease
+#9 0.633 Get:4 http://archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+#9 0.665 Get:5 http://security.ubuntu.com/ubuntu focal-security/main i386 Packages [1053 kB]
+#9 0.682 Get:6 http://security.ubuntu.com/ubuntu focal-security/universe i386 Packages [861 kB]
+#9 0.697 Get:7 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1301 kB]
+#9 0.719 Get:8 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [4389 kB]
+#9 1.108 Get:9 http://archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
+#9 1.309 Get:10 http://archive.ubuntu.com/ubuntu focal-updates/universe i386 Packages [1021 kB]
+#9 1.571 Get:11 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [4730 kB]
+#9 1.813 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/main i386 Packages [1332 kB]
+#9 1.847 Get:13 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [4577 kB]
+#9 1.954 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1593 kB]
+#9 2.408 Fetched 25.5 MB in 2s (11.9 MB/s)
+#9 2.408 Reading package lists...
+#9 3.575 Reading package lists...
+#9 4.693 Building dependency tree...
+#9 4.918 Reading state information...
+#9 4.941 Calculating upgrade...
+#9 5.485 The following packages will be upgraded:
+#9 5.485   apt base-files binutils binutils-common binutils-dev
+#9 5.485   binutils-x86-64-linux-gnu bsdutils ca-certificates e2fsprogs fdisk
+#9 5.485   gir1.2-harfbuzz-0.0 git git-man krb5-locales less libapr1 libaprutil1
+#9 5.485   libapt-pkg6.0 libasn1-8-heimdal libbinutils libc-bin libc-dev-bin libc6
+#9 5.485   libc6-dev libc6-dev-i386 libc6-dev-x32 libc6-i386 libc6-x32 libcap2
+#9 5.485   libcom-err2 libctf-nobfd0 libctf0 libcurl3-gnutls libext2fs2 libfdisk1
+#9 5.485   libgnutls30 libgssapi-krb5-2 libgssapi3-heimdal libharfbuzz-dev
+#9 5.485   libharfbuzz-gobject0 libharfbuzz-icu0 libharfbuzz0b libhcrypto4-heimdal
+#9 5.485   libheimbase1-heimdal libheimntlm0-heimdal libhx509-5-heimdal libk5crypto3
+#9 5.485   libkrb5-26-heimdal libkrb5-3 libkrb5support0 libldap-2.4-2 libldap-common
+#9 5.485   libnghttp2-14 libpam-modules libpam-modules-bin libpam-runtime libpam0g
+#9 5.485   libperl5.30 libprocps8 libpython3.8 libpython3.8-dev libpython3.8-minimal
+#9 5.485   libpython3.8-stdlib libroken18-heimdal libsmartcols1 libsqlite3-0 libss2
+#9 5.485   libssh-4 libssl-dev libssl1.1 libtasn1-6 libudev1 libwind0-heimdal
+#9 5.485   libx11-data libxml2 linux-libc-dev login logsave mount ncurses-base
+#9 5.485   ncurses-bin openssh-client openssl passwd perl perl-base perl-modules-5.30
+#9 5.485   procps python3.8 python3.8-dev python3.8-minimal rsync tar tzdata unzip
+#9 5.485   util-linux
+#9 5.681 96 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 5.681 Need to get 64.5 MB of archives.
+#9 5.681 After this operation, 477 kB of additional disk space will be used.
+#9 5.681 Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-x32 amd64 2.31-0ubuntu9.17 [1975 kB]
+#9 6.406 Get:2 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-i386 amd64 2.31-0ubuntu9.17 [1902 kB]
+#9 6.466 Get:3 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev amd64 2.31-0ubuntu9.17 [2521 kB]
+#9 6.564 Get:4 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-dev-bin amd64 2.31-0ubuntu9.17 [71.8 kB]
+#9 6.565 Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-i386 amd64 2.31-0ubuntu9.17 [2726 kB]
+#9 6.618 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-x32 amd64 2.31-0ubuntu9.17 [2779 kB]
+#9 6.688 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 linux-libc-dev amd64 5.4.0-208.228 [1118 kB]
+#9 6.708 Get:8 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6 amd64 2.31-0ubuntu9.17 [2721 kB]
+#9 6.774 Get:9 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 base-files amd64 11ubuntu5.8 [60.3 kB]
+#9 6.775 Get:10 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 bsdutils amd64 1:2.34-0.1ubuntu9.6 [63.3 kB]
+#9 6.776 Get:11 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 login amd64 1:4.8.1-1ubuntu5.20.04.5 [220 kB]
+#9 6.781 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ncurses-bin amd64 6.2-0ubuntu2.1 [172 kB]
+#9 6.784 Get:13 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libperl5.30 amd64 5.30.0-9ubuntu0.5 [3941 kB]
+#9 6.880 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl amd64 5.30.0-9ubuntu0.5 [224 kB]
+#9 6.883 Get:15 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl-base amd64 5.30.0-9ubuntu0.5 [1514 kB]
+#9 6.910 Get:16 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl-modules-5.30 all 5.30.0-9ubuntu0.5 [2739 kB]
+#9 6.979 Get:17 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tar amd64 1.30+dfsg-7ubuntu0.20.04.4 [240 kB]
+#9 6.982 Get:18 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libfdisk1 amd64 2.34-0.1ubuntu9.6 [175 kB]
+#9 6.985 Get:19 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libsmartcols1 amd64 2.34-0.1ubuntu9.6 [100 kB]
+#9 6.987 Get:20 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 fdisk amd64 2.34-0.1ubuntu9.6 [120 kB]
+#9 6.990 Get:21 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 util-linux amd64 2.34-0.1ubuntu9.6 [1022 kB]
+#9 7.008 Get:22 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-bin amd64 2.31-0ubuntu9.17 [634 kB]
+#9 7.027 Get:23 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ncurses-base all 6.2-0ubuntu2.1 [18.9 kB]
+#9 7.027 Get:24 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libudev1 amd64 245.4-4ubuntu3.24 [75.2 kB]
+#9 7.028 Get:25 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libapt-pkg6.0 amd64 2.0.10 [843 kB]
+#9 7.099 Get:26 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libtasn1-6 amd64 4.16.0-2ubuntu0.1 [38.6 kB]
+#9 7.100 Get:27 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgnutls30 amd64 3.6.13-2ubuntu1.12 [829 kB]
+#9 7.119 Get:28 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 apt amd64 2.0.10 [1280 kB]
+#9 7.145 Get:29 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam0g amd64 1.3.1-5ubuntu4.7 [55.4 kB]
+#9 7.146 Get:30 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-modules-bin amd64 1.3.1-5ubuntu4.7 [41.2 kB]
+#9 7.147 Get:31 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-modules amd64 1.3.1-5ubuntu4.7 [261 kB]
+#9 7.185 Get:32 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 logsave amd64 1.45.5-2ubuntu1.2 [10.2 kB]
+#9 7.185 Get:33 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libext2fs2 amd64 1.45.5-2ubuntu1.2 [183 kB]
+#9 7.189 Get:34 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 e2fsprogs amd64 1.45.5-2ubuntu1.2 [527 kB]
+#9 7.200 Get:35 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 mount amd64 2.34-0.1ubuntu9.6 [115 kB]
+#9 7.272 Get:36 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [514 kB]
+#9 7.282 Get:37 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [3950 kB]
+#9 7.373 Get:38 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8 amd64 3.8.10-0ubuntu1~20.04.15 [1626 kB]
+#9 7.399 Get:39 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl-dev amd64 1.1.1f-1ubuntu2.24 [1586 kB]
+#9 7.427 Get:40 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl1.1 amd64 1.1.1f-1ubuntu2.24 [1323 kB]
+#9 7.471 Get:41 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8 amd64 3.8.10-0ubuntu1~20.04.15 [387 kB]
+#9 7.477 Get:42 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-stdlib amd64 3.8.10-0ubuntu1~20.04.15 [1675 kB]
+#9 7.506 Get:43 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [1901 kB]
+#9 7.560 Get:44 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [720 kB]
+#9 7.572 Get:45 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libsqlite3-0 amd64 3.31.1-4ubuntu0.6 [549 kB]
+#9 7.582 Get:46 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 rsync amd64 3.1.3-8ubuntu0.9 [323 kB]
+#9 7.588 Get:47 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-runtime all 1.3.1-5ubuntu4.7 [37.3 kB]
+#9 7.589 Get:48 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 passwd amd64 1:4.8.1-1ubuntu5.20.04.5 [797 kB]
+#9 7.602 Get:49 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcom-err2 amd64 1.45.5-2ubuntu1.2 [9580 B]
+#9 7.612 Get:50 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libprocps8 amd64 2:3.3.16-1ubuntu2.4 [33.1 kB]
+#9 7.615 Get:51 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libss2 amd64 1.45.5-2ubuntu1.2 [11.3 kB]
+#9 7.615 Get:52 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 procps amd64 2:3.3.16-1ubuntu2.4 [232 kB]
+#9 7.699 Get:53 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssl amd64 1.1.1f-1ubuntu2.24 [621 kB]
+#9 7.711 Get:54 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ca-certificates all 20240203~20.04.1 [159 kB]
+#9 7.713 Get:55 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 less amd64 551-1ubuntu0.3 [123 kB]
+#9 7.716 Get:56 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcap2 amd64 1:2.32-1ubuntu0.2 [15.7 kB]
+#9 7.717 Get:57 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libxml2 amd64 2.9.10+dfsg-5ubuntu0.20.04.9 [641 kB]
+#9 7.728 Get:58 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tzdata all 2024b-0ubuntu0.20.04.1 [299 kB]
+#9 7.732 Get:59 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 krb5-locales all 1.17-6ubuntu4.8 [11.6 kB]
+#9 7.785 Get:60 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi-krb5-2 amd64 1.17-6ubuntu4.8 [121 kB]
+#9 7.788 Get:61 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-3 amd64 1.17-6ubuntu4.8 [329 kB]
+#9 7.793 Get:62 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5support0 amd64 1.17-6ubuntu4.8 [31.1 kB]
+#9 7.871 Get:63 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libk5crypto3 amd64 1.17-6ubuntu4.8 [80.4 kB]
+#9 7.874 Get:64 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libx11-data all 2:1.6.9-2ubuntu1.6 [114 kB]
+#9 7.875 Get:65 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git-man all 1:2.25.1-1ubuntu3.14 [887 kB]
+#9 7.896 Get:66 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libroken18-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [42.5 kB]
+#9 7.896 Get:67 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libasn1-8-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [181 kB]
+#9 7.899 Get:68 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libheimbase1-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [30.4 kB]
+#9 7.899 Get:69 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhcrypto4-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [88.1 kB]
+#9 7.957 Get:70 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libwind0-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [47.7 kB]
+#9 7.959 Get:71 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhx509-5-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [107 kB]
+#9 7.961 Get:72 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-26-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [207 kB]
+#9 8.045 Get:73 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libheimntlm0-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [15.1 kB]
+#9 8.045 Get:74 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi3-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [96.5 kB]
+#9 8.047 Get:75 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libldap-common all 2.4.49+dfsg-2ubuntu1.10 [16.5 kB]
+#9 8.047 Get:76 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libldap-2.4-2 amd64 2.4.49+dfsg-2ubuntu1.10 [155 kB]
+#9 8.050 Get:77 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libnghttp2-14 amd64 1.40.0-1ubuntu0.3 [79.9 kB]
+#9 8.052 Get:78 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssh-4 amd64 0.9.3-2ubuntu2.5 [171 kB]
+#9 8.055 Get:79 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcurl3-gnutls amd64 7.68.0-1ubuntu2.25 [233 kB]
+#9 8.132 Get:80 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git amd64 1:2.25.1-1ubuntu3.14 [4613 kB]
+#9 8.232 Get:81 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssh-client amd64 1:8.2p1-4ubuntu0.12 [671 kB]
+#9 8.243 Get:82 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-dev amd64 2.34-6ubuntu1.10 [3636 kB]
+#9 8.329 Get:83 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf0 amd64 2.34-6ubuntu1.10 [46.7 kB]
+#9 8.329 Get:84 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-x86-64-linux-gnu amd64 2.34-6ubuntu1.10 [1613 kB]
+#9 8.357 Get:85 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libbinutils amd64 2.34-6ubuntu1.10 [474 kB]
+#9 8.376 Get:86 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils amd64 2.34-6ubuntu1.10 [3380 B]
+#9 8.376 Get:87 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-common amd64 2.34-6ubuntu1.10 [208 kB]
+#9 8.379 Get:88 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf-nobfd0 amd64 2.34-6ubuntu1.10 [48.1 kB]
+#9 8.381 Get:89 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-dev amd64 2.6.4-1ubuntu4.3 [526 kB]
+#9 8.393 Get:90 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz0b amd64 2.6.4-1ubuntu4.3 [391 kB]
+#9 8.405 Get:91 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-icu0 amd64 2.6.4-1ubuntu4.3 [5592 B]
+#9 8.493 Get:92 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-gobject0 amd64 2.6.4-1ubuntu4.3 [20.3 kB]
+#9 8.493 Get:93 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 gir1.2-harfbuzz-0.0 amd64 2.6.4-1ubuntu4.3 [26.3 kB]
+#9 8.494 Get:94 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libaprutil1 amd64 1.6.1-4ubuntu2.2 [85.1 kB]
+#9 8.495 Get:95 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libapr1 amd64 1.6.5-1ubuntu1.1 [91.5 kB]
+#9 8.498 Get:96 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 unzip amd64 6.0-25ubuntu1.2 [169 kB]
+#9 8.671 debconf: delaying package configuration, since apt-utils is not installed
+#9 8.713 Fetched 64.5 MB in 3s (21.5 MB/s)
+#9 8.736 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46278 files and directories currently installed.)
+#9 8.765 Preparing to unpack .../0-libc6-dev-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 8.767 Unpacking libc6-dev-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.002 Preparing to unpack .../1-libc6-dev-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.004 Unpacking libc6-dev-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.230 Preparing to unpack .../2-libc6-dev_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.231 Unpacking libc6-dev:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.781 Preparing to unpack .../3-libc-dev-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.783 Unpacking libc-dev-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.814 Preparing to unpack .../4-libc6-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.816 Unpacking libc6-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 10.21 Preparing to unpack .../5-libc6-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 10.21 Unpacking libc6-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 10.61 Preparing to unpack .../6-linux-libc-dev_5.4.0-208.228_amd64.deb ...
+#9 10.61 Unpacking linux-libc-dev:amd64 (5.4.0-208.228) over (5.4.0-137.154) ...
+#9 11.20 Preparing to unpack .../7-libc6_2.31-0ubuntu9.17_amd64.deb ...
+#9 11.35 Unpacking libc6:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 11.75 Setting up libc6:amd64 (2.31-0ubuntu9.17) ...
+#9 12.90 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 12.92 Preparing to unpack .../base-files_11ubuntu5.8_amd64.deb ...
+#9 12.94 Unpacking base-files (11ubuntu5.8) over (11ubuntu5.6) ...
+#9 13.01 Setting up base-files (11ubuntu5.8) ...
+#9 13.01 Installing new version of config file /etc/issue ...
+#9 13.01 Installing new version of config file /etc/issue.net ...
+#9 13.01 Installing new version of config file /etc/lsb-release ...
+#9 13.01 Installing new version of config file /etc/update-motd.d/10-help-text ...
+#9 13.17 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 13.19 Preparing to unpack .../bsdutils_1%3a2.34-0.1ubuntu9.6_amd64.deb ...
+#9 13.20 Unpacking bsdutils (1:2.34-0.1ubuntu9.6) over (1:2.34-0.1ubuntu9.3) ...
+#9 13.24 Setting up bsdutils (1:2.34-0.1ubuntu9.6) ...
+#9 13.26 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 13.29 Preparing to unpack .../login_1%3a4.8.1-1ubuntu5.20.04.5_amd64.deb ...
+#9 13.31 Unpacking login (1:4.8.1-1ubuntu5.20.04.5) over (1:4.8.1-1ubuntu5.20.04.4) ...
+#9 13.36 Setting up login (1:4.8.1-1ubuntu5.20.04.5) ...
+#9 13.40 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 13.42 Preparing to unpack .../ncurses-bin_6.2-0ubuntu2.1_amd64.deb ...
+#9 13.42 Unpacking ncurses-bin (6.2-0ubuntu2.1) over (6.2-0ubuntu2) ...
+#9 13.47 Setting up ncurses-bin (6.2-0ubuntu2.1) ...
+#9 13.49 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 13.52 Preparing to unpack .../libperl5.30_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 13.52 Unpacking libperl5.30:amd64 (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 14.08 Preparing to unpack .../perl_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 14.10 Unpacking perl (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 14.15 Preparing to unpack .../perl-base_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 14.17 Unpacking perl-base (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 14.66 Setting up perl-base (5.30.0-9ubuntu0.5) ...
+#9 14.69 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 14.72 Preparing to unpack .../perl-modules-5.30_5.30.0-9ubuntu0.5_all.deb ...
+#9 14.72 Unpacking perl-modules-5.30 (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 15.60 Preparing to unpack .../tar_1.30+dfsg-7ubuntu0.20.04.4_amd64.deb ...
+#9 15.60 Unpacking tar (1.30+dfsg-7ubuntu0.20.04.4) over (1.30+dfsg-7ubuntu0.20.04.2) ...
+#9 15.65 Setting up tar (1.30+dfsg-7ubuntu0.20.04.4) ...
+#9 15.68 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 15.70 Preparing to unpack .../libfdisk1_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 15.70 Unpacking libfdisk1:amd64 (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 15.74 Preparing to unpack .../libsmartcols1_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 15.74 Unpacking libsmartcols1:amd64 (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 15.78 Setting up libsmartcols1:amd64 (2.34-0.1ubuntu9.6) ...
+#9 15.80 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 15.82 Preparing to unpack .../fdisk_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 15.83 Unpacking fdisk (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 15.86 Preparing to unpack .../util-linux_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 15.88 Unpacking util-linux (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 16.07 Setting up util-linux (2.34-0.1ubuntu9.6) ...
+#9 16.39 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.42 Preparing to unpack .../libc-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 16.42 Unpacking libc-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 16.53 Setting up libc-bin (2.31-0ubuntu9.17) ...
+#9 16.59 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.61 Preparing to unpack .../ncurses-base_6.2-0ubuntu2.1_all.deb ...
+#9 16.62 Unpacking ncurses-base (6.2-0ubuntu2.1) over (6.2-0ubuntu2) ...
+#9 16.68 Setting up ncurses-base (6.2-0ubuntu2.1) ...
+#9 16.71 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.73 Preparing to unpack .../libudev1_245.4-4ubuntu3.24_amd64.deb ...
+#9 16.73 Unpacking libudev1:amd64 (245.4-4ubuntu3.24) over (245.4-4ubuntu3.19) ...
+#9 16.77 Setting up libudev1:amd64 (245.4-4ubuntu3.24) ...
+#9 16.79 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.82 Preparing to unpack .../libapt-pkg6.0_2.0.10_amd64.deb ...
+#9 16.82 Unpacking libapt-pkg6.0:amd64 (2.0.10) over (2.0.9) ...
+#9 16.91 Setting up libapt-pkg6.0:amd64 (2.0.10) ...
+#9 16.93 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.95 Preparing to unpack .../libtasn1-6_4.16.0-2ubuntu0.1_amd64.deb ...
+#9 16.96 Unpacking libtasn1-6:amd64 (4.16.0-2ubuntu0.1) over (4.16.0-2) ...
+#9 16.99 Setting up libtasn1-6:amd64 (4.16.0-2ubuntu0.1) ...
+#9 17.02 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 17.04 Preparing to unpack .../libgnutls30_3.6.13-2ubuntu1.12_amd64.deb ...
+#9 17.05 Unpacking libgnutls30:amd64 (3.6.13-2ubuntu1.12) over (3.6.13-2ubuntu1.7) ...
+#9 17.13 Setting up libgnutls30:amd64 (3.6.13-2ubuntu1.12) ...
+#9 17.16 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 17.18 Preparing to unpack .../archives/apt_2.0.10_amd64.deb ...
+#9 17.22 Unpacking apt (2.0.10) over (2.0.9) ...
+#9 17.42 Setting up apt (2.0.10) ...
+#9 17.73 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 17.76 Preparing to unpack .../libpam0g_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 17.80 Unpacking libpam0g:amd64 (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 17.84 Setting up libpam0g:amd64 (1.3.1-5ubuntu4.7) ...
+#9 17.93 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 17.95 Preparing to unpack .../libpam-modules-bin_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 17.96 Unpacking libpam-modules-bin (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 17.99 Setting up libpam-modules-bin (1.3.1-5ubuntu4.7) ...
+#9 18.02 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 18.05 Preparing to unpack .../libpam-modules_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 18.12 Unpacking libpam-modules:amd64 (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 18.19 Setting up libpam-modules:amd64 (1.3.1-5ubuntu4.7) ...
+#9 18.23 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 18.26 Preparing to unpack .../logsave_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.26 Unpacking logsave (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.28 Preparing to unpack .../libext2fs2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.28 Unpacking libext2fs2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.33 Setting up libext2fs2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 18.36 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 18.38 Preparing to unpack .../00-e2fsprogs_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.38 Unpacking e2fsprogs (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.45 Preparing to unpack .../01-mount_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 18.46 Unpacking mount (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 18.49 Preparing to unpack .../02-python3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 18.49 Unpacking python3.8-dev (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 18.52 Preparing to unpack .../03-libpython3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 18.52 Unpacking libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 18.96 Preparing to unpack .../04-libpython3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 18.96 Unpacking libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.11 Preparing to unpack .../05-libssl-dev_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 19.11 Unpacking libssl-dev:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 19.32 Preparing to unpack .../06-libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 19.32 Unpacking libssl1.1:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 19.44 Preparing to unpack .../07-python3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.50 Unpacking python3.8 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.53 Preparing to unpack .../08-libpython3.8-stdlib_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.58 Unpacking libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.89 Preparing to unpack .../09-python3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.90 Unpacking python3.8-minimal (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 20.07 Preparing to unpack .../10-libpython3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 20.14 Unpacking libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 20.34 Preparing to unpack .../11-libsqlite3-0_3.31.1-4ubuntu0.6_amd64.deb ...
+#9 20.34 Unpacking libsqlite3-0:amd64 (3.31.1-4ubuntu0.6) over (3.31.1-4ubuntu0.5) ...
+#9 20.40 Preparing to unpack .../12-rsync_3.1.3-8ubuntu0.9_amd64.deb ...
+#9 20.41 Unpacking rsync (3.1.3-8ubuntu0.9) over (3.1.3-8ubuntu0.4) ...
+#9 20.46 Preparing to unpack .../13-libpam-runtime_1.3.1-5ubuntu4.7_all.deb ...
+#9 20.46 Unpacking libpam-runtime (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 20.51 Setting up libpam-runtime (1.3.1-5ubuntu4.7) ...
+#9 20.65 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 20.67 Preparing to unpack .../passwd_1%3a4.8.1-1ubuntu5.20.04.5_amd64.deb ...
+#9 20.70 Unpacking passwd (1:4.8.1-1ubuntu5.20.04.5) over (1:4.8.1-1ubuntu5.20.04.4) ...
+#9 20.81 Setting up passwd (1:4.8.1-1ubuntu5.20.04.5) ...
+#9 20.86 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 20.88 Preparing to unpack .../00-libcom-err2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 20.88 Unpacking libcom-err2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 20.90 Preparing to unpack .../01-libprocps8_2%3a3.3.16-1ubuntu2.4_amd64.deb ...
+#9 20.91 Unpacking libprocps8:amd64 (2:3.3.16-1ubuntu2.4) over (2:3.3.16-1ubuntu2.3) ...
+#9 20.93 Preparing to unpack .../02-libss2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 20.93 Unpacking libss2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 20.96 Preparing to unpack .../03-procps_2%3a3.3.16-1ubuntu2.4_amd64.deb ...
+#9 20.98 Unpacking procps (2:3.3.16-1ubuntu2.4) over (2:3.3.16-1ubuntu2.3) ...
+#9 21.04 Preparing to unpack .../04-openssl_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 21.04 Unpacking openssl (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 21.11 Preparing to unpack .../05-ca-certificates_20240203~20.04.1_all.deb ...
+#9 21.11 Unpacking ca-certificates (20240203~20.04.1) over (20211016ubuntu0.20.04.1) ...
+#9 21.21 Preparing to unpack .../06-less_551-1ubuntu0.3_amd64.deb ...
+#9 21.22 Unpacking less (551-1ubuntu0.3) over (551-1ubuntu0.1) ...
+#9 21.25 Preparing to unpack .../07-libcap2_1%3a2.32-1ubuntu0.2_amd64.deb ...
+#9 21.25 Unpacking libcap2:amd64 (1:2.32-1ubuntu0.2) over (1:2.32-1ubuntu0.1) ...
+#9 21.28 Preparing to unpack .../08-libxml2_2.9.10+dfsg-5ubuntu0.20.04.9_amd64.deb ...
+#9 21.28 Unpacking libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) over (2.9.10+dfsg-5ubuntu0.20.04.8) ...
+#9 21.35 Preparing to unpack .../09-tzdata_2024b-0ubuntu0.20.04.1_all.deb ...
+#9 21.35 Unpacking tzdata (2024b-0ubuntu0.20.04.1) over (2022g-0ubuntu0.20.04.1) ...
+#9 22.17 Preparing to unpack .../10-krb5-locales_1.17-6ubuntu4.8_all.deb ...
+#9 22.17 Unpacking krb5-locales (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.20 Preparing to unpack .../11-libgssapi-krb5-2_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.20 Unpacking libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.24 Preparing to unpack .../12-libkrb5-3_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.24 Unpacking libkrb5-3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.29 Preparing to unpack .../13-libkrb5support0_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.30 Unpacking libkrb5support0:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.32 Preparing to unpack .../14-libk5crypto3_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.32 Unpacking libk5crypto3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.35 Preparing to unpack .../15-libx11-data_2%3a1.6.9-2ubuntu1.6_all.deb ...
+#9 22.35 Unpacking libx11-data (2:1.6.9-2ubuntu1.6) over (2:1.6.9-2ubuntu1.2) ...
+#9 22.50 Preparing to unpack .../16-git-man_1%3a2.25.1-1ubuntu3.14_all.deb ...
+#9 22.50 Unpacking git-man (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.8) ...
+#9 22.58 Preparing to unpack .../17-libroken18-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.58 Unpacking libroken18-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.61 Preparing to unpack .../18-libasn1-8-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.61 Unpacking libasn1-8-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.65 Preparing to unpack .../19-libheimbase1-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.65 Unpacking libheimbase1-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.68 Preparing to unpack .../20-libhcrypto4-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.68 Unpacking libhcrypto4-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.71 Preparing to unpack .../21-libwind0-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.71 Unpacking libwind0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.74 Preparing to unpack .../22-libhx509-5-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.74 Unpacking libhx509-5-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.77 Preparing to unpack .../23-libkrb5-26-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.77 Unpacking libkrb5-26-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.81 Preparing to unpack .../24-libheimntlm0-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.81 Unpacking libheimntlm0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.84 Preparing to unpack .../25-libgssapi3-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.84 Unpacking libgssapi3-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.87 Preparing to unpack .../26-libldap-common_2.4.49+dfsg-2ubuntu1.10_all.deb ...
+#9 22.87 Unpacking libldap-common (2.4.49+dfsg-2ubuntu1.10) over (2.4.49+dfsg-2ubuntu1.9) ...
+#9 22.89 Preparing to unpack .../27-libldap-2.4-2_2.4.49+dfsg-2ubuntu1.10_amd64.deb ...
+#9 22.89 Unpacking libldap-2.4-2:amd64 (2.4.49+dfsg-2ubuntu1.10) over (2.4.49+dfsg-2ubuntu1.9) ...
+#9 22.93 Preparing to unpack .../28-libnghttp2-14_1.40.0-1ubuntu0.3_amd64.deb ...
+#9 22.93 Unpacking libnghttp2-14:amd64 (1.40.0-1ubuntu0.3) over (1.40.0-1build1) ...
+#9 22.96 Preparing to unpack .../29-libssh-4_0.9.3-2ubuntu2.5_amd64.deb ...
+#9 22.96 Unpacking libssh-4:amd64 (0.9.3-2ubuntu2.5) over (0.9.3-2ubuntu2.2) ...
+#9 22.99 Preparing to unpack .../30-libcurl3-gnutls_7.68.0-1ubuntu2.25_amd64.deb ...
+#9 23.00 Unpacking libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) over (7.68.0-1ubuntu2.15) ...
+#9 23.04 Preparing to unpack .../31-git_1%3a2.25.1-1ubuntu3.14_amd64.deb ...
+#9 23.09 Unpacking git (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.13) ...
+#9 23.63 Preparing to unpack .../32-openssh-client_1%3a8.2p1-4ubuntu0.12_amd64.deb ...
+#9 23.65 Unpacking openssh-client (1:8.2p1-4ubuntu0.12) over (1:8.2p1-4ubuntu0.5) ...
+#9 23.74 Preparing to unpack .../33-binutils-dev_2.34-6ubuntu1.10_amd64.deb ...
+#9 23.74 Unpacking binutils-dev (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.15 Preparing to unpack .../34-libctf0_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.15 Unpacking libctf0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.17 Preparing to unpack .../35-binutils-x86-64-linux-gnu_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.17 Unpacking binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.42 Preparing to unpack .../36-libbinutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.43 Unpacking libbinutils:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.49 Preparing to unpack .../37-binutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.49 Unpacking binutils (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.52 Preparing to unpack .../38-binutils-common_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.52 Unpacking binutils-common:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.56 Preparing to unpack .../39-libctf-nobfd0_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.56 Unpacking libctf-nobfd0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.58 Preparing to unpack .../40-libharfbuzz-dev_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.59 Unpacking libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.67 Preparing to unpack .../41-libharfbuzz0b_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.67 Unpacking libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.74 Preparing to unpack .../42-libharfbuzz-icu0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.74 Unpacking libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.77 Preparing to unpack .../43-libharfbuzz-gobject0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.77 Unpacking libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.79 Preparing to unpack .../44-gir1.2-harfbuzz-0.0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.79 Unpacking gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.82 Preparing to unpack .../45-libaprutil1_1.6.1-4ubuntu2.2_amd64.deb ...
+#9 24.82 Unpacking libaprutil1:amd64 (1.6.1-4ubuntu2.2) over (1.6.1-4ubuntu2) ...
+#9 24.85 Preparing to unpack .../46-libapr1_1.6.5-1ubuntu1.1_amd64.deb ...
+#9 24.85 Unpacking libapr1:amd64 (1.6.5-1ubuntu1.1) over (1.6.5-1ubuntu1) ...
+#9 24.88 Preparing to unpack .../47-unzip_6.0-25ubuntu1.2_amd64.deb ...
+#9 24.88 Unpacking unzip (6.0-25ubuntu1.2) over (6.0-25ubuntu1.1) ...
+#9 24.94 Setting up perl-modules-5.30 (5.30.0-9ubuntu0.5) ...
+#9 24.94 Setting up libssl1.1:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 25.02 Setting up unzip (6.0-25ubuntu1.2) ...
+#9 25.03 Setting up libsqlite3-0:amd64 (3.31.1-4ubuntu0.6) ...
+#9 25.03 Setting up binutils-common:amd64 (2.34-6ubuntu1.10) ...
+#9 25.03 Setting up libnghttp2-14:amd64 (1.40.0-1ubuntu0.3) ...
+#9 25.03 Setting up libapr1:amd64 (1.6.5-1ubuntu1.1) ...
+#9 25.03 Setting up less (551-1ubuntu0.3) ...
+#9 25.04 Setting up linux-libc-dev:amd64 (5.4.0-208.228) ...
+#9 25.04 Setting up libctf-nobfd0:amd64 (2.34-6ubuntu1.10) ...
+#9 25.04 Setting up krb5-locales (1.17-6ubuntu4.8) ...
+#9 25.04 Setting up libcom-err2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 25.04 Setting up libldap-common (2.4.49+dfsg-2ubuntu1.10) ...
+#9 25.05 Setting up libcap2:amd64 (1:2.32-1ubuntu0.2) ...
+#9 25.05 Setting up libkrb5support0:amd64 (1.17-6ubuntu4.8) ...
+#9 25.05 Setting up libc6-x32 (2.31-0ubuntu9.17) ...
+#9 25.05 Setting up tzdata (2024b-0ubuntu0.20.04.1) ...
+#9 25.14 
+#9 25.14 Current default time zone: 'Etc/UTC'
+#9 25.14 Local time is now:      Sat Mar  1 16:28:45 UTC 2025.
+#9 25.14 Universal Time is now:  Sat Mar  1 16:28:45 UTC 2025.
+#9 25.14 Run 'dpkg-reconfigure tzdata' if you wish to change it.
+#9 25.14 
+#9 25.15 Setting up libx11-data (2:1.6.9-2ubuntu1.6) ...
+#9 25.15 Setting up libssl-dev:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 25.15 Setting up libss2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 25.16 Setting up libk5crypto3:amd64 (1.17-6ubuntu4.8) ...
+#9 25.16 Setting up logsave (1.45.5-2ubuntu1.2) ...
+#9 25.16 Setting up libroken18-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.16 Setting up libfdisk1:amd64 (2.34-0.1ubuntu9.6) ...
+#9 25.16 Setting up mount (2.34-0.1ubuntu9.6) ...
+#9 25.16 Setting up libc6-i386 (2.31-0ubuntu9.17) ...
+#9 25.17 Setting up libperl5.30:amd64 (5.30.0-9ubuntu0.5) ...
+#9 25.17 Setting up git-man (1:2.25.1-1ubuntu3.14) ...
+#9 25.17 Setting up libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.17 Setting up libkrb5-3:amd64 (1.17-6ubuntu4.8) ...
+#9 25.17 Setting up libbinutils:amd64 (2.34-6ubuntu1.10) ...
+#9 25.17 Setting up libc-dev-bin (2.31-0ubuntu9.17) ...
+#9 25.17 Setting up openssl (1.1.1f-1ubuntu2.24) ...
+#9 25.18 Setting up libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) ...
+#9 25.18 Setting up libprocps8:amd64 (2:3.3.16-1ubuntu2.4) ...
+#9 25.18 Setting up rsync (3.1.3-8ubuntu0.9) ...
+#9 25.20 invoke-rc.d: could not determine current runlevel
+#9 25.20 invoke-rc.d: policy-rc.d denied execution of restart.
+#9 25.31 Setting up libheimbase1-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.31 Setting up libaprutil1:amd64 (1.6.1-4ubuntu2.2) ...
+#9 25.31 Setting up libctf0:amd64 (2.34-6ubuntu1.10) ...
+#9 25.31 Setting up libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 25.31 Setting up libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.32 Setting up libasn1-8-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.32 Setting up e2fsprogs (1.45.5-2ubuntu1.2) ...
+#9 25.53 Setting up libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.53 Setting up gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.54 Setting up libhcrypto4-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.54 Setting up fdisk (2.34-0.1ubuntu9.6) ...
+#9 25.54 Setting up ca-certificates (20240203~20.04.1) ...
+#9 27.03 Updating certificates in /etc/ssl/certs...
+#9 27.88 rehash: warning: skipping ca-certificates.crt,it does not contain exactly one certificate or CRL
+#9 27.89 30 added, 8 removed; done.
+#9 27.91 Setting up perl (5.30.0-9ubuntu0.5) ...
+#9 27.92 Setting up libwind0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 27.92 Setting up libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) ...
+#9 27.93 Setting up libssh-4:amd64 (0.9.3-2ubuntu2.5) ...
+#9 27.93 Setting up python3.8-minimal (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.39 Setting up procps (2:3.3.16-1ubuntu2.4) ...
+#9 28.43 Setting up libc6-dev:amd64 (2.31-0ubuntu9.17) ...
+#9 28.43 Setting up libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.43 Setting up python3.8 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.95 Setting up binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) ...
+#9 28.96 Setting up libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) ...
+#9 28.96 Setting up libc6-dev-i386 (2.31-0ubuntu9.17) ...
+#9 28.96 Setting up openssh-client (1:8.2p1-4ubuntu0.12) ...
+#9 28.98 Setting up libhx509-5-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.98 Setting up binutils (2.34-6ubuntu1.10) ...
+#9 28.98 Setting up libc6-dev-x32 (2.31-0ubuntu9.17) ...
+#9 28.98 Setting up libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.99 Setting up libkrb5-26-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.99 Setting up binutils-dev (2.34-6ubuntu1.10) ...
+#9 28.99 Setting up libheimntlm0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.99 Setting up libgssapi3-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.99 Setting up libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.99 Setting up python3.8-dev (3.8.10-0ubuntu1~20.04.15) ...
+#9 29.00 Setting up libldap-2.4-2:amd64 (2.4.49+dfsg-2ubuntu1.10) ...
+#9 29.00 Setting up libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) ...
+#9 29.00 Setting up git (1:2.25.1-1ubuntu3.14) ...
+#9 29.03 Processing triggers for libc-bin (2.31-0ubuntu9.17) ...
+#9 29.04 Processing triggers for systemd (245.4-4ubuntu3.24) ...
+#9 29.06 Processing triggers for mime-support (3.64ubuntu1) ...
+#9 29.07 Processing triggers for ca-certificates (20240203~20.04.1) ...
+#9 29.08 Updating certificates in /etc/ssl/certs...
+#9 29.68 0 added, 0 removed; done.
+#9 29.68 Running hooks in /etc/ca-certificates/update.d...
+#9 29.68 done.
+#9 29.76 Reading package lists...
+#9 30.85 Building dependency tree...
+#9 31.03 Reading state information...
+#9 31.21 libffi-dev is already the newest version (3.3-4).
+#9 31.21 libffi-dev set to manually installed.
+#9 31.21 curl is already the newest version (7.68.0-1ubuntu2.25).
+#9 31.21 libssl-dev is already the newest version (1.1.1f-1ubuntu2.24).
+#9 31.21 xz-utils is already the newest version (5.2.4-1ubuntu1.1).
+#9 31.21 xz-utils set to manually installed.
+#9 31.21 zlib1g-dev is already the newest version (1:1.2.11.dfsg-2ubuntu1.5).
+#9 31.21 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 DONE 31.3s
+
+#10 [stage-1  3/15] RUN rm -rf /usr/local/bin/python3.8* /usr/local/bin/pip3 /usr/local/lib/python3.8     /usr/local/include/python3.8 /usr/local/lib/python3.8/site-packages
+#10 DONE 0.5s
+
+#11 [stage-1  4/15] COPY --from=base-image /usr/local/bin/python3* /usr/local/bin/
+#11 DONE 0.1s
+
+#12 [stage-1  5/15] COPY --from=base-image /usr/local/bin/pip3* /usr/local/bin/
+#12 DONE 0.0s
+
+#13 [stage-1  6/15] COPY --from=base-image /usr/local/lib/python3.10 /usr/local/lib/python3.10
+#13 DONE 8.9s
+
+#14 [stage-1  7/15] COPY --from=base-image /usr/local/include/python3.10 /usr/local/include/python3.10
+#14 DONE 0.1s
+
+#15 [stage-1  8/15] COPY --from=base-image /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+#15 DONE 9.9s
+
+#16 [stage-1  9/15] COPY fuzzers /src/fuzzers
+#16 DONE 0.1s
+
+#17 [stage-1 10/15] COPY benchmarks/libpng_libpng_read_fuzzer/benchmark.yaml /
+#17 DONE 0.0s
+
+#18 [stage-1 11/15] RUN mkdir /opt/fuzzbench/
+#18 DONE 0.2s
+
+#19 [stage-1 12/15] COPY docker/benchmark-builder/checkout_commit.py /opt/fuzzbench/
+#19 DONE 0.0s
+
+#20 [stage-1 13/15] RUN export CHECKOUT_COMMIT=$(cat /benchmark.yaml | tr -d ' ' | grep 'commit:' | cut -d ':' -f2) &&     python3 -u /opt/fuzzbench/checkout_commit.py $CHECKOUT_COMMIT /src
+#20 0.234 Checking out commit cd0ea2a7f53b603d3d9b5b891c779c430047b39a
+#20 0.335 Note: switching to 'cd0ea2a7f53b603d3d9b5b891c779c430047b39a'.
+#20 0.335 
+#20 0.335 You are in 'detached HEAD' state. You can look around, make experimental
+#20 0.335 changes and commit them, and you can discard any commits you make in this
+#20 0.335 state without impacting any branches by switching back to a branch.
+#20 0.335 
+#20 0.335 If you want to create a new branch to retain commits you create, you may
+#20 0.335 do so (now or later) by using -c with the switch command. Example:
+#20 0.335 
+#20 0.335   git switch -c <new-branch-name>
+#20 0.335 
+#20 0.335 Or undo this operation with:
+#20 0.335 
+#20 0.335   git switch -
+#20 0.335 
+#20 0.335 Turn off this advice by setting config variable advice.detachedHead to false
+#20 0.335 
+#20 0.335 HEAD is now at cd0ea2a7f Fix for universal binaries on macOS
+#20 DONE 0.4s
+
+#21 [stage-1 14/15] COPY docker/benchmark-builder/fuzzer_build /usr/bin/fuzzer_build
+#21 DONE 0.0s
+
+#22 [stage-1 15/15] RUN echo "Run fuzzer_build to build the target" && if [ -z "$debug_builder" ] ; then fuzzer_build; fi
+#22 0.188 Run fuzzer_build to build the target
+#22 0.254 FUZZ_TARGET = libpng_read_fuzzer
+#22 0.254 CFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3
+#22 0.254 CXXFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3
+#22 0.259 AFL++ build: 
+#22 0.259 ['tracepc', 'cmplog', 'dict2file']
+#22 0.904 Building benchmark libpng_libpng_read_fuzzer with fuzzer aflmmbb
+#22 0.906 + cat scripts/pnglibconf.dfa
+#22 0.906 + sed -e 's/option STDIO/option STDIO disabled/' -e 's/option WARNING /option WARNING disabled/' -e 's/option WRITE enables WRITE_INT_FUNCTIONS/option WRITE disabled/'
+#22 0.909 + mv scripts/pnglibconf.dfa.temp scripts/pnglibconf.dfa
+#22 0.911 + autoreconf -f -i
+#22 3.537 libtoolize: putting auxiliary files in '.'.
+#22 3.537 libtoolize: copying file './ltmain.sh'
+#22 3.567 libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'scripts'.
+#22 3.567 libtoolize: copying file 'scripts/libtool.m4'
+#22 3.578 libtoolize: copying file 'scripts/ltoptions.m4'
+#22 3.590 libtoolize: copying file 'scripts/ltsugar.m4'
+#22 3.604 libtoolize: copying file 'scripts/ltversion.m4'
+#22 3.620 libtoolize: copying file 'scripts/lt~obsolete.m4'
+#22 5.679 configure.ac:61: installing './compile'
+#22 5.689 configure.ac:37: installing './missing'
+#22 5.717 Makefile.am: installing './depcomp'
+#22 5.773 + ./configure --with-libpng-prefix=OSS_FUZZ_
+#22 5.906 checking for a BSD-compatible install... /usr/bin/install -c
+#22 5.917 checking whether build environment is sane... yes
+#22 5.930 checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+#22 5.933 checking for gawk... no
+#22 5.933 checking for mawk... mawk
+#22 5.934 checking whether make sets $(MAKE)... yes
+#22 5.948 checking whether make supports nested variables... yes
+#22 5.960 checking whether to enable maintainer-specific portions of Makefiles... no
+#22 5.960 checking for gcc... /afl/afl-clang-fast
+#22 6.015 checking whether the C compiler works... yes
+#22 6.071 checking for C compiler default output file name... a.out
+#22 6.072 checking for suffix of executables... 
+#22 6.123 checking whether we are cross compiling... no
+#22 6.182 checking for suffix of object files... o
+#22 6.205 checking whether we are using the GNU C compiler... yes
+#22 6.227 checking whether /afl/afl-clang-fast accepts -g... yes
+#22 6.247 checking for /afl/afl-clang-fast option to accept ISO C89... none needed
+#22 6.279 checking whether /afl/afl-clang-fast understands -c and -o together... yes
+#22 6.315 checking whether make supports the include directive... yes (GNU style)
+#22 6.324 checking dependency style of /afl/afl-clang-fast... gcc3
+#22 6.361 checking dependency style of /afl/afl-clang-fast... gcc3
+#22 6.408 checking build system type... x86_64-pc-linux-gnu
+#22 6.457 checking host system type... x86_64-pc-linux-gnu
+#22 6.457 checking for a sed that does not truncate output... /usr/bin/sed
+#22 6.463 checking for grep that handles long lines and -e... /usr/bin/grep
+#22 6.466 checking for egrep... /usr/bin/grep -E
+#22 6.468 checking for fgrep... /usr/bin/grep -F
+#22 6.470 checking how to print strings... printf
+#22 6.500 checking for ld used by /afl/afl-clang-fast... /usr/bin/ld
+#22 6.513 checking if the linker (/usr/bin/ld) is GNU ld... yes
+#22 6.516 checking how to run the C preprocessor... /afl/afl-clang-fast -E
+#22 6.583 checking for gawk... (cached) mawk
+#22 6.583 checking whether ln -s works... yes
+#22 6.584 checking whether make sets $(MAKE)... (cached) yes
+#22 6.588 checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+#22 6.592 checking the name lister (/usr/bin/nm -B) interface... BSD nm
+#22 6.616 checking the maximum length of command line arguments... 1572864
+#22 6.624 checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+#22 6.625 checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+#22 6.625 checking for /usr/bin/ld option to reload object files... -r
+#22 6.626 checking for objdump... objdump
+#22 6.627 checking how to recognize dependent libraries... pass_all
+#22 6.628 checking for dlltool... no
+#22 6.628 checking how to associate runtime and link libraries... printf %s\n
+#22 6.629 checking for ar... ar
+#22 6.630 checking for archiver @FILE support... @
+#22 6.659 checking for strip... strip
+#22 6.660 checking for ranlib... ranlib
+#22 6.661 checking command to parse /usr/bin/nm -B output from /afl/afl-clang-fast object... ok
+#22 6.749 checking for sysroot... no
+#22 6.750 checking for a working dd... /usr/bin/dd
+#22 6.755 checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+#22 6.778 checking for mt... mt
+#22 6.778 checking if mt is a manifest tool... no
+#22 6.785 checking for ANSI C header files... yes
+#22 6.920 checking for sys/types.h... yes
+#22 6.954 checking for sys/stat.h... yes
+#22 6.989 checking for stdlib.h... yes
+#22 7.023 checking for string.h... yes
+#22 7.059 checking for memory.h... yes
+#22 7.095 checking for strings.h... yes
+#22 7.131 checking for inttypes.h... yes
+#22 7.169 checking for stdint.h... yes
+#22 7.206 checking for unistd.h... yes
+#22 7.243 checking for dlfcn.h... yes
+#22 7.278 checking for objdir... .libs
+#22 7.358 checking if /afl/afl-clang-fast supports -fno-rtti -fno-exceptions... yes
+#22 7.382 checking for /afl/afl-clang-fast option to produce PIC... -fPIC -DPIC
+#22 7.382 checking if /afl/afl-clang-fast PIC flag -fPIC -DPIC works... yes
+#22 7.405 checking if /afl/afl-clang-fast static flag -static works... yes
+#22 7.495 checking if /afl/afl-clang-fast supports -c -o file.o... yes
+#22 7.531 checking if /afl/afl-clang-fast supports -c -o file.o... (cached) yes
+#22 7.532 checking whether the /afl/afl-clang-fast linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+#22 7.552 checking whether -lc should be explicitly linked in... no
+#22 7.596 checking dynamic linker characteristics... GNU/Linux ld.so
+#22 7.682 checking how to hardcode library paths into programs... immediate
+#22 7.683 checking whether stripping libraries is possible... yes
+#22 7.685 checking if libtool supports shared libraries... yes
+#22 7.686 checking whether to build shared libraries... yes
+#22 7.686 checking whether to build static libraries... yes
+#22 7.687 checking that AWK works... ok
+#22 7.690 checking if we need to force back C standard to C89... no
+#22 7.716 checking whether struct tm is in sys/time.h or time.h... time.h
+#22 7.742 checking for C/C++ restrict keyword... __restrict
+#22 7.766 checking for pow... yes
+#22 7.824 checking for clock_gettime... yes
+#22 7.877 checking for zlibVersion in -lz... yes
+#22 7.932 checking for feenableexcept in -lm... yes
+#22 7.987 checking for feenableexcept... yes
+#22 8.043 checking if using Solaris linker... no
+#22 8.046 checking if libraries can be versioned... yes
+#22 8.050 checking for symbol prefix... 
+#22 8.064 configure: pkgconfig directory is ${libdir}/pkgconfig
+#22 8.065 configure: Extra options for compiler: 
+#22 8.087 checking that generated files are newer than configure... done
+#22 8.088 configure: creating ./config.status
+#22 8.665 config.status: creating Makefile
+#22 8.679 config.status: creating libpng.pc
+#22 8.693 config.status: creating libpng-config
+#22 8.707 config.status: creating config.h
+#22 8.717 config.status: executing depfiles commands
+#22 8.884 config.status: executing libtool commands
+#22 8.941 ++ nproc
+#22 8.942 + make -j128 clean
+#22 8.946 test -z "*.tf? pngout.png libpng16.pc libpng16-config libpng.vers libpng.sym check.new pnglibconf.h pngprefix.h symbols.new pngtest-log.txt pnglibconf.out pnglibconf.c pnglibconf.pre pnglibconf.dfn scripts/*.out scripts/*.chk" || rm -f *.tf? pngout.png libpng16.pc libpng16-config libpng.vers libpng.sym check.new pnglibconf.h pngprefix.h symbols.new pngtest-log.txt pnglibconf.out pnglibconf.c pnglibconf.pre pnglibconf.dfn scripts/*.out scripts/*.chk
+#22 8.946 test -z "libpng16.la" || rm -f libpng16.la
+#22 8.946 rm -rf .libs _libs
+#22 8.946 rm -f *.o
+#22 8.946  rm -f pngfix png-fix-itxt
+#22 8.947 test -z "tests/pngtest-all.log tests/pngvalid-gamma-16-to-8.log tests/pngvalid-gamma-alpha-mode.log tests/pngvalid-gamma-background.log tests/pngvalid-gamma-expand16-alpha-mode.log tests/pngvalid-gamma-expand16-background.log tests/pngvalid-gamma-expand16-transform.log tests/pngvalid-gamma-sbit.log tests/pngvalid-gamma-threshold.log tests/pngvalid-gamma-transform.log tests/pngvalid-progressive-size.log tests/pngvalid-progressive-interlace-standard.log tests/pngvalid-transform.log tests/pngvalid-progressive-standard.log tests/pngvalid-standard.log tests/pngstest-1.8.log tests/pngstest-1.8-alpha.log tests/pngstest-linear.log tests/pngstest-linear-alpha.log tests/pngstest-none.log tests/pngstest-none-alpha.log tests/pngstest-sRGB.log tests/pngstest-sRGB-alpha.log tests/pngunknown-IDAT.log tests/pngunknown-discard.log tests/pngunknown-if-safe.log tests/pngunknown-sAPI.log tests/pngunknown-sTER.log tests/pngunknown-save.log tests/pngunknown-vpAg.log tests/pngimage-quick.log tests/pngimage-full.log" || rm -f tests/pngtest-all.log tests/pngvalid-gamma-16-to-8.log tests/pngvalid-gamma-alpha-mode.log tests/pngvalid-gamma-background.log tests/pngvalid-gamma-expand16-alpha-mode.log tests/pngvalid-gamma-expand16-background.log tests/pngvalid-gamma-expand16-transform.log tests/pngvalid-gamma-sbit.log tests/pngvalid-gamma-threshold.log tests/pngvalid-gamma-transform.log tests/pngvalid-progressive-size.log tests/pngvalid-progressive-interlace-standard.log tests/pngvalid-transform.log tests/pngvalid-progressive-standard.log tests/pngvalid-standard.log tests/pngstest-1.8.log tests/pngstest-1.8-alpha.log tests/pngstest-linear.log tests/pngstest-linear-alpha.log tests/pngstest-none.log tests/pngstest-none-alpha.log tests/pngstest-sRGB.log tests/pngstest-sRGB-alpha.log tests/pngunknown-IDAT.log tests/pngunknown-discard.log tests/pngunknown-if-safe.log tests/pngunknown-sAPI.log tests/pngunknown-sTER.log tests/pngunknown-save.log tests/pngunknown-vpAg.log tests/pngimage-quick.log tests/pngimage-full.log
+#22 8.947 rm -f *.lo
+#22 8.947  rm -f pngtest pngunknown pngstest pngvalid pngimage pngcp timepng
+#22 8.949 rm -rf arm/.libs arm/_libs
+#22 8.949 rm -f arm/*.o
+#22 8.949 test -z "tests/pngtest-all.trs tests/pngvalid-gamma-16-to-8.trs tests/pngvalid-gamma-alpha-mode.trs tests/pngvalid-gamma-background.trs tests/pngvalid-gamma-expand16-alpha-mode.trs tests/pngvalid-gamma-expand16-background.trs tests/pngvalid-gamma-expand16-transform.trs tests/pngvalid-gamma-sbit.trs tests/pngvalid-gamma-threshold.trs tests/pngvalid-gamma-transform.trs tests/pngvalid-progressive-size.trs tests/pngvalid-progressive-interlace-standard.trs tests/pngvalid-transform.trs tests/pngvalid-progressive-standard.trs tests/pngvalid-standard.trs tests/pngstest-1.8.trs tests/pngstest-1.8-alpha.trs tests/pngstest-linear.trs tests/pngstest-linear-alpha.trs tests/pngstest-none.trs tests/pngstest-none-alpha.trs tests/pngstest-sRGB.trs tests/pngstest-sRGB-alpha.trs tests/pngunknown-IDAT.trs tests/pngunknown-discard.trs tests/pngunknown-if-safe.trs tests/pngunknown-sAPI.trs tests/pngunknown-sTER.trs tests/pngunknown-save.trs tests/pngunknown-vpAg.trs tests/pngimage-quick.trs tests/pngimage-full.trs" || rm -f tests/pngtest-all.trs tests/pngvalid-gamma-16-to-8.trs tests/pngvalid-gamma-alpha-mode.trs tests/pngvalid-gamma-background.trs tests/pngvalid-gamma-expand16-alpha-mode.trs tests/pngvalid-gamma-expand16-background.trs tests/pngvalid-gamma-expand16-transform.trs tests/pngvalid-gamma-sbit.trs tests/pngvalid-gamma-threshold.trs tests/pngvalid-gamma-transform.trs tests/pngvalid-progressive-size.trs tests/pngvalid-progressive-interlace-standard.trs tests/pngvalid-transform.trs tests/pngvalid-progressive-standard.trs tests/pngvalid-standard.trs tests/pngstest-1.8.trs tests/pngstest-1.8-alpha.trs tests/pngstest-linear.trs tests/pngstest-linear-alpha.trs tests/pngstest-none.trs tests/pngstest-none-alpha.trs tests/pngstest-sRGB.trs tests/pngstest-sRGB-alpha.trs tests/pngunknown-IDAT.trs tests/pngunknown-discard.trs tests/pngunknown-if-safe.trs tests/pngunknown-sAPI.trs tests/pngunknown-sTER.trs tests/pngunknown-save.trs tests/pngunknown-vpAg.trs tests/pngimage-quick.trs tests/pngimage-full.trs
+#22 8.951 rm -rf intel/.libs intel/_libs
+#22 8.951 rm -f arm/*.lo
+#22 8.952 test -z "test-suite.log" || rm -f test-suite.log
+#22 8.952 rm -f ./so_locations
+#22 8.953 rm -rf mips/.libs mips/_libs
+#22 8.954 rm -f contrib/libtests/*.o
+#22 8.956 rm -rf powerpc/.libs powerpc/_libs
+#22 8.956 rm -f contrib/tools/*.o
+#22 8.958 rm -f intel/*.o
+#22 8.960 rm -f intel/*.lo
+#22 8.962 rm -f mips/*.o
+#22 8.964 rm -f mips/*.lo
+#22 8.966 rm -f powerpc/*.o
+#22 8.967 rm -f powerpc/*.lo
+#22 8.970 ++ nproc
+#22 8.971 + make -j128 libpng16.la
+#22 8.974 rm -f pnglibconf.c pnglibconf.tf[45]
+#22 8.976 mawk -f ./scripts/options.awk out=pnglibconf.tf4 version=search\
+#22 8.976     ./pngconf.h ./scripts/pnglibconf.dfa\
+#22 8.976     ./pngusr.dfa  1>&2
+#22 8.981 mawk -f ./scripts/options.awk out=pnglibconf.tf5 pnglibconf.tf4 1>&2
+#22 8.986 rm pnglibconf.tf4
+#22 8.988 mv pnglibconf.tf5 pnglibconf.c
+#22 8.991 rm -f pnglibconf.out pnglibconf.tf[12]
+#22 8.993 test -d scripts || mkdir scripts || test -d scripts
+#22 8.994 /afl/afl-clang-fast -E -DHAVE_CONFIG_H -I. \
+#22 8.994      -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.40.git' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE -DPNG_PREFIX='OSS_FUZZ_' pnglibconf.c > pnglibconf.tf1
+#22 9.012 mawk -f "./scripts/dfn.awk" out="pnglibconf.tf2" pnglibconf.tf1 1>&2
+#22 9.019 rm -f pnglibconf.tf1
+#22 9.021 mv pnglibconf.tf2 pnglibconf.out
+#22 9.024 rm -f scripts/prefix.out scripts/prefix.tf[12]
+#22 9.026 test -d scripts || mkdir scripts || test -d scripts
+#22 9.027 /afl/afl-clang-fast -E -DHAVE_CONFIG_H -I. \
+#22 9.027      -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.40.git' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE -DPNG_PREFIX='OSS_FUZZ_' scripts/prefix.c > scripts/prefix.tf1
+#22 9.040 mawk -f "./scripts/dfn.awk" out="scripts/prefix.tf2" scripts/prefix.tf1 1>&2
+#22 9.047 rm -f scripts/prefix.tf1
+#22 9.049 mv scripts/prefix.tf2 scripts/prefix.out
+#22 9.052 rm -f pnglibconf.h
+#22 9.053 mawk 's==0 && NR>1{print prev}\
+#22 9.053    s==0{prev=$0}\
+#22 9.053    s==1{print "#define", $1, "OSS_FUZZ_" $1}\
+#22 9.053    s==2{print "#define OSS_FUZZ_png_" $1, "PNG_" $1}\
+#22 9.053    END{print prev}' s=0 pnglibconf.out s=1 scripts/prefix.out\
+#22 9.053    s=2 ./scripts/macro.lst >pnglibconf.tf8
+#22 9.056 mv pnglibconf.tf8 pnglibconf.h
+#22 9.059 rm -f scripts/intprefix.out scripts/intprefix.tf[12]
+#22 9.059 rm -f scripts/vers.out scripts/vers.tf[12]
+#22 9.061 test -d scripts || mkdir scripts || test -d scripts
+#22 9.062 test -d scripts || mkdir scripts || test -d scripts
+#22 9.062 /afl/afl-clang-fast -E -DHAVE_CONFIG_H -I. \
+#22 9.062      -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.40.git' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE -DPNG_PREFIX='OSS_FUZZ_' scripts/intprefix.c > scripts/intprefix.tf1
+#22 9.064 /afl/afl-clang-fast -E -DHAVE_CONFIG_H -I. \
+#22 9.064      -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.40.git' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE -DPNG_PREFIX='OSS_FUZZ_' scripts/vers.c > scripts/vers.tf1
+#22 9.078 mawk -f "./scripts/dfn.awk" out="scripts/vers.tf2" scripts/vers.tf1 1>&2
+#22 9.081 rm -f scripts/vers.tf1
+#22 9.084 mv scripts/vers.tf2 scripts/vers.out
+#22 9.086 rm -f libpng.vers
+#22 9.088 mawk -f "./scripts/dfn.awk" out="scripts/intprefix.tf2" scripts/intprefix.tf1 1>&2
+#22 9.088 cp scripts/vers.out libpng.vers
+#22 9.094 rm -f scripts/intprefix.tf1
+#22 9.096 mv scripts/intprefix.tf2 scripts/intprefix.out
+#22 9.099 rm -f pngprefix.tf1
+#22 9.101 mawk '{print "#define", $1, "OSS_FUZZ_" $1}' scripts/intprefix.out >pngprefix.tf1
+#22 9.104 mv pngprefix.tf1 pngprefix.h
+#22 9.107 depbase=`echo png.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.107 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT png.lo -MD -MP -MF $depbase.Tpo -c -o png.lo png.c &&\
+#22 9.107 mv -f $depbase.Tpo $depbase.Plo
+#22 9.107 depbase=`echo pngerror.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.107 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngerror.lo -MD -MP -MF $depbase.Tpo -c -o pngerror.lo pngerror.c &&\
+#22 9.107 mv -f $depbase.Tpo $depbase.Plo
+#22 9.107 depbase=`echo pngget.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.107 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngget.lo -MD -MP -MF $depbase.Tpo -c -o pngget.lo pngget.c &&\
+#22 9.107 mv -f $depbase.Tpo $depbase.Plo
+#22 9.108 depbase=`echo pngmem.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.108 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngmem.lo -MD -MP -MF $depbase.Tpo -c -o pngmem.lo pngmem.c &&\
+#22 9.108 mv -f $depbase.Tpo $depbase.Plo
+#22 9.108 depbase=`echo pngpread.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.108 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngpread.lo -MD -MP -MF $depbase.Tpo -c -o pngpread.lo pngpread.c &&\
+#22 9.108 mv -f $depbase.Tpo $depbase.Plo
+#22 9.108 depbase=`echo pngread.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.108 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngread.lo -MD -MP -MF $depbase.Tpo -c -o pngread.lo pngread.c &&\
+#22 9.108 mv -f $depbase.Tpo $depbase.Plo
+#22 9.108 depbase=`echo pngrio.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.108 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrio.lo -MD -MP -MF $depbase.Tpo -c -o pngrio.lo pngrio.c &&\
+#22 9.108 mv -f $depbase.Tpo $depbase.Plo
+#22 9.108 depbase=`echo pngrtran.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.108 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrtran.lo -MD -MP -MF $depbase.Tpo -c -o pngrtran.lo pngrtran.c &&\
+#22 9.108 mv -f $depbase.Tpo $depbase.Plo
+#22 9.109 depbase=`echo pngrutil.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.109 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrutil.lo -MD -MP -MF $depbase.Tpo -c -o pngrutil.lo pngrutil.c &&\
+#22 9.109 mv -f $depbase.Tpo $depbase.Plo
+#22 9.109 depbase=`echo pngset.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.109 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngset.lo -MD -MP -MF $depbase.Tpo -c -o pngset.lo pngset.c &&\
+#22 9.109 mv -f $depbase.Tpo $depbase.Plo
+#22 9.109 depbase=`echo pngtrans.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.109 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngtrans.lo -MD -MP -MF $depbase.Tpo -c -o pngtrans.lo pngtrans.c &&\
+#22 9.109 mv -f $depbase.Tpo $depbase.Plo
+#22 9.109 depbase=`echo pngwio.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.109 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwio.lo -MD -MP -MF $depbase.Tpo -c -o pngwio.lo pngwio.c &&\
+#22 9.109 mv -f $depbase.Tpo $depbase.Plo
+#22 9.110 depbase=`echo pngwrite.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.110 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwrite.lo -MD -MP -MF $depbase.Tpo -c -o pngwrite.lo pngwrite.c &&\
+#22 9.110 mv -f $depbase.Tpo $depbase.Plo
+#22 9.110 depbase=`echo pngwtran.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.110 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwtran.lo -MD -MP -MF $depbase.Tpo -c -o pngwtran.lo pngwtran.c &&\
+#22 9.110 mv -f $depbase.Tpo $depbase.Plo
+#22 9.110 depbase=`echo pngwutil.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.110 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwutil.lo -MD -MP -MF $depbase.Tpo -c -o pngwutil.lo pngwutil.c &&\
+#22 9.110 mv -f $depbase.Tpo $depbase.Plo
+#22 9.110 depbase=`echo mips/mips_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.110 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/mips_init.lo -MD -MP -MF $depbase.Tpo -c -o mips/mips_init.lo mips/mips_init.c &&\
+#22 9.110 mv -f $depbase.Tpo $depbase.Plo
+#22 9.110 depbase=`echo mips/filter_msa_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.110 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/filter_msa_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o mips/filter_msa_intrinsics.lo mips/filter_msa_intrinsics.c &&\
+#22 9.110 mv -f $depbase.Tpo $depbase.Plo
+#22 9.111 depbase=`echo intel/intel_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.111 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/intel_init.lo -MD -MP -MF $depbase.Tpo -c -o intel/intel_init.lo intel/intel_init.c &&\
+#22 9.111 mv -f $depbase.Tpo $depbase.Plo
+#22 9.111 depbase=`echo intel/filter_sse2_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.111 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/filter_sse2_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o intel/filter_sse2_intrinsics.lo intel/filter_sse2_intrinsics.c &&\
+#22 9.111 mv -f $depbase.Tpo $depbase.Plo
+#22 9.111 depbase=`echo powerpc/powerpc_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.111 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/powerpc_init.lo -MD -MP -MF $depbase.Tpo -c -o powerpc/powerpc_init.lo powerpc/powerpc_init.c &&\
+#22 9.111 mv -f $depbase.Tpo $depbase.Plo
+#22 9.111 depbase=`echo powerpc/filter_vsx_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 9.111 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/filter_vsx_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o powerpc/filter_vsx_intrinsics.lo powerpc/filter_vsx_intrinsics.c &&\
+#22 9.111 mv -f $depbase.Tpo $depbase.Plo
+#22 9.144 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngerror.lo -MD -MP -MF .deps/pngerror.Tpo -c pngerror.c  -fPIC -DPIC -o .libs/pngerror.o
+#22 9.145 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT png.lo -MD -MP -MF .deps/png.Tpo -c png.c  -fPIC -DPIC -o .libs/png.o
+#22 9.145 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngget.lo -MD -MP -MF .deps/pngget.Tpo -c pngget.c  -fPIC -DPIC -o .libs/pngget.o
+#22 9.146 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngmem.lo -MD -MP -MF .deps/pngmem.Tpo -c pngmem.c  -fPIC -DPIC -o .libs/pngmem.o
+#22 9.146 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrio.lo -MD -MP -MF .deps/pngrio.Tpo -c pngrio.c  -fPIC -DPIC -o .libs/pngrio.o
+#22 9.146 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngread.lo -MD -MP -MF .deps/pngread.Tpo -c pngread.c  -fPIC -DPIC -o .libs/pngread.o
+#22 9.146 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrutil.lo -MD -MP -MF .deps/pngrutil.Tpo -c pngrutil.c  -fPIC -DPIC -o .libs/pngrutil.o
+#22 9.146 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngpread.lo -MD -MP -MF .deps/pngpread.Tpo -c pngpread.c  -fPIC -DPIC -o .libs/pngpread.o
+#22 9.147 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrtran.lo -MD -MP -MF .deps/pngrtran.Tpo -c pngrtran.c  -fPIC -DPIC -o .libs/pngrtran.o
+#22 9.147 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwio.lo -MD -MP -MF .deps/pngwio.Tpo -c pngwio.c  -fPIC -DPIC -o .libs/pngwio.o
+#22 9.147 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwtran.lo -MD -MP -MF .deps/pngwtran.Tpo -c pngwtran.c  -fPIC -DPIC -o .libs/pngwtran.o
+#22 9.148 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwrite.lo -MD -MP -MF .deps/pngwrite.Tpo -c pngwrite.c  -fPIC -DPIC -o .libs/pngwrite.o
+#22 9.148 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngset.lo -MD -MP -MF .deps/pngset.Tpo -c pngset.c  -fPIC -DPIC -o .libs/pngset.o
+#22 9.148 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwutil.lo -MD -MP -MF .deps/pngwutil.Tpo -c pngwutil.c  -fPIC -DPIC -o .libs/pngwutil.o
+#22 9.148 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngtrans.lo -MD -MP -MF .deps/pngtrans.Tpo -c pngtrans.c  -fPIC -DPIC -o .libs/pngtrans.o
+#22 9.151 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/intel_init.lo -MD -MP -MF intel/.deps/intel_init.Tpo -c intel/intel_init.c  -fPIC -DPIC -o intel/.libs/intel_init.o
+#22 9.151 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/mips_init.lo -MD -MP -MF mips/.deps/mips_init.Tpo -c mips/mips_init.c  -fPIC -DPIC -o mips/.libs/mips_init.o
+#22 9.151 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/filter_msa_intrinsics.lo -MD -MP -MF mips/.deps/filter_msa_intrinsics.Tpo -c mips/filter_msa_intrinsics.c  -fPIC -DPIC -o mips/.libs/filter_msa_intrinsics.o
+#22 9.151 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/filter_sse2_intrinsics.lo -MD -MP -MF intel/.deps/filter_sse2_intrinsics.Tpo -c intel/filter_sse2_intrinsics.c  -fPIC -DPIC -o intel/.libs/filter_sse2_intrinsics.o
+#22 9.154 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/filter_vsx_intrinsics.lo -MD -MP -MF powerpc/.deps/filter_vsx_intrinsics.Tpo -c powerpc/filter_vsx_intrinsics.c  -fPIC -DPIC -o powerpc/.libs/filter_vsx_intrinsics.o
+#22 9.154 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/powerpc_init.lo -MD -MP -MF powerpc/.deps/powerpc_init.Tpo -c powerpc/powerpc_init.c  -fPIC -DPIC -o powerpc/.libs/powerpc_init.o
+#22 9.183 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwtran.lo -MD -MP -MF .deps/pngwtran.Tpo -c pngwtran.c -o pngwtran.o >/dev/null 2>&1
+#22 9.184 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwio.lo -MD -MP -MF .deps/pngwio.Tpo -c pngwio.c -o pngwio.o >/dev/null 2>&1
+#22 9.185 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwrite.lo -MD -MP -MF .deps/pngwrite.Tpo -c pngwrite.c -o pngwrite.o >/dev/null 2>&1
+#22 9.185 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwutil.lo -MD -MP -MF .deps/pngwutil.Tpo -c pngwutil.c -o pngwutil.o >/dev/null 2>&1
+#22 9.187 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/filter_sse2_intrinsics.lo -MD -MP -MF intel/.deps/filter_sse2_intrinsics.Tpo -c intel/filter_sse2_intrinsics.c -o intel/filter_sse2_intrinsics.o >/dev/null 2>&1
+#22 9.189 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/intel_init.lo -MD -MP -MF intel/.deps/intel_init.Tpo -c intel/intel_init.c -o intel/intel_init.o >/dev/null 2>&1
+#22 9.189 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/mips_init.lo -MD -MP -MF mips/.deps/mips_init.Tpo -c mips/mips_init.c -o mips/mips_init.o >/dev/null 2>&1
+#22 9.191 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrio.lo -MD -MP -MF .deps/pngrio.Tpo -c pngrio.c -o pngrio.o >/dev/null 2>&1
+#22 9.192 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/powerpc_init.lo -MD -MP -MF powerpc/.deps/powerpc_init.Tpo -c powerpc/powerpc_init.c -o powerpc/powerpc_init.o >/dev/null 2>&1
+#22 9.195 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/filter_msa_intrinsics.lo -MD -MP -MF mips/.deps/filter_msa_intrinsics.Tpo -c mips/filter_msa_intrinsics.c -o mips/filter_msa_intrinsics.o >/dev/null 2>&1
+#22 9.197 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/filter_vsx_intrinsics.lo -MD -MP -MF powerpc/.deps/filter_vsx_intrinsics.Tpo -c powerpc/filter_vsx_intrinsics.c -o powerpc/filter_vsx_intrinsics.o >/dev/null 2>&1
+#22 9.252 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngmem.lo -MD -MP -MF .deps/pngmem.Tpo -c pngmem.c -o pngmem.o >/dev/null 2>&1
+#22 9.336 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngtrans.lo -MD -MP -MF .deps/pngtrans.Tpo -c pngtrans.c -o pngtrans.o >/dev/null 2>&1
+#22 9.360 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngerror.lo -MD -MP -MF .deps/pngerror.Tpo -c pngerror.c -o pngerror.o >/dev/null 2>&1
+#22 9.373 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngget.lo -MD -MP -MF .deps/pngget.Tpo -c pngget.c -o pngget.o >/dev/null 2>&1
+#22 9.438 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngset.lo -MD -MP -MF .deps/pngset.Tpo -c pngset.c -o pngset.o >/dev/null 2>&1
+#22 9.442 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngpread.lo -MD -MP -MF .deps/pngpread.Tpo -c pngpread.c -o pngpread.o >/dev/null 2>&1
+#22 9.834 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngread.lo -MD -MP -MF .deps/pngread.Tpo -c pngread.c -o pngread.o >/dev/null 2>&1
+#22 9.840 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT png.lo -MD -MP -MF .deps/png.Tpo -c png.c -o png.o >/dev/null 2>&1
+#22 10.04 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrutil.lo -MD -MP -MF .deps/pngrutil.Tpo -c pngrutil.c -o pngrutil.o >/dev/null 2>&1
+#22 11.09 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrtran.lo -MD -MP -MF .deps/pngrtran.Tpo -c pngrtran.c -o pngrtran.o >/dev/null 2>&1
+#22 13.04 /bin/bash ./libtool  --tag=CC   --mode=link /afl/afl-clang-fast  -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -no-undefined -export-dynamic -version-number 16:40:0  -Wl,--version-script=libpng.vers   -o libpng16.la -rpath /usr/local/lib png.lo pngerror.lo pngget.lo pngmem.lo pngpread.lo pngread.lo pngrio.lo pngrtran.lo pngrutil.lo pngset.lo pngtrans.lo pngwio.lo pngwrite.lo pngwtran.lo pngwutil.lo  mips/mips_init.lo mips/filter_msa_intrinsics.lo intel/intel_init.lo intel/filter_sse2_intrinsics.lo powerpc/powerpc_init.lo powerpc/filter_vsx_intrinsics.lo   -lm -lz 
+#22 13.12 libtool: link: /afl/afl-clang-fast -shared  -fPIC -DPIC  .libs/png.o .libs/pngerror.o .libs/pngget.o .libs/pngmem.o .libs/pngpread.o .libs/pngread.o .libs/pngrio.o .libs/pngrtran.o .libs/pngrutil.o .libs/pngset.o .libs/pngtrans.o .libs/pngwio.o .libs/pngwrite.o .libs/pngwtran.o .libs/pngwutil.o mips/.libs/mips_init.o mips/.libs/filter_msa_intrinsics.o intel/.libs/intel_init.o intel/.libs/filter_sse2_intrinsics.o powerpc/.libs/powerpc_init.o powerpc/.libs/filter_vsx_intrinsics.o   -lm -lz  -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -O3 -Wl,--version-script=libpng.vers   -pthread -Wl,-soname -Wl,libpng16.so.16 -o .libs/libpng16.so.16.40.0
+#22 13.18 libtool: link: (cd ".libs" && rm -f "libpng16.so.16" && ln -s "libpng16.so.16.40.0" "libpng16.so.16")
+#22 13.18 libtool: link: (cd ".libs" && rm -f "libpng16.so" && ln -s "libpng16.so.16.40.0" "libpng16.so")
+#22 13.19 libtool: link: ar cr .libs/libpng16.a  png.o pngerror.o pngget.o pngmem.o pngpread.o pngread.o pngrio.o pngrtran.o pngrutil.o pngset.o pngtrans.o pngwio.o pngwrite.o pngwtran.o pngwutil.o mips/mips_init.o mips/filter_msa_intrinsics.o intel/intel_init.o intel/filter_sse2_intrinsics.o powerpc/powerpc_init.o powerpc/filter_vsx_intrinsics.o
+#22 13.20 libtool: link: ranlib .libs/libpng16.a
+#22 13.23 libtool: link: ( cd ".libs" && rm -f "libpng16.la" && ln -s "../libpng16.la" "libpng16.la" )
+#22 13.23 + /afl/afl-clang-fast++ -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -std=c++11 -I. /src/libpng/contrib/oss-fuzz/libpng_read_fuzzer.cc -o /out/libpng_read_fuzzer -lFuzzingEngine .libs/libpng16.a -lz
+#22 13.75 + find /src/libpng -name '*.png'
+#22 13.75 + grep -v crashers
+#22 13.75 + xargs zip /out/libpng_read_fuzzer_seed_corpus.zip
+#22 13.76   adding: src/libpng/pngtest.png (deflated 0%)
+#22 13.76   adding: src/libpng/pngbar.png (stored 0%)
+#22 13.76   adding: src/libpng/pngnow.png (deflated 0%)
+#22 13.76   adding: src/libpng/contrib/gregbook/toucan.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/visupng/VisualPng.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-1-1.8-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-8-linear-tRNS.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-4-1.8-tRNS.png (deflated 4%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-4-linear-tRNS.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-16-linear-tRNS.png (deflated 64%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-4-linear.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-alpha-8-linear.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-1-sRGB.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-8-sRGB-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-8-1.8.png (deflated 14%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-1-linear-tRNS.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-16-tRNS.png (deflated 67%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-16-1.8-tRNS.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-1-sRGB.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-16-sRGB-tRNS.png (deflated 66%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-alpha-16-1.8.png (deflated 68%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-4.png (deflated 5%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-8-linear-tRNS.png (deflated 11%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-4-1.8.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-8-linear.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-2-sRGB-tRNS.png (deflated 4%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-4-sRGB.png (deflated 6%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-16.png (deflated 57%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-alpha-16-sRGB.png (deflated 60%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-8-tRNS.png (deflated 13%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-2-linear-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-8.png (deflated 57%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-8-linear.png (deflated 14%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-alpha-16-sRGB.png (deflated 70%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-alpha-16-linear.png (deflated 57%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-alpha-8.png (deflated 61%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-4-tRNS.png (deflated 4%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-1.png (deflated 1%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-4.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-1-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-8.png (deflated 15%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-2-1.8.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-1-sRGB-tRNS.png (deflated 4%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-2.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-16-sRGB-tRNS.png (deflated 56%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-8-1.8-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-2-linear-tRNS.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-1-sRGB-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-alpha-8-1.8.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-2-sRGB.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-1-1.8.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-16-1.8.png (deflated 64%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-4-linear-tRNS.png (deflated 4%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-16-linear.png (deflated 64%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-16-linear.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-16-tRNS.png (deflated 57%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-2-1.8-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-2-1.8.png (deflated 4%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-alpha-8-sRGB.png (deflated 60%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-4-sRGB-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-2-tRNS.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-8-sRGB-tRNS.png (deflated 12%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-1.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-1-linear.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-8-tRNS.png (deflated 56%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-4-sRGB.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-alpha-8-linear.png (deflated 57%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-2-sRGB-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-alpha-16.png (deflated 61%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-2-1.8-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-8-1.8.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-16-sRGB.png (deflated 56%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-4-linear.png (deflated 5%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-alpha-8-sRGB.png (deflated 56%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-8-1.8.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-4-1.8-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-8-tRNS.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-8-sRGB.png (deflated 15%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-8-sRGB.png (deflated 56%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-8.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-1-1.8-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-2-linear.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-1-linear.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-4-1.8.png (deflated 5%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-8-1.8-tRNS.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-1-linear-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-alpha-16-linear.png (deflated 68%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-alpha-8.png (deflated 57%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-4-tRNS.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-2-tRNS.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-8-linear.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-alpha-16-1.8.png (deflated 57%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-8-sRGB-tRNS.png (deflated 56%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-16-linear-tRNS.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-2.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-2-sRGB.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-16-1.8-tRNS.png (deflated 64%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-8-1.8-tRNS.png (deflated 12%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-alpha-8-1.8.png (deflated 57%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-16.png (deflated 67%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-1-tRNS.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-16-sRGB.png (deflated 66%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-2-linear.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-alpha-16.png (deflated 71%)
+#22 13.76   adding: src/libpng/contrib/testpngs/rgb-8-linear-tRNS.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-8-sRGB.png (deflated 3%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-4-sRGB-tRNS.png (deflated 5%)
+#22 13.76   adding: src/libpng/contrib/testpngs/gray-16-1.8.png (deflated 53%)
+#22 13.76   adding: src/libpng/contrib/testpngs/palette-1-1.8.png (deflated 2%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/basn3p01.png (deflated 6%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/basn0g08.png (deflated 4%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/ftbrn2c08.png (stored 0%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/ftbbn3p08.png (deflated 1%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/interlaced/ibasn3p02.png (deflated 4%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/interlaced/ibasn0g04.png (stored 0%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/interlaced/ibasn0g02.png (deflated 1%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/interlaced/iftbbn0g02.png (stored 0%)
+#22 13.76   adding: src/libpng/contrib/pngsuite/interlaced/iftbbn0g01.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/interlaced/ibasn0g01.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/interlaced/ibasn3p04.png (deflated 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/interlaced/iftbbn0g04.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/interlaced/ibasn3p01.png (deflated 3%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftbgn3p08.png (deflated 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbbn0g01.png (deflated 4%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn2c16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbyn3p08.png (deflated 1%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftp0n0g08.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn3p08.png (deflated 15%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbwn3p08.png (deflated 1%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbgn3p08.png (deflated 1%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn2c08.png (deflated 2%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftbrn2c08.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn6a08.png (deflated 1%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn6a08.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbbn0g02.png (deflated 3%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn0g04.png (deflated 3%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbwn0g16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftbgn2c16.png (deflated 4%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftp1n3p08.png (deflated 1%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftbyn3p08.png (deflated 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftp0n3p08.png (deflated 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftp0n2c08.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftbbn3p08.png (deflated 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn4a08.png (deflated 3%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftbbn2c16.png (deflated 4%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn3p02.png (deflated 7%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftbwn3p08.png (deflated 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn0g08.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn3p08.png (deflated 21%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn0g02.png (deflated 7%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbbn0g04.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn0g16.png (deflated 1%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn6a16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn0g01.png (deflated 3%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn6a16.png (deflated 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftbwn0g16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftp0n0g08.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn4a08.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftp0n3p08.png (deflated 1%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn0g16.png (deflated 2%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn4a16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn3p04.png (deflated 4%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbbn2c16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftp0n2c08.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ftbgn2c16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/iftp1n3p08.png (deflated 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn4a16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/basn2c16.png (stored 0%)
+#22 13.77   adding: src/libpng/contrib/pngsuite/ibasn2c08.png (stored 0%)
+#22 13.77 + cp /src/libpng/contrib/oss-fuzz/png.dict /src/libpng/contrib/oss-fuzz/libpng_read_fuzzer.options /out/
+#22 13.97 Re-building benchmark for CmpLog fuzzing target
+#22 13.97 Building benchmark libpng_libpng_read_fuzzer with fuzzer aflmmbb
+#22 13.97 + cat scripts/pnglibconf.dfa
+#22 13.97 + sed -e 's/option STDIO/option STDIO disabled/' -e 's/option WARNING /option WARNING disabled/' -e 's/option WRITE enables WRITE_INT_FUNCTIONS/option WRITE disabled/'
+#22 13.97 + mv scripts/pnglibconf.dfa.temp scripts/pnglibconf.dfa
+#22 13.98 + autoreconf -f -i
+#22 16.56 libtoolize: putting auxiliary files in '.'.
+#22 16.56 libtoolize: copying file './ltmain.sh'
+#22 16.59 libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'scripts'.
+#22 16.59 libtoolize: copying file 'scripts/libtool.m4'
+#22 16.60 libtoolize: copying file 'scripts/ltoptions.m4'
+#22 16.61 libtoolize: copying file 'scripts/ltsugar.m4'
+#22 16.63 libtoolize: copying file 'scripts/ltversion.m4'
+#22 16.64 libtoolize: copying file 'scripts/lt~obsolete.m4'
+#22 18.73 configure.ac:61: installing './compile'
+#22 18.74 configure.ac:37: installing './missing'
+#22 18.77 Makefile.am: installing './depcomp'
+#22 18.83 + ./configure --with-libpng-prefix=OSS_FUZZ_
+#22 18.95 checking for a BSD-compatible install... /usr/bin/install -c
+#22 18.96 checking whether build environment is sane... yes
+#22 18.98 checking for a thread-safe mkdir -p... /usr/bin/mkdir -p
+#22 18.98 checking for gawk... no
+#22 18.98 checking for mawk... mawk
+#22 18.98 checking whether make sets $(MAKE)... yes
+#22 18.99 checking whether make supports nested variables... yes
+#22 19.00 checking whether to enable maintainer-specific portions of Makefiles... no
+#22 19.00 checking for gcc... /afl/afl-clang-fast
+#22 19.05 checking whether the C compiler works... yes
+#22 19.10 checking for C compiler default output file name... a.out
+#22 19.11 checking for suffix of executables... 
+#22 19.16 checking whether we are cross compiling... no
+#22 19.22 checking for suffix of object files... o
+#22 19.24 checking whether we are using the GNU C compiler... yes
+#22 19.26 checking whether /afl/afl-clang-fast accepts -g... yes
+#22 19.28 checking for /afl/afl-clang-fast option to accept ISO C89... none needed
+#22 19.31 checking whether /afl/afl-clang-fast understands -c and -o together... yes
+#22 19.35 checking whether make supports the include directive... yes (GNU style)
+#22 19.36 checking dependency style of /afl/afl-clang-fast... gcc3
+#22 19.40 checking dependency style of /afl/afl-clang-fast... gcc3
+#22 19.45 checking build system type... x86_64-pc-linux-gnu
+#22 19.50 checking host system type... x86_64-pc-linux-gnu
+#22 19.50 checking for a sed that does not truncate output... /usr/bin/sed
+#22 19.50 checking for grep that handles long lines and -e... /usr/bin/grep
+#22 19.50 checking for egrep... /usr/bin/grep -E
+#22 19.51 checking for fgrep... /usr/bin/grep -F
+#22 19.51 checking how to print strings... printf
+#22 19.54 checking for ld used by /afl/afl-clang-fast... /usr/bin/ld
+#22 19.55 checking if the linker (/usr/bin/ld) is GNU ld... yes
+#22 19.56 checking how to run the C preprocessor... /afl/afl-clang-fast -E
+#22 19.62 checking for gawk... (cached) mawk
+#22 19.62 checking whether ln -s works... yes
+#22 19.62 checking whether make sets $(MAKE)... (cached) yes
+#22 19.63 checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+#22 19.63 checking the name lister (/usr/bin/nm -B) interface... BSD nm
+#22 19.66 checking the maximum length of command line arguments... 1572864
+#22 19.66 checking how to convert x86_64-pc-linux-gnu file names to x86_64-pc-linux-gnu format... func_convert_file_noop
+#22 19.67 checking how to convert x86_64-pc-linux-gnu file names to toolchain format... func_convert_file_noop
+#22 19.67 checking for /usr/bin/ld option to reload object files... -r
+#22 19.67 checking for objdump... objdump
+#22 19.67 checking how to recognize dependent libraries... pass_all
+#22 19.67 checking for dlltool... no
+#22 19.67 checking how to associate runtime and link libraries... printf %s\n
+#22 19.67 checking for ar... ar
+#22 19.67 checking for archiver @FILE support... @
+#22 19.70 checking for strip... strip
+#22 19.70 checking for ranlib... ranlib
+#22 19.70 checking command to parse /usr/bin/nm -B output from /afl/afl-clang-fast object... ok
+#22 19.79 checking for sysroot... no
+#22 19.79 checking for a working dd... /usr/bin/dd
+#22 19.80 checking how to truncate binary pipes... /usr/bin/dd bs=4096 count=1
+#22 19.82 checking for mt... mt
+#22 19.82 checking if mt is a manifest tool... no
+#22 19.83 checking for ANSI C header files... yes
+#22 19.96 checking for sys/types.h... yes
+#22 19.99 checking for sys/stat.h... yes
+#22 20.03 checking for stdlib.h... yes
+#22 20.06 checking for string.h... yes
+#22 20.10 checking for memory.h... yes
+#22 20.13 checking for strings.h... yes
+#22 20.17 checking for inttypes.h... yes
+#22 20.20 checking for stdint.h... yes
+#22 20.24 checking for unistd.h... yes
+#22 20.27 checking for dlfcn.h... yes
+#22 20.30 checking for objdir... .libs
+#22 20.38 checking if /afl/afl-clang-fast supports -fno-rtti -fno-exceptions... yes
+#22 20.41 checking for /afl/afl-clang-fast option to produce PIC... -fPIC -DPIC
+#22 20.41 checking if /afl/afl-clang-fast PIC flag -fPIC -DPIC works... yes
+#22 20.43 checking if /afl/afl-clang-fast static flag -static works... yes
+#22 20.51 checking if /afl/afl-clang-fast supports -c -o file.o... yes
+#22 20.54 checking if /afl/afl-clang-fast supports -c -o file.o... (cached) yes
+#22 20.54 checking whether the /afl/afl-clang-fast linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+#22 20.56 checking whether -lc should be explicitly linked in... no
+#22 20.60 checking dynamic linker characteristics... GNU/Linux ld.so
+#22 20.69 checking how to hardcode library paths into programs... immediate
+#22 20.69 checking whether stripping libraries is possible... yes
+#22 20.69 checking if libtool supports shared libraries... yes
+#22 20.69 checking whether to build shared libraries... yes
+#22 20.69 checking whether to build static libraries... yes
+#22 20.69 checking that AWK works... ok
+#22 20.69 checking if we need to force back C standard to C89... no
+#22 20.72 checking whether struct tm is in sys/time.h or time.h... time.h
+#22 20.74 checking for C/C++ restrict keyword... __restrict
+#22 20.77 checking for pow... yes
+#22 20.83 checking for clock_gettime... yes
+#22 20.88 checking for zlibVersion in -lz... yes
+#22 20.94 checking for feenableexcept in -lm... yes
+#22 21.00 checking for feenableexcept... yes
+#22 21.05 checking if using Solaris linker... no
+#22 21.06 checking if libraries can be versioned... yes
+#22 21.06 checking for symbol prefix... 
+#22 21.07 configure: pkgconfig directory is ${libdir}/pkgconfig
+#22 21.07 configure: Extra options for compiler: 
+#22 21.10 checking that generated files are newer than configure... done
+#22 21.10 configure: creating ./config.status
+#22 21.67 config.status: creating Makefile
+#22 21.68 config.status: creating libpng.pc
+#22 21.70 config.status: creating libpng-config
+#22 21.71 config.status: creating config.h
+#22 21.72 config.status: executing depfiles commands
+#22 21.89 config.status: executing libtool commands
+#22 21.93 ++ nproc
+#22 21.93 + make -j128 clean
+#22 21.93 test -z "*.tf? pngout.png libpng16.pc libpng16-config libpng.vers libpng.sym check.new pnglibconf.h pngprefix.h symbols.new pngtest-log.txt pnglibconf.out pnglibconf.c pnglibconf.pre pnglibconf.dfn scripts/*.out scripts/*.chk" || rm -f *.tf? pngout.png libpng16.pc libpng16-config libpng.vers libpng.sym check.new pnglibconf.h pngprefix.h symbols.new pngtest-log.txt pnglibconf.out pnglibconf.c pnglibconf.pre pnglibconf.dfn scripts/*.out scripts/*.chk
+#22 21.93 test -z "libpng16.la" || rm -f libpng16.la
+#22 21.93 rm -rf .libs _libs
+#22 21.93 rm -f *.o
+#22 21.93  rm -f pngfix png-fix-itxt
+#22 21.93 test -z "tests/pngtest-all.log tests/pngvalid-gamma-16-to-8.log tests/pngvalid-gamma-alpha-mode.log tests/pngvalid-gamma-background.log tests/pngvalid-gamma-expand16-alpha-mode.log tests/pngvalid-gamma-expand16-background.log tests/pngvalid-gamma-expand16-transform.log tests/pngvalid-gamma-sbit.log tests/pngvalid-gamma-threshold.log tests/pngvalid-gamma-transform.log tests/pngvalid-progressive-size.log tests/pngvalid-progressive-interlace-standard.log tests/pngvalid-transform.log tests/pngvalid-progressive-standard.log tests/pngvalid-standard.log tests/pngstest-1.8.log tests/pngstest-1.8-alpha.log tests/pngstest-linear.log tests/pngstest-linear-alpha.log tests/pngstest-none.log tests/pngstest-none-alpha.log tests/pngstest-sRGB.log tests/pngstest-sRGB-alpha.log tests/pngunknown-IDAT.log tests/pngunknown-discard.log tests/pngunknown-if-safe.log tests/pngunknown-sAPI.log tests/pngunknown-sTER.log tests/pngunknown-save.log tests/pngunknown-vpAg.log tests/pngimage-quick.log tests/pngimage-full.log" || rm -f tests/pngtest-all.log tests/pngvalid-gamma-16-to-8.log tests/pngvalid-gamma-alpha-mode.log tests/pngvalid-gamma-background.log tests/pngvalid-gamma-expand16-alpha-mode.log tests/pngvalid-gamma-expand16-background.log tests/pngvalid-gamma-expand16-transform.log tests/pngvalid-gamma-sbit.log tests/pngvalid-gamma-threshold.log tests/pngvalid-gamma-transform.log tests/pngvalid-progressive-size.log tests/pngvalid-progressive-interlace-standard.log tests/pngvalid-transform.log tests/pngvalid-progressive-standard.log tests/pngvalid-standard.log tests/pngstest-1.8.log tests/pngstest-1.8-alpha.log tests/pngstest-linear.log tests/pngstest-linear-alpha.log tests/pngstest-none.log tests/pngstest-none-alpha.log tests/pngstest-sRGB.log tests/pngstest-sRGB-alpha.log tests/pngunknown-IDAT.log tests/pngunknown-discard.log tests/pngunknown-if-safe.log tests/pngunknown-sAPI.log tests/pngunknown-sTER.log tests/pngunknown-save.log tests/pngunknown-vpAg.log tests/pngimage-quick.log tests/pngimage-full.log
+#22 21.93  rm -f pngtest pngunknown pngstest pngvalid pngimage pngcp timepng
+#22 21.93 rm -f *.lo
+#22 21.94 rm -rf arm/.libs arm/_libs
+#22 21.94 rm -f arm/*.o
+#22 21.94 test -z "tests/pngtest-all.trs tests/pngvalid-gamma-16-to-8.trs tests/pngvalid-gamma-alpha-mode.trs tests/pngvalid-gamma-background.trs tests/pngvalid-gamma-expand16-alpha-mode.trs tests/pngvalid-gamma-expand16-background.trs tests/pngvalid-gamma-expand16-transform.trs tests/pngvalid-gamma-sbit.trs tests/pngvalid-gamma-threshold.trs tests/pngvalid-gamma-transform.trs tests/pngvalid-progressive-size.trs tests/pngvalid-progressive-interlace-standard.trs tests/pngvalid-transform.trs tests/pngvalid-progressive-standard.trs tests/pngvalid-standard.trs tests/pngstest-1.8.trs tests/pngstest-1.8-alpha.trs tests/pngstest-linear.trs tests/pngstest-linear-alpha.trs tests/pngstest-none.trs tests/pngstest-none-alpha.trs tests/pngstest-sRGB.trs tests/pngstest-sRGB-alpha.trs tests/pngunknown-IDAT.trs tests/pngunknown-discard.trs tests/pngunknown-if-safe.trs tests/pngunknown-sAPI.trs tests/pngunknown-sTER.trs tests/pngunknown-save.trs tests/pngunknown-vpAg.trs tests/pngimage-quick.trs tests/pngimage-full.trs" || rm -f tests/pngtest-all.trs tests/pngvalid-gamma-16-to-8.trs tests/pngvalid-gamma-alpha-mode.trs tests/pngvalid-gamma-background.trs tests/pngvalid-gamma-expand16-alpha-mode.trs tests/pngvalid-gamma-expand16-background.trs tests/pngvalid-gamma-expand16-transform.trs tests/pngvalid-gamma-sbit.trs tests/pngvalid-gamma-threshold.trs tests/pngvalid-gamma-transform.trs tests/pngvalid-progressive-size.trs tests/pngvalid-progressive-interlace-standard.trs tests/pngvalid-transform.trs tests/pngvalid-progressive-standard.trs tests/pngvalid-standard.trs tests/pngstest-1.8.trs tests/pngstest-1.8-alpha.trs tests/pngstest-linear.trs tests/pngstest-linear-alpha.trs tests/pngstest-none.trs tests/pngstest-none-alpha.trs tests/pngstest-sRGB.trs tests/pngstest-sRGB-alpha.trs tests/pngunknown-IDAT.trs tests/pngunknown-discard.trs tests/pngunknown-if-safe.trs tests/pngunknown-sAPI.trs tests/pngunknown-sTER.trs tests/pngunknown-save.trs tests/pngunknown-vpAg.trs tests/pngimage-quick.trs tests/pngimage-full.trs
+#22 21.94 rm -rf intel/.libs intel/_libs
+#22 21.94 rm -f arm/*.lo
+#22 21.94 test -z "test-suite.log" || rm -f test-suite.log
+#22 21.94 rm -f ./so_locations
+#22 21.94 rm -rf mips/.libs mips/_libs
+#22 21.94 rm -f contrib/libtests/*.o
+#22 21.94 rm -rf powerpc/.libs powerpc/_libs
+#22 21.94 rm -f contrib/tools/*.o
+#22 21.94 rm -f intel/*.o
+#22 21.95 rm -f intel/*.lo
+#22 21.95 rm -f mips/*.o
+#22 21.95 rm -f mips/*.lo
+#22 21.95 rm -f powerpc/*.o
+#22 21.95 rm -f powerpc/*.lo
+#22 21.96 ++ nproc
+#22 21.96 + make -j128 libpng16.la
+#22 21.96 rm -f pnglibconf.c pnglibconf.tf[45]
+#22 21.96 mawk -f ./scripts/options.awk out=pnglibconf.tf4 version=search\
+#22 21.96     ./pngconf.h ./scripts/pnglibconf.dfa\
+#22 21.96     ./pngusr.dfa  1>&2
+#22 21.97 mawk -f ./scripts/options.awk out=pnglibconf.tf5 pnglibconf.tf4 1>&2
+#22 21.97 rm pnglibconf.tf4
+#22 21.97 mv pnglibconf.tf5 pnglibconf.c
+#22 21.98 rm -f pnglibconf.out pnglibconf.tf[12]
+#22 21.98 test -d scripts || mkdir scripts || test -d scripts
+#22 21.98 /afl/afl-clang-fast -E -DHAVE_CONFIG_H -I. \
+#22 21.98      -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.40.git' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE -DPNG_PREFIX='OSS_FUZZ_' pnglibconf.c > pnglibconf.tf1
+#22 22.00 mawk -f "./scripts/dfn.awk" out="pnglibconf.tf2" pnglibconf.tf1 1>&2
+#22 22.01 rm -f pnglibconf.tf1
+#22 22.01 mv pnglibconf.tf2 pnglibconf.out
+#22 22.01 rm -f scripts/prefix.out scripts/prefix.tf[12]
+#22 22.01 test -d scripts || mkdir scripts || test -d scripts
+#22 22.01 /afl/afl-clang-fast -E -DHAVE_CONFIG_H -I. \
+#22 22.01      -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.40.git' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE -DPNG_PREFIX='OSS_FUZZ_' scripts/prefix.c > scripts/prefix.tf1
+#22 22.03 mawk -f "./scripts/dfn.awk" out="scripts/prefix.tf2" scripts/prefix.tf1 1>&2
+#22 22.03 rm -f scripts/prefix.tf1
+#22 22.04 mv scripts/prefix.tf2 scripts/prefix.out
+#22 22.04 rm -f pnglibconf.h
+#22 22.04 mawk 's==0 && NR>1{print prev}\
+#22 22.04    s==0{prev=$0}\
+#22 22.04    s==1{print "#define", $1, "OSS_FUZZ_" $1}\
+#22 22.04    s==2{print "#define OSS_FUZZ_png_" $1, "PNG_" $1}\
+#22 22.04    END{print prev}' s=0 pnglibconf.out s=1 scripts/prefix.out\
+#22 22.04    s=2 ./scripts/macro.lst >pnglibconf.tf8
+#22 22.04 mv pnglibconf.tf8 pnglibconf.h
+#22 22.05 rm -f scripts/intprefix.out scripts/intprefix.tf[12]
+#22 22.05 rm -f scripts/vers.out scripts/vers.tf[12]
+#22 22.05 test -d scripts || mkdir scripts || test -d scripts
+#22 22.05 test -d scripts || mkdir scripts || test -d scripts
+#22 22.05 /afl/afl-clang-fast -E -DHAVE_CONFIG_H -I. \
+#22 22.05      -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.40.git' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE -DPNG_PREFIX='OSS_FUZZ_' scripts/intprefix.c > scripts/intprefix.tf1
+#22 22.05 /afl/afl-clang-fast -E -DHAVE_CONFIG_H -I. \
+#22 22.05      -DPNGLIB_LIBNAME='PNG16_0' -DPNGLIB_VERSION='1.6.40.git' -DSYMBOL_PREFIX='' -DPNG_NO_USE_READ_MACROS -DPNG_BUILDING_SYMBOL_TABLE -DPNG_PREFIX='OSS_FUZZ_' scripts/vers.c > scripts/vers.tf1
+#22 22.06 mawk -f "./scripts/dfn.awk" out="scripts/vers.tf2" scripts/vers.tf1 1>&2
+#22 22.07 rm -f scripts/vers.tf1
+#22 22.07 mv scripts/vers.tf2 scripts/vers.out
+#22 22.07 rm -f libpng.vers
+#22 22.07 mawk -f "./scripts/dfn.awk" out="scripts/intprefix.tf2" scripts/intprefix.tf1 1>&2
+#22 22.08 cp scripts/vers.out libpng.vers
+#22 22.08 rm -f scripts/intprefix.tf1
+#22 22.08 mv scripts/intprefix.tf2 scripts/intprefix.out
+#22 22.08 rm -f pngprefix.tf1
+#22 22.09 mawk '{print "#define", $1, "OSS_FUZZ_" $1}' scripts/intprefix.out >pngprefix.tf1
+#22 22.09 mv pngprefix.tf1 pngprefix.h
+#22 22.09 depbase=`echo png.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT png.lo -MD -MP -MF $depbase.Tpo -c -o png.lo png.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngerror.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngerror.lo -MD -MP -MF $depbase.Tpo -c -o pngerror.lo pngerror.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngget.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngget.lo -MD -MP -MF $depbase.Tpo -c -o pngget.lo pngget.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngmem.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngmem.lo -MD -MP -MF $depbase.Tpo -c -o pngmem.lo pngmem.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngpread.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngpread.lo -MD -MP -MF $depbase.Tpo -c -o pngpread.lo pngpread.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngread.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngread.lo -MD -MP -MF $depbase.Tpo -c -o pngread.lo pngread.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngrio.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrio.lo -MD -MP -MF $depbase.Tpo -c -o pngrio.lo pngrio.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngrtran.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrtran.lo -MD -MP -MF $depbase.Tpo -c -o pngrtran.lo pngrtran.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngrutil.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrutil.lo -MD -MP -MF $depbase.Tpo -c -o pngrutil.lo pngrutil.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngset.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngset.lo -MD -MP -MF $depbase.Tpo -c -o pngset.lo pngset.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngtrans.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngtrans.lo -MD -MP -MF $depbase.Tpo -c -o pngtrans.lo pngtrans.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngwio.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwio.lo -MD -MP -MF $depbase.Tpo -c -o pngwio.lo pngwio.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngwrite.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwrite.lo -MD -MP -MF $depbase.Tpo -c -o pngwrite.lo pngwrite.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngwtran.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwtran.lo -MD -MP -MF $depbase.Tpo -c -o pngwtran.lo pngwtran.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo pngwutil.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwutil.lo -MD -MP -MF $depbase.Tpo -c -o pngwutil.lo pngwutil.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo mips/mips_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/mips_init.lo -MD -MP -MF $depbase.Tpo -c -o mips/mips_init.lo mips/mips_init.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo mips/filter_msa_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/filter_msa_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o mips/filter_msa_intrinsics.lo mips/filter_msa_intrinsics.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.09 depbase=`echo intel/intel_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.09 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/intel_init.lo -MD -MP -MF $depbase.Tpo -c -o intel/intel_init.lo intel/intel_init.c &&\
+#22 22.09 mv -f $depbase.Tpo $depbase.Plo
+#22 22.10 depbase=`echo intel/filter_sse2_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.10 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/filter_sse2_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o intel/filter_sse2_intrinsics.lo intel/filter_sse2_intrinsics.c &&\
+#22 22.10 mv -f $depbase.Tpo $depbase.Plo
+#22 22.10 depbase=`echo powerpc/powerpc_init.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.10 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/powerpc_init.lo -MD -MP -MF $depbase.Tpo -c -o powerpc/powerpc_init.lo powerpc/powerpc_init.c &&\
+#22 22.10 mv -f $depbase.Tpo $depbase.Plo
+#22 22.10 depbase=`echo powerpc/filter_vsx_intrinsics.lo | sed 's|[^/]*$|.deps/&|;s|\.lo$||'`;\
+#22 22.10 /bin/bash ./libtool  --tag=CC   --mode=compile /afl/afl-clang-fast -DHAVE_CONFIG_H -I.     -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/filter_vsx_intrinsics.lo -MD -MP -MF $depbase.Tpo -c -o powerpc/filter_vsx_intrinsics.lo powerpc/filter_vsx_intrinsics.c &&\
+#22 22.10 mv -f $depbase.Tpo $depbase.Plo
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT png.lo -MD -MP -MF .deps/png.Tpo -c png.c  -fPIC -DPIC -o .libs/png.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngerror.lo -MD -MP -MF .deps/pngerror.Tpo -c pngerror.c  -fPIC -DPIC -o .libs/pngerror.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngmem.lo -MD -MP -MF .deps/pngmem.Tpo -c pngmem.c  -fPIC -DPIC -o .libs/pngmem.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngpread.lo -MD -MP -MF .deps/pngpread.Tpo -c pngpread.c  -fPIC -DPIC -o .libs/pngpread.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngget.lo -MD -MP -MF .deps/pngget.Tpo -c pngget.c  -fPIC -DPIC -o .libs/pngget.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngread.lo -MD -MP -MF .deps/pngread.Tpo -c pngread.c  -fPIC -DPIC -o .libs/pngread.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrio.lo -MD -MP -MF .deps/pngrio.Tpo -c pngrio.c  -fPIC -DPIC -o .libs/pngrio.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwutil.lo -MD -MP -MF .deps/pngwutil.Tpo -c pngwutil.c  -fPIC -DPIC -o .libs/pngwutil.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwtran.lo -MD -MP -MF .deps/pngwtran.Tpo -c pngwtran.c  -fPIC -DPIC -o .libs/pngwtran.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwrite.lo -MD -MP -MF .deps/pngwrite.Tpo -c pngwrite.c  -fPIC -DPIC -o .libs/pngwrite.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngtrans.lo -MD -MP -MF .deps/pngtrans.Tpo -c pngtrans.c  -fPIC -DPIC -o .libs/pngtrans.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngset.lo -MD -MP -MF .deps/pngset.Tpo -c pngset.c  -fPIC -DPIC -o .libs/pngset.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrutil.lo -MD -MP -MF .deps/pngrutil.Tpo -c pngrutil.c  -fPIC -DPIC -o .libs/pngrutil.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrtran.lo -MD -MP -MF .deps/pngrtran.Tpo -c pngrtran.c  -fPIC -DPIC -o .libs/pngrtran.o
+#22 22.13 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwio.lo -MD -MP -MF .deps/pngwio.Tpo -c pngwio.c  -fPIC -DPIC -o .libs/pngwio.o
+#22 22.14 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/intel_init.lo -MD -MP -MF intel/.deps/intel_init.Tpo -c intel/intel_init.c  -fPIC -DPIC -o intel/.libs/intel_init.o
+#22 22.14 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/mips_init.lo -MD -MP -MF mips/.deps/mips_init.Tpo -c mips/mips_init.c  -fPIC -DPIC -o mips/.libs/mips_init.o
+#22 22.14 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/filter_sse2_intrinsics.lo -MD -MP -MF intel/.deps/filter_sse2_intrinsics.Tpo -c intel/filter_sse2_intrinsics.c  -fPIC -DPIC -o intel/.libs/filter_sse2_intrinsics.o
+#22 22.14 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/filter_vsx_intrinsics.lo -MD -MP -MF powerpc/.deps/filter_vsx_intrinsics.Tpo -c powerpc/filter_vsx_intrinsics.c  -fPIC -DPIC -o powerpc/.libs/filter_vsx_intrinsics.o
+#22 22.14 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/powerpc_init.lo -MD -MP -MF powerpc/.deps/powerpc_init.Tpo -c powerpc/powerpc_init.c  -fPIC -DPIC -o powerpc/.libs/powerpc_init.o
+#22 22.14 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/filter_msa_intrinsics.lo -MD -MP -MF mips/.deps/filter_msa_intrinsics.Tpo -c mips/filter_msa_intrinsics.c  -fPIC -DPIC -o mips/.libs/filter_msa_intrinsics.o
+#22 22.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwio.lo -MD -MP -MF .deps/pngwio.Tpo -c pngwio.c -o pngwio.o >/dev/null 2>&1
+#22 22.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwtran.lo -MD -MP -MF .deps/pngwtran.Tpo -c pngwtran.c -o pngwtran.o >/dev/null 2>&1
+#22 22.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwrite.lo -MD -MP -MF .deps/pngwrite.Tpo -c pngwrite.c -o pngwrite.o >/dev/null 2>&1
+#22 22.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngwutil.lo -MD -MP -MF .deps/pngwutil.Tpo -c pngwutil.c -o pngwutil.o >/dev/null 2>&1
+#22 22.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/intel_init.lo -MD -MP -MF intel/.deps/intel_init.Tpo -c intel/intel_init.c -o intel/intel_init.o >/dev/null 2>&1
+#22 22.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT intel/filter_sse2_intrinsics.lo -MD -MP -MF intel/.deps/filter_sse2_intrinsics.Tpo -c intel/filter_sse2_intrinsics.c -o intel/filter_sse2_intrinsics.o >/dev/null 2>&1
+#22 22.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/mips_init.lo -MD -MP -MF mips/.deps/mips_init.Tpo -c mips/mips_init.c -o mips/mips_init.o >/dev/null 2>&1
+#22 22.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/powerpc_init.lo -MD -MP -MF powerpc/.deps/powerpc_init.Tpo -c powerpc/powerpc_init.c -o powerpc/powerpc_init.o >/dev/null 2>&1
+#22 22.18 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrio.lo -MD -MP -MF .deps/pngrio.Tpo -c pngrio.c -o pngrio.o >/dev/null 2>&1
+#22 22.18 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT mips/filter_msa_intrinsics.lo -MD -MP -MF mips/.deps/filter_msa_intrinsics.Tpo -c mips/filter_msa_intrinsics.c -o mips/filter_msa_intrinsics.o >/dev/null 2>&1
+#22 22.18 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT powerpc/filter_vsx_intrinsics.lo -MD -MP -MF powerpc/.deps/filter_vsx_intrinsics.Tpo -c powerpc/filter_vsx_intrinsics.c -o powerpc/filter_vsx_intrinsics.o >/dev/null 2>&1
+#22 22.21 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngmem.lo -MD -MP -MF .deps/pngmem.Tpo -c pngmem.c -o pngmem.o >/dev/null 2>&1
+#22 22.32 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngerror.lo -MD -MP -MF .deps/pngerror.Tpo -c pngerror.c -o pngerror.o >/dev/null 2>&1
+#22 22.35 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngtrans.lo -MD -MP -MF .deps/pngtrans.Tpo -c pngtrans.c -o pngtrans.o >/dev/null 2>&1
+#22 22.38 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngget.lo -MD -MP -MF .deps/pngget.Tpo -c pngget.c -o pngget.o >/dev/null 2>&1
+#22 22.41 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngpread.lo -MD -MP -MF .deps/pngpread.Tpo -c pngpread.c -o pngpread.o >/dev/null 2>&1
+#22 22.45 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngset.lo -MD -MP -MF .deps/pngset.Tpo -c pngset.c -o pngset.o >/dev/null 2>&1
+#22 22.87 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT png.lo -MD -MP -MF .deps/png.Tpo -c png.c -o png.o >/dev/null 2>&1
+#22 22.95 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngread.lo -MD -MP -MF .deps/pngread.Tpo -c pngread.c -o pngread.o >/dev/null 2>&1
+#22 23.17 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrutil.lo -MD -MP -MF .deps/pngrutil.Tpo -c pngrutil.c -o pngrutil.o >/dev/null 2>&1
+#22 23.37 libtool: compile:  /afl/afl-clang-fast -DHAVE_CONFIG_H -I. -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -MT pngrtran.lo -MD -MP -MF .deps/pngrtran.Tpo -c pngrtran.c -o pngrtran.o >/dev/null 2>&1
+#22 24.62 /bin/bash ./libtool  --tag=CC   --mode=link /afl/afl-clang-fast  -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -no-undefined -export-dynamic -version-number 16:40:0  -Wl,--version-script=libpng.vers   -o libpng16.la -rpath /usr/local/lib png.lo pngerror.lo pngget.lo pngmem.lo pngpread.lo pngread.lo pngrio.lo pngrtran.lo pngrutil.lo pngset.lo pngtrans.lo pngwio.lo pngwrite.lo pngwtran.lo pngwutil.lo  mips/mips_init.lo mips/filter_msa_intrinsics.lo intel/intel_init.lo intel/filter_sse2_intrinsics.lo powerpc/powerpc_init.lo powerpc/filter_vsx_intrinsics.lo   -lm -lz 
+#22 24.70 libtool: link: /afl/afl-clang-fast -shared  -fPIC -DPIC  .libs/png.o .libs/pngerror.o .libs/pngget.o .libs/pngmem.o .libs/pngpread.o .libs/pngread.o .libs/pngrio.o .libs/pngrtran.o .libs/pngrutil.o .libs/pngset.o .libs/pngtrans.o .libs/pngwio.o .libs/pngwrite.o .libs/pngwtran.o .libs/pngwutil.o mips/.libs/mips_init.o mips/.libs/filter_msa_intrinsics.o intel/.libs/intel_init.o intel/.libs/filter_sse2_intrinsics.o powerpc/.libs/powerpc_init.o powerpc/.libs/filter_vsx_intrinsics.o   -lm -lz  -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -O3 -Wl,--version-script=libpng.vers   -pthread -Wl,-soname -Wl,libpng16.so.16 -o .libs/libpng16.so.16.40.0
+#22 24.76 libtool: link: (cd ".libs" && rm -f "libpng16.so.16" && ln -s "libpng16.so.16.40.0" "libpng16.so.16")
+#22 24.76 libtool: link: (cd ".libs" && rm -f "libpng16.so" && ln -s "libpng16.so.16.40.0" "libpng16.so")
+#22 24.77 libtool: link: ar cr .libs/libpng16.a  png.o pngerror.o pngget.o pngmem.o pngpread.o pngread.o pngrio.o pngrtran.o pngrutil.o pngset.o pngtrans.o pngwio.o pngwrite.o pngwtran.o pngwutil.o mips/mips_init.o mips/filter_msa_intrinsics.o intel/intel_init.o intel/filter_sse2_intrinsics.o powerpc/powerpc_init.o powerpc/filter_vsx_intrinsics.o
+#22 24.78 libtool: link: ranlib .libs/libpng16.a
+#22 24.80 libtool: link: ( cd ".libs" && rm -f "libpng16.la" && ln -s "../libpng16.la" "libpng16.la" )
+#22 24.81 + /afl/afl-clang-fast++ -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -std=c++11 -I. /src/libpng/contrib/oss-fuzz/libpng_read_fuzzer.cc -o /out/cmplog/libpng_read_fuzzer -lFuzzingEngine .libs/libpng16.a -lz
+#22 25.37 + find /src/libpng -name '*.png'
+#22 25.37 + grep -v crashers
+#22 25.37 + xargs zip /out/cmplog/libpng_read_fuzzer_seed_corpus.zip
+#22 25.38   adding: src/libpng/pngtest.png (deflated 0%)
+#22 25.38   adding: src/libpng/pngbar.png (stored 0%)
+#22 25.38   adding: src/libpng/pngnow.png (deflated 0%)
+#22 25.38   adding: src/libpng/contrib/gregbook/toucan.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/visupng/VisualPng.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-1-1.8-tRNS.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-8-linear-tRNS.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-4-1.8-tRNS.png (deflated 4%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-4-linear-tRNS.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-16-linear-tRNS.png (deflated 64%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-4-linear.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-alpha-8-linear.png (deflated 53%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-1-sRGB.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-8-sRGB-tRNS.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-8-1.8.png (deflated 14%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-1-linear-tRNS.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-16-tRNS.png (deflated 67%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-16-1.8-tRNS.png (deflated 53%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-1-sRGB.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-16-sRGB-tRNS.png (deflated 66%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-alpha-16-1.8.png (deflated 68%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-4.png (deflated 5%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-8-linear-tRNS.png (deflated 11%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-4-1.8.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-8-linear.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-2-sRGB-tRNS.png (deflated 4%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-4-sRGB.png (deflated 6%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-16.png (deflated 57%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-alpha-16-sRGB.png (deflated 60%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-8-tRNS.png (deflated 13%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-2-linear-tRNS.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-8.png (deflated 57%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-8-linear.png (deflated 14%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-alpha-16-sRGB.png (deflated 70%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-alpha-16-linear.png (deflated 57%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-alpha-8.png (deflated 61%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-4-tRNS.png (deflated 4%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-1.png (deflated 1%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-4.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-1-tRNS.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-8.png (deflated 15%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-2-1.8.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-1-sRGB-tRNS.png (deflated 4%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-2.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-16-sRGB-tRNS.png (deflated 56%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-8-1.8-tRNS.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-2-linear-tRNS.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-1-sRGB-tRNS.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-alpha-8-1.8.png (deflated 53%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-2-sRGB.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-1-1.8.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-16-1.8.png (deflated 64%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-4-linear-tRNS.png (deflated 4%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-16-linear.png (deflated 64%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-16-linear.png (deflated 53%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-16-tRNS.png (deflated 57%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-2-1.8-tRNS.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-2-1.8.png (deflated 4%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-alpha-8-sRGB.png (deflated 60%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-4-sRGB-tRNS.png (deflated 3%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-2-tRNS.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-8-sRGB-tRNS.png (deflated 12%)
+#22 25.38   adding: src/libpng/contrib/testpngs/gray-1.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/palette-1-linear.png (deflated 2%)
+#22 25.38   adding: src/libpng/contrib/testpngs/rgb-8-tRNS.png (deflated 56%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-4-sRGB.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-alpha-8-linear.png (deflated 57%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-2-sRGB-tRNS.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-alpha-16.png (deflated 61%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-2-1.8-tRNS.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-8-1.8.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-16-sRGB.png (deflated 56%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-4-linear.png (deflated 5%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-alpha-8-sRGB.png (deflated 56%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-8-1.8.png (deflated 53%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-4-1.8-tRNS.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-8-tRNS.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-8-sRGB.png (deflated 15%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-8-sRGB.png (deflated 56%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-8.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-1-1.8-tRNS.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-2-linear.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-1-linear.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-4-1.8.png (deflated 5%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-8-1.8-tRNS.png (deflated 53%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-1-linear-tRNS.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-alpha-16-linear.png (deflated 68%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-alpha-8.png (deflated 57%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-4-tRNS.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-2-tRNS.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-8-linear.png (deflated 53%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-alpha-16-1.8.png (deflated 57%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-8-sRGB-tRNS.png (deflated 56%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-16-linear-tRNS.png (deflated 53%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-2.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-2-sRGB.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-16-1.8-tRNS.png (deflated 64%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-8-1.8-tRNS.png (deflated 12%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-alpha-8-1.8.png (deflated 57%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-16.png (deflated 67%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-1-tRNS.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-16-sRGB.png (deflated 66%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-2-linear.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-alpha-16.png (deflated 71%)
+#22 25.39   adding: src/libpng/contrib/testpngs/rgb-8-linear-tRNS.png (deflated 53%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-8-sRGB.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-4-sRGB-tRNS.png (deflated 5%)
+#22 25.39   adding: src/libpng/contrib/testpngs/gray-16-1.8.png (deflated 53%)
+#22 25.39   adding: src/libpng/contrib/testpngs/palette-1-1.8.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn3p01.png (deflated 6%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn0g08.png (deflated 4%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbrn2c08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbbn3p08.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/ibasn3p02.png (deflated 4%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/ibasn0g04.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/ibasn0g02.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/iftbbn0g02.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/iftbbn0g01.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/ibasn0g01.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/ibasn3p04.png (deflated 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/iftbbn0g04.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/interlaced/ibasn3p01.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftbgn3p08.png (deflated 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbbn0g01.png (deflated 4%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn2c16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbyn3p08.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftp0n0g08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn3p08.png (deflated 15%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbwn3p08.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbgn3p08.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn2c08.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftbrn2c08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn6a08.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn6a08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbbn0g02.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn0g04.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbwn0g16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftbgn2c16.png (deflated 4%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftp1n3p08.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftbyn3p08.png (deflated 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftp0n3p08.png (deflated 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftp0n2c08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftbbn3p08.png (deflated 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn4a08.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftbbn2c16.png (deflated 4%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn3p02.png (deflated 7%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftbwn3p08.png (deflated 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn0g08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn3p08.png (deflated 21%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn0g02.png (deflated 7%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbbn0g04.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn0g16.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn6a16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn0g01.png (deflated 3%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn6a16.png (deflated 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftbwn0g16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftp0n0g08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn4a08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftp0n3p08.png (deflated 1%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn0g16.png (deflated 2%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn4a16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn3p04.png (deflated 4%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbbn2c16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftp0n2c08.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ftbgn2c16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/iftp1n3p08.png (deflated 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn4a16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/basn2c16.png (stored 0%)
+#22 25.39   adding: src/libpng/contrib/pngsuite/ibasn2c08.png (stored 0%)
+#22 25.39 + cp /src/libpng/contrib/oss-fuzz/png.dict /src/libpng/contrib/oss-fuzz/libpng_read_fuzzer.options /out/cmplog/
+#22 DONE 25.5s
+
+#23 exporting to image
+#23 exporting layers
+#23 exporting layers 5.0s done
+#23 preparing layers for inline cache 0.1s done
+#23 writing image sha256:9f45cab94d8e8e06584f95181ce2572afc5622c6c03a0637e98990523d9cc16b done
+#23 naming to gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer done
+#23 DONE 5.1s
+
+ [33m4 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer-intermediate \
+--file fuzzers/aflmmbb/runner.Dockerfile \
+fuzzers/aflmmbb
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from runner.Dockerfile
+#1 transferring dockerfile: 1.13kB done
+#1 WARN: UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer-intermediate
+#4 DONE 0.0s
+
+#5 [1/1] FROM gcr.io/fuzzbench/base-image:latest
+#5 CACHED
+
+#6 exporting to image
+#6 exporting layers done
+#6 preparing layers for inline cache done
+#6 writing image sha256:0dcae0633340983dc0f0325a60e3ded9110cef498f835801c6f3e1c84d756bd0 done
+#6 naming to gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer-intermediate done
+#6 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer \
+--build-arg benchmark=libpng_libpng_read_fuzzer \
+--build-arg fuzzer=aflmmbb \
+--file docker/benchmark-runner/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 3.23kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+#1 WARN: JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer-intermediate:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 [stage-1  1/12] FROM gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer-intermediate:latest
+#5 DONE 0.0s
+
+#6 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 ...
+
+#8 [builder 1/1] FROM gcr.io/fuzzbench/builders/aflmmbb/libpng_libpng_read_fuzzer:latest
+#8 DONE 0.2s
+
+#7 [internal] load build context
+#7 transferring context: 7.26MB 0.2s done
+#7 DONE 0.2s
+
+#9 [stage-1  2/12] RUN apt-get update -y &&     DEBIAN_FRONTEND="noninteractive" apt-get install -y     libglib2.0-0     libxml2     libarchive13     libgss3
+#9 CACHED
+
+#10 [stage-1  3/12] RUN mkdir -p /out
+#10 CACHED
+
+#11 [stage-1  4/12] WORKDIR /out
+#11 CACHED
+
+#12 [stage-1  5/12] COPY --from=builder /out/ ./
+#12 DONE 0.0s
+
+#13 [stage-1  6/12] COPY benchmarks /src/benchmarks
+#13 DONE 0.1s
+
+#14 [stage-1  7/12] COPY fuzzers /src/fuzzers
+#14 DONE 0.1s
+
+#15 [stage-1  8/12] RUN mkdir -p /out/seeds /out/corpus
+#15 DONE 0.2s
+
+#16 [stage-1  9/12] COPY common /src/common
+#16 DONE 0.0s
+
+#17 [stage-1 10/12] COPY experiment/runner.py /src/experiment/runner.py
+#17 DONE 0.0s
+
+#18 [stage-1 11/12] COPY docker/benchmark-runner /src/docker/benchmark-runner
+#18 DONE 0.0s
+
+#19 [stage-1 12/12] RUN chmod +x /src/docker/benchmark-runner/startup-runner.sh
+#19 DONE 0.2s
+
+#20 exporting to image
+#20 exporting layers 0.0s done
+#20 preparing layers for inline cache done
+#20 writing image sha256:bde94c3c3694bb87652a2314027c9627658111ce26ffc287e5e4c65f01c47d96 done
+#20 naming to gcr.io/fuzzbench/runners/aflmmbb/libpng_libpng_read_fuzzer done
+#20 DONE 0.1s
+
+ [33m5 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+ - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+ - JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)

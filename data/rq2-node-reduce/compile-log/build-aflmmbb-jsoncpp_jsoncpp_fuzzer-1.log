@@ -1,0 +1,1007 @@
+docker build \
+--tag gcr.io/fuzzbench/builders/benchmark/jsoncpp_jsoncpp_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/benchmark/jsoncpp_jsoncpp_fuzzer \
+--file benchmarks/jsoncpp_jsoncpp_fuzzer/Dockerfile \
+benchmarks/jsoncpp_jsoncpp_fuzzer
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.33kB done
+#1 WARN: WorkdirRelativePath: Relative workdir "jsoncpp" can have unexpected results if the base image changes (line 26)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/benchmark/jsoncpp_jsoncpp_fuzzer
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 1.27kB 0.0s done
+#6 DONE 0.0s
+
+#7 [2/6] RUN apt-get update && apt-get install -y build-essential make curl wget
+#7 CACHED
+
+#8 [3/6] RUN wget https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5-Linux-x86_64.sh &&     chmod +x cmake-3.14.5-Linux-x86_64.sh &&     ./cmake-3.14.5-Linux-x86_64.sh --skip-license --prefix="/usr/local"
+#8 CACHED
+
+#9 [4/6] RUN git clone https://github.com/open-source-parsers/jsoncpp
+#9 CACHED
+
+#10 [5/6] WORKDIR jsoncpp
+#10 CACHED
+
+#11 [6/6] COPY build.sh /src/
+#11 CACHED
+
+#12 exporting to image
+#12 exporting layers done
+#12 preparing layers for inline cache done
+#12 writing image sha256:ff6670d6c84cfa1a560cf7693a353d806679ff95dd2ce31a6370c9e045057761 done
+#12 naming to gcr.io/fuzzbench/builders/benchmark/jsoncpp_jsoncpp_fuzzer done
+#12 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - WorkdirRelativePath: Relative workdir "jsoncpp" can have unexpected results if the base image changes (line 26)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate \
+--build-arg parent_image=gcr.io/fuzzbench/builders/benchmark/jsoncpp_jsoncpp_fuzzer \
+--file fuzzers/aflmmbb/builder.Dockerfile \
+fuzzers/aflmmbb
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from builder.Dockerfile
+#1 transferring dockerfile: 2.90kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/builders/benchmark/jsoncpp_jsoncpp_fuzzer:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate
+#4 DONE 0.0s
+
+#5 [ 1/13] FROM gcr.io/fuzzbench/builders/benchmark/jsoncpp_jsoncpp_fuzzer:latest
+#5 DONE 0.0s
+
+#6 [11/13] RUN cd /afl &&     unset CFLAGS CXXFLAGS &&     export CC=clang AFL_NO_X86=1 &&     PYTHON_INCLUDE=/ make &&     cp utils/aflpp_driver/libAFLDriver.a /
+#6 CACHED
+
+#7 [ 2/13] RUN apt-get update &&     apt-get install -y     build-essential python3-dev automake cmake git flex bison     libglib2.0-dev libpixman-1-dev python3-setuptools cargo libgtk-3-dev
+#7 CACHED
+
+#8 [ 6/13] RUN apt-get install -y cpio libcapstone-dev # for Nyx mode
+#8 CACHED
+
+#9 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#9 CACHED
+
+#10 [ 7/13] RUN apt-get install -y wget curl # for Frida mode
+#10 CACHED
+
+#11 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install
+#11 CACHED
+
+#12 [ 4/13] RUN apt-get install -y gcc-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-plugin-dev     libstdc++-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-dev
+#12 CACHED
+
+#13 [ 5/13] RUN apt-get install -y ninja-build # for QEMU mode
+#13 CACHED
+
+#14 [ 9/13] RUN echo "dont cache3"
+#14 CACHED
+
+#15 [ 3/13] RUN apt-get install -y lld-14 llvm-14 llvm-14-dev clang-14 ||     apt-get install -y lld llvm llvm-dev clang
+#15 CACHED
+
+#16 [ 8/13] RUN apt-get install -y python3-pip # for Unicorn mode
+#16 CACHED
+
+#17 [13/13] RUN cd /afl/custom_mutators/examples &&     cc -O3 -fPIC -shared -g -o custom_post_run.so -I../../include set.c custom_post_run.c
+#17 CACHED
+
+#18 exporting to image
+#18 exporting layers done
+#18 preparing layers for inline cache 0.0s done
+#18 writing image sha256:8671562a2400ec314d793619876b17b2998437ac35d6ccb8637c914d542fb287 done
+#18 naming to gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate done
+#18 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+docker pull ubuntu:focal
+focal: Pulling from library/ubuntu
+Digest: sha256:8e5c4f0285ecbb4ead070431d29b576a530d3166df73ec44affc1cd27555141b
+Status: Image is up to date for ubuntu:focal
+docker.io/library/ubuntu:focal
+docker build \
+--tag gcr.io/fuzzbench/base-image \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/base-image \
+--file docker/base-image/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.34kB done
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:focal
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 220B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/base-image
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/ubuntu:focal
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 711B done
+#6 DONE 0.0s
+
+#7 [6/7] RUN apt-get update &&     apt-get install -y     apt-transport-https     ca-certificates     rsync     gnupg
+#7 CACHED
+
+#8 [3/7] RUN cd /tmp/ &&     curl -O https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tar.xz &&     tar -xvf Python-3.10.8.tar.xz > /dev/null &&     cd Python-3.10.8 &&     ./configure         --enable-loadable-sqlite-extensions         --enable-optimizations         > /dev/null &&     make -j install > /dev/null &&     rm -r /tmp/Python-3.10.8.tar.xz /tmp/Python-3.10.8 &&     ln -s /usr/local/bin/python3 /usr/local/bin/python &&     ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+#8 CACHED
+
+#9 [5/7] RUN pip install -r /tmp/requirements.txt
+#9 CACHED
+
+#10 [4/7] COPY ./requirements.txt /tmp
+#10 CACHED
+
+#11 [2/7] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     build-essential     zlib1g-dev     libssl-dev     libffi-dev     libsqlite3-dev     libbz2-dev     liblzma-dev
+#11 CACHED
+
+#12 [7/7] RUN echo "deb https://packages.cloud.google.com/apt cloud-sdk main"     | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg     | apt-key add - &&     apt-get update &&     apt-get install -y google-cloud-cli
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 preparing layers for inline cache done
+#13 writing image sha256:301837c4bc3b22e7210b5f2f53fa52cf0e5b0454fd0a3813ae57f7d732e83395 done
+#13 naming to gcr.io/fuzzbench/base-image done
+#13 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer \
+--build-arg benchmark=jsoncpp_jsoncpp_fuzzer \
+--build-arg fuzzer=aflmmbb \
+--build-arg parent_image=gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate \
+--no-cache \
+--file docker/benchmark-builder/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.50kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer
+#5 DONE 0.0s
+
+#6 [stage-1  1/15] FROM gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate:latest
+#6 CACHED
+
+#7 [base-image 1/1] FROM gcr.io/fuzzbench/base-image:latest
+#7 CACHED
+
+#8 [internal] load build context
+#8 transferring context: 979.39kB 0.1s done
+#8 DONE 0.1s
+
+#9 [stage-1  2/15] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     zlib1g-dev     libssl-dev     libffi-dev
+#9 0.442 Get:1 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+#9 0.468 Hit:2 http://archive.ubuntu.com/ubuntu focal InRelease
+#9 0.555 Get:3 http://archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+#9 0.914 Get:4 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1301 kB]
+#9 0.978 Get:5 http://archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
+#9 1.145 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/main i386 Packages [1332 kB]
+#9 1.320 Get:7 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [4252 kB]
+#9 1.472 Get:8 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [4577 kB]
+#9 1.507 Get:9 http://security.ubuntu.com/ubuntu focal-security/universe i386 Packages [861 kB]
+#9 1.524 Get:10 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [4389 kB]
+#9 1.631 Get:11 http://security.ubuntu.com/ubuntu focal-security/main i386 Packages [1053 kB]
+#9 1.686 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1593 kB]
+#9 1.724 Get:13 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [4730 kB]
+#9 1.851 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/universe i386 Packages [1021 kB]
+#9 2.586 Fetched 25.5 MB in 2s (11.0 MB/s)
+#9 2.586 Reading package lists...
+#9 3.713 Reading package lists...
+#9 4.780 Building dependency tree...
+#9 4.948 Reading state information...
+#9 4.967 Calculating upgrade...
+#9 5.471 The following packages will be upgraded:
+#9 5.471   apt base-files binutils binutils-common binutils-dev
+#9 5.471   binutils-x86-64-linux-gnu bsdutils ca-certificates e2fsprogs fdisk
+#9 5.471   gir1.2-harfbuzz-0.0 git git-man krb5-locales less libapr1 libaprutil1
+#9 5.471   libapt-pkg6.0 libasn1-8-heimdal libbinutils libc-bin libc-dev-bin libc6
+#9 5.471   libc6-dev libc6-dev-i386 libc6-dev-x32 libc6-i386 libc6-x32 libcap2
+#9 5.471   libcom-err2 libctf-nobfd0 libctf0 libcurl3-gnutls libext2fs2 libfdisk1
+#9 5.471   libgnutls30 libgssapi-krb5-2 libgssapi3-heimdal libharfbuzz-dev
+#9 5.471   libharfbuzz-gobject0 libharfbuzz-icu0 libharfbuzz0b libhcrypto4-heimdal
+#9 5.471   libheimbase1-heimdal libheimntlm0-heimdal libhx509-5-heimdal libk5crypto3
+#9 5.471   libkrb5-26-heimdal libkrb5-3 libkrb5support0 libldap-2.4-2 libldap-common
+#9 5.471   libnghttp2-14 libpam-modules libpam-modules-bin libpam-runtime libpam0g
+#9 5.471   libperl5.30 libprocps8 libpython3.8 libpython3.8-dev libpython3.8-minimal
+#9 5.471   libpython3.8-stdlib libroken18-heimdal libsmartcols1 libsqlite3-0 libss2
+#9 5.471   libssh-4 libssl-dev libssl1.1 libtasn1-6 libudev1 libwind0-heimdal
+#9 5.471   libx11-data libxml2 linux-libc-dev login logsave mount ncurses-base
+#9 5.471   ncurses-bin openssh-client openssl passwd perl perl-base perl-modules-5.30
+#9 5.471   procps python3.8 python3.8-dev python3.8-minimal rsync tar tzdata unzip
+#9 5.471   util-linux
+#9 5.534 96 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 5.534 Need to get 64.5 MB of archives.
+#9 5.534 After this operation, 477 kB of additional disk space will be used.
+#9 5.534 Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-x32 amd64 2.31-0ubuntu9.17 [1975 kB]
+#9 5.690 Get:2 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-i386 amd64 2.31-0ubuntu9.17 [1902 kB]
+#9 5.722 Get:3 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev amd64 2.31-0ubuntu9.17 [2521 kB]
+#9 5.764 Get:4 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-dev-bin amd64 2.31-0ubuntu9.17 [71.8 kB]
+#9 5.766 Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-i386 amd64 2.31-0ubuntu9.17 [2726 kB]
+#9 5.813 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-x32 amd64 2.31-0ubuntu9.17 [2779 kB]
+#9 5.860 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 linux-libc-dev amd64 5.4.0-208.228 [1118 kB]
+#9 5.879 Get:8 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6 amd64 2.31-0ubuntu9.17 [2721 kB]
+#9 5.927 Get:9 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 base-files amd64 11ubuntu5.8 [60.3 kB]
+#9 5.928 Get:10 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 bsdutils amd64 1:2.34-0.1ubuntu9.6 [63.3 kB]
+#9 5.929 Get:11 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 login amd64 1:4.8.1-1ubuntu5.20.04.5 [220 kB]
+#9 5.932 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ncurses-bin amd64 6.2-0ubuntu2.1 [172 kB]
+#9 5.934 Get:13 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libperl5.30 amd64 5.30.0-9ubuntu0.5 [3941 kB]
+#9 6.003 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl amd64 5.30.0-9ubuntu0.5 [224 kB]
+#9 6.005 Get:15 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl-base amd64 5.30.0-9ubuntu0.5 [1514 kB]
+#9 6.032 Get:16 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl-modules-5.30 all 5.30.0-9ubuntu0.5 [2739 kB]
+#9 6.078 Get:17 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tar amd64 1.30+dfsg-7ubuntu0.20.04.4 [240 kB]
+#9 6.082 Get:18 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libfdisk1 amd64 2.34-0.1ubuntu9.6 [175 kB]
+#9 6.084 Get:19 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libsmartcols1 amd64 2.34-0.1ubuntu9.6 [100 kB]
+#9 6.086 Get:20 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 fdisk amd64 2.34-0.1ubuntu9.6 [120 kB]
+#9 6.088 Get:21 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 util-linux amd64 2.34-0.1ubuntu9.6 [1022 kB]
+#9 6.106 Get:22 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-bin amd64 2.31-0ubuntu9.17 [634 kB]
+#9 6.117 Get:23 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ncurses-base all 6.2-0ubuntu2.1 [18.9 kB]
+#9 6.118 Get:24 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libudev1 amd64 245.4-4ubuntu3.24 [75.2 kB]
+#9 6.119 Get:25 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libapt-pkg6.0 amd64 2.0.10 [843 kB]
+#9 6.132 Get:26 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libtasn1-6 amd64 4.16.0-2ubuntu0.1 [38.6 kB]
+#9 6.134 Get:27 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgnutls30 amd64 3.6.13-2ubuntu1.12 [829 kB]
+#9 6.149 Get:28 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 apt amd64 2.0.10 [1280 kB]
+#9 6.170 Get:29 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam0g amd64 1.3.1-5ubuntu4.7 [55.4 kB]
+#9 6.171 Get:30 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-modules-bin amd64 1.3.1-5ubuntu4.7 [41.2 kB]
+#9 6.172 Get:31 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-modules amd64 1.3.1-5ubuntu4.7 [261 kB]
+#9 6.176 Get:32 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 logsave amd64 1.45.5-2ubuntu1.2 [10.2 kB]
+#9 6.176 Get:33 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libext2fs2 amd64 1.45.5-2ubuntu1.2 [183 kB]
+#9 6.179 Get:34 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 e2fsprogs amd64 1.45.5-2ubuntu1.2 [527 kB]
+#9 6.188 Get:35 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 mount amd64 2.34-0.1ubuntu9.6 [115 kB]
+#9 6.191 Get:36 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [514 kB]
+#9 6.199 Get:37 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [3950 kB]
+#9 6.267 Get:38 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8 amd64 3.8.10-0ubuntu1~20.04.15 [1626 kB]
+#9 6.294 Get:39 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl-dev amd64 1.1.1f-1ubuntu2.24 [1586 kB]
+#9 6.322 Get:40 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl1.1 amd64 1.1.1f-1ubuntu2.24 [1323 kB]
+#9 6.344 Get:41 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8 amd64 3.8.10-0ubuntu1~20.04.15 [387 kB]
+#9 6.350 Get:42 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-stdlib amd64 3.8.10-0ubuntu1~20.04.15 [1675 kB]
+#9 6.380 Get:43 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [1901 kB]
+#9 6.412 Get:44 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [720 kB]
+#9 6.424 Get:45 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libsqlite3-0 amd64 3.31.1-4ubuntu0.6 [549 kB]
+#9 6.433 Get:46 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 rsync amd64 3.1.3-8ubuntu0.9 [323 kB]
+#9 6.439 Get:47 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-runtime all 1.3.1-5ubuntu4.7 [37.3 kB]
+#9 6.439 Get:48 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 passwd amd64 1:4.8.1-1ubuntu5.20.04.5 [797 kB]
+#9 6.454 Get:49 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcom-err2 amd64 1.45.5-2ubuntu1.2 [9580 B]
+#9 6.454 Get:50 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libprocps8 amd64 2:3.3.16-1ubuntu2.4 [33.1 kB]
+#9 6.455 Get:51 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libss2 amd64 1.45.5-2ubuntu1.2 [11.3 kB]
+#9 6.455 Get:52 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 procps amd64 2:3.3.16-1ubuntu2.4 [232 kB]
+#9 6.458 Get:53 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssl amd64 1.1.1f-1ubuntu2.24 [621 kB]
+#9 6.481 Get:54 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ca-certificates all 20240203~20.04.1 [159 kB]
+#9 6.484 Get:55 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 less amd64 551-1ubuntu0.3 [123 kB]
+#9 6.486 Get:56 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcap2 amd64 1:2.32-1ubuntu0.2 [15.7 kB]
+#9 6.487 Get:57 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libxml2 amd64 2.9.10+dfsg-5ubuntu0.20.04.9 [641 kB]
+#9 6.497 Get:58 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tzdata all 2024b-0ubuntu0.20.04.1 [299 kB]
+#9 6.502 Get:59 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 krb5-locales all 1.17-6ubuntu4.8 [11.6 kB]
+#9 6.502 Get:60 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi-krb5-2 amd64 1.17-6ubuntu4.8 [121 kB]
+#9 6.503 Get:61 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-3 amd64 1.17-6ubuntu4.8 [329 kB]
+#9 6.509 Get:62 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5support0 amd64 1.17-6ubuntu4.8 [31.1 kB]
+#9 6.510 Get:63 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libk5crypto3 amd64 1.17-6ubuntu4.8 [80.4 kB]
+#9 6.529 Get:64 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libx11-data all 2:1.6.9-2ubuntu1.6 [114 kB]
+#9 6.531 Get:65 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git-man all 1:2.25.1-1ubuntu3.14 [887 kB]
+#9 6.546 Get:66 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libroken18-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [42.5 kB]
+#9 6.547 Get:67 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libasn1-8-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [181 kB]
+#9 6.549 Get:68 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libheimbase1-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [30.4 kB]
+#9 6.550 Get:69 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhcrypto4-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [88.1 kB]
+#9 6.552 Get:70 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libwind0-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [47.7 kB]
+#9 6.552 Get:71 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhx509-5-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [107 kB]
+#9 6.555 Get:72 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-26-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [207 kB]
+#9 6.558 Get:73 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libheimntlm0-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [15.1 kB]
+#9 6.573 Get:74 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi3-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [96.5 kB]
+#9 6.575 Get:75 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libldap-common all 2.4.49+dfsg-2ubuntu1.10 [16.5 kB]
+#9 6.575 Get:76 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libldap-2.4-2 amd64 2.4.49+dfsg-2ubuntu1.10 [155 kB]
+#9 6.577 Get:77 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libnghttp2-14 amd64 1.40.0-1ubuntu0.3 [79.9 kB]
+#9 6.579 Get:78 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssh-4 amd64 0.9.3-2ubuntu2.5 [171 kB]
+#9 6.581 Get:79 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcurl3-gnutls amd64 7.68.0-1ubuntu2.25 [233 kB]
+#9 6.593 Get:80 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git amd64 1:2.25.1-1ubuntu3.14 [4613 kB]
+#9 6.672 Get:81 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssh-client amd64 1:8.2p1-4ubuntu0.12 [671 kB]
+#9 6.683 Get:82 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-dev amd64 2.34-6ubuntu1.10 [3636 kB]
+#9 6.746 Get:83 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf0 amd64 2.34-6ubuntu1.10 [46.7 kB]
+#9 6.747 Get:84 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-x86-64-linux-gnu amd64 2.34-6ubuntu1.10 [1613 kB]
+#9 6.774 Get:85 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libbinutils amd64 2.34-6ubuntu1.10 [474 kB]
+#9 6.781 Get:86 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils amd64 2.34-6ubuntu1.10 [3380 B]
+#9 6.781 Get:87 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-common amd64 2.34-6ubuntu1.10 [208 kB]
+#9 6.784 Get:88 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf-nobfd0 amd64 2.34-6ubuntu1.10 [48.1 kB]
+#9 6.785 Get:89 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-dev amd64 2.6.4-1ubuntu4.3 [526 kB]
+#9 6.795 Get:90 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz0b amd64 2.6.4-1ubuntu4.3 [391 kB]
+#9 6.801 Get:91 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-icu0 amd64 2.6.4-1ubuntu4.3 [5592 B]
+#9 6.801 Get:92 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-gobject0 amd64 2.6.4-1ubuntu4.3 [20.3 kB]
+#9 6.812 Get:93 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 gir1.2-harfbuzz-0.0 amd64 2.6.4-1ubuntu4.3 [26.3 kB]
+#9 6.813 Get:94 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libaprutil1 amd64 1.6.1-4ubuntu2.2 [85.1 kB]
+#9 6.814 Get:95 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libapr1 amd64 1.6.5-1ubuntu1.1 [91.5 kB]
+#9 6.816 Get:96 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 unzip amd64 6.0-25ubuntu1.2 [169 kB]
+#9 6.977 debconf: delaying package configuration, since apt-utils is not installed
+#9 7.017 Fetched 64.5 MB in 1s (48.4 MB/s)
+#9 7.038 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46202 files and directories currently installed.)
+#9 7.065 Preparing to unpack .../0-libc6-dev-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 7.067 Unpacking libc6-dev-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 7.274 Preparing to unpack .../1-libc6-dev-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 7.276 Unpacking libc6-dev-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 7.503 Preparing to unpack .../2-libc6-dev_2.31-0ubuntu9.17_amd64.deb ...
+#9 7.505 Unpacking libc6-dev:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 8.024 Preparing to unpack .../3-libc-dev-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 8.026 Unpacking libc-dev-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 8.055 Preparing to unpack .../4-libc6-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 8.057 Unpacking libc6-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 8.426 Preparing to unpack .../5-libc6-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 8.428 Unpacking libc6-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 8.794 Preparing to unpack .../6-linux-libc-dev_5.4.0-208.228_amd64.deb ...
+#9 8.796 Unpacking linux-libc-dev:amd64 (5.4.0-208.228) over (5.4.0-137.154) ...
+#9 9.352 Preparing to unpack .../7-libc6_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.505 Unpacking libc6:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.876 Setting up libc6:amd64 (2.31-0ubuntu9.17) ...
+#9 11.02 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 11.05 Preparing to unpack .../base-files_11ubuntu5.8_amd64.deb ...
+#9 11.06 Unpacking base-files (11ubuntu5.8) over (11ubuntu5.6) ...
+#9 11.12 Setting up base-files (11ubuntu5.8) ...
+#9 11.12 Installing new version of config file /etc/issue ...
+#9 11.13 Installing new version of config file /etc/issue.net ...
+#9 11.13 Installing new version of config file /etc/lsb-release ...
+#9 11.13 Installing new version of config file /etc/update-motd.d/10-help-text ...
+#9 11.30 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 11.32 Preparing to unpack .../bsdutils_1%3a2.34-0.1ubuntu9.6_amd64.deb ...
+#9 11.32 Unpacking bsdutils (1:2.34-0.1ubuntu9.6) over (1:2.34-0.1ubuntu9.3) ...
+#9 11.36 Setting up bsdutils (1:2.34-0.1ubuntu9.6) ...
+#9 11.39 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 11.42 Preparing to unpack .../login_1%3a4.8.1-1ubuntu5.20.04.5_amd64.deb ...
+#9 11.44 Unpacking login (1:4.8.1-1ubuntu5.20.04.5) over (1:4.8.1-1ubuntu5.20.04.4) ...
+#9 11.49 Setting up login (1:4.8.1-1ubuntu5.20.04.5) ...
+#9 11.53 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 11.55 Preparing to unpack .../ncurses-bin_6.2-0ubuntu2.1_amd64.deb ...
+#9 11.55 Unpacking ncurses-bin (6.2-0ubuntu2.1) over (6.2-0ubuntu2) ...
+#9 11.62 Setting up ncurses-bin (6.2-0ubuntu2.1) ...
+#9 11.65 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 11.68 Preparing to unpack .../libperl5.30_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 11.68 Unpacking libperl5.30:amd64 (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 12.20 Preparing to unpack .../perl_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 12.22 Unpacking perl (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 12.27 Preparing to unpack .../perl-base_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 12.28 Unpacking perl-base (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 12.75 Setting up perl-base (5.30.0-9ubuntu0.5) ...
+#9 12.78 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 12.80 Preparing to unpack .../perl-modules-5.30_5.30.0-9ubuntu0.5_all.deb ...
+#9 12.80 Unpacking perl-modules-5.30 (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 13.64 Preparing to unpack .../tar_1.30+dfsg-7ubuntu0.20.04.4_amd64.deb ...
+#9 13.64 Unpacking tar (1.30+dfsg-7ubuntu0.20.04.4) over (1.30+dfsg-7ubuntu0.20.04.2) ...
+#9 13.69 Setting up tar (1.30+dfsg-7ubuntu0.20.04.4) ...
+#9 13.72 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 13.74 Preparing to unpack .../libfdisk1_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 13.75 Unpacking libfdisk1:amd64 (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 13.78 Preparing to unpack .../libsmartcols1_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 13.78 Unpacking libsmartcols1:amd64 (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 13.82 Setting up libsmartcols1:amd64 (2.34-0.1ubuntu9.6) ...
+#9 13.84 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 13.86 Preparing to unpack .../fdisk_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 13.87 Unpacking fdisk (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 13.90 Preparing to unpack .../util-linux_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 13.91 Unpacking util-linux (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 14.09 Setting up util-linux (2.34-0.1ubuntu9.6) ...
+#9 14.41 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 14.43 Preparing to unpack .../libc-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 14.43 Unpacking libc-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 14.54 Setting up libc-bin (2.31-0ubuntu9.17) ...
+#9 14.60 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 14.62 Preparing to unpack .../ncurses-base_6.2-0ubuntu2.1_all.deb ...
+#9 14.63 Unpacking ncurses-base (6.2-0ubuntu2.1) over (6.2-0ubuntu2) ...
+#9 14.69 Setting up ncurses-base (6.2-0ubuntu2.1) ...
+#9 14.71 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 14.73 Preparing to unpack .../libudev1_245.4-4ubuntu3.24_amd64.deb ...
+#9 14.74 Unpacking libudev1:amd64 (245.4-4ubuntu3.24) over (245.4-4ubuntu3.19) ...
+#9 14.77 Setting up libudev1:amd64 (245.4-4ubuntu3.24) ...
+#9 14.80 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 14.82 Preparing to unpack .../libapt-pkg6.0_2.0.10_amd64.deb ...
+#9 14.82 Unpacking libapt-pkg6.0:amd64 (2.0.10) over (2.0.9) ...
+#9 14.91 Setting up libapt-pkg6.0:amd64 (2.0.10) ...
+#9 14.93 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 14.96 Preparing to unpack .../libtasn1-6_4.16.0-2ubuntu0.1_amd64.deb ...
+#9 14.96 Unpacking libtasn1-6:amd64 (4.16.0-2ubuntu0.1) over (4.16.0-2) ...
+#9 14.99 Setting up libtasn1-6:amd64 (4.16.0-2ubuntu0.1) ...
+#9 15.02 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 15.04 Preparing to unpack .../libgnutls30_3.6.13-2ubuntu1.12_amd64.deb ...
+#9 15.04 Unpacking libgnutls30:amd64 (3.6.13-2ubuntu1.12) over (3.6.13-2ubuntu1.7) ...
+#9 15.13 Setting up libgnutls30:amd64 (3.6.13-2ubuntu1.12) ...
+#9 15.15 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46201 files and directories currently installed.)
+#9 15.17 Preparing to unpack .../archives/apt_2.0.10_amd64.deb ...
+#9 15.21 Unpacking apt (2.0.10) over (2.0.9) ...
+#9 15.35 Setting up apt (2.0.10) ...
+#9 15.66 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46199 files and directories currently installed.)
+#9 15.68 Preparing to unpack .../libpam0g_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 15.68 Unpacking libpam0g:amd64 (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 15.72 Setting up libpam0g:amd64 (1.3.1-5ubuntu4.7) ...
+#9 15.81 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46199 files and directories currently installed.)
+#9 15.84 Preparing to unpack .../libpam-modules-bin_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 15.84 Unpacking libpam-modules-bin (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 15.88 Setting up libpam-modules-bin (1.3.1-5ubuntu4.7) ...
+#9 15.90 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46199 files and directories currently installed.)
+#9 15.92 Preparing to unpack .../libpam-modules_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 15.99 Unpacking libpam-modules:amd64 (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 16.06 Setting up libpam-modules:amd64 (1.3.1-5ubuntu4.7) ...
+#9 16.10 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46199 files and directories currently installed.)
+#9 16.13 Preparing to unpack .../logsave_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 16.13 Unpacking logsave (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 16.15 Preparing to unpack .../libext2fs2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 16.15 Unpacking libext2fs2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 16.19 Setting up libext2fs2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 16.22 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46199 files and directories currently installed.)
+#9 16.24 Preparing to unpack .../00-e2fsprogs_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 16.25 Unpacking e2fsprogs (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 16.32 Preparing to unpack .../01-mount_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 16.32 Unpacking mount (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 16.35 Preparing to unpack .../02-python3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 16.35 Unpacking python3.8-dev (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 16.38 Preparing to unpack .../03-libpython3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 16.38 Unpacking libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 16.80 Preparing to unpack .../04-libpython3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 16.80 Unpacking libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 16.94 Preparing to unpack .../05-libssl-dev_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 16.94 Unpacking libssl-dev:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 17.14 Preparing to unpack .../06-libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 17.14 Unpacking libssl1.1:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 17.25 Preparing to unpack .../07-python3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 17.31 Unpacking python3.8 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 17.35 Preparing to unpack .../08-libpython3.8-stdlib_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 17.39 Unpacking libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 17.64 Preparing to unpack .../09-python3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 17.65 Unpacking python3.8-minimal (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 17.81 Preparing to unpack .../10-libpython3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 17.88 Unpacking libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 18.08 Preparing to unpack .../11-libsqlite3-0_3.31.1-4ubuntu0.6_amd64.deb ...
+#9 18.08 Unpacking libsqlite3-0:amd64 (3.31.1-4ubuntu0.6) over (3.31.1-4ubuntu0.5) ...
+#9 18.14 Preparing to unpack .../12-rsync_3.1.3-8ubuntu0.9_amd64.deb ...
+#9 18.14 Unpacking rsync (3.1.3-8ubuntu0.9) over (3.1.3-8ubuntu0.4) ...
+#9 18.19 Preparing to unpack .../13-libpam-runtime_1.3.1-5ubuntu4.7_all.deb ...
+#9 18.20 Unpacking libpam-runtime (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 18.24 Setting up libpam-runtime (1.3.1-5ubuntu4.7) ...
+#9 18.38 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46199 files and directories currently installed.)
+#9 18.40 Preparing to unpack .../passwd_1%3a4.8.1-1ubuntu5.20.04.5_amd64.deb ...
+#9 18.43 Unpacking passwd (1:4.8.1-1ubuntu5.20.04.5) over (1:4.8.1-1ubuntu5.20.04.4) ...
+#9 18.53 Setting up passwd (1:4.8.1-1ubuntu5.20.04.5) ...
+#9 18.59 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46199 files and directories currently installed.)
+#9 18.61 Preparing to unpack .../00-libcom-err2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.61 Unpacking libcom-err2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.64 Preparing to unpack .../01-libprocps8_2%3a3.3.16-1ubuntu2.4_amd64.deb ...
+#9 18.64 Unpacking libprocps8:amd64 (2:3.3.16-1ubuntu2.4) over (2:3.3.16-1ubuntu2.3) ...
+#9 18.66 Preparing to unpack .../02-libss2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.67 Unpacking libss2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.69 Preparing to unpack .../03-procps_2%3a3.3.16-1ubuntu2.4_amd64.deb ...
+#9 18.71 Unpacking procps (2:3.3.16-1ubuntu2.4) over (2:3.3.16-1ubuntu2.3) ...
+#9 18.77 Preparing to unpack .../04-openssl_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 18.77 Unpacking openssl (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 18.84 Preparing to unpack .../05-ca-certificates_20240203~20.04.1_all.deb ...
+#9 18.84 Unpacking ca-certificates (20240203~20.04.1) over (20211016ubuntu0.20.04.1) ...
+#9 18.94 Preparing to unpack .../06-less_551-1ubuntu0.3_amd64.deb ...
+#9 18.94 Unpacking less (551-1ubuntu0.3) over (551-1ubuntu0.1) ...
+#9 18.97 Preparing to unpack .../07-libcap2_1%3a2.32-1ubuntu0.2_amd64.deb ...
+#9 18.97 Unpacking libcap2:amd64 (1:2.32-1ubuntu0.2) over (1:2.32-1ubuntu0.1) ...
+#9 19.00 Preparing to unpack .../08-libxml2_2.9.10+dfsg-5ubuntu0.20.04.9_amd64.deb ...
+#9 19.00 Unpacking libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) over (2.9.10+dfsg-5ubuntu0.20.04.8) ...
+#9 19.07 Preparing to unpack .../09-tzdata_2024b-0ubuntu0.20.04.1_all.deb ...
+#9 19.07 Unpacking tzdata (2024b-0ubuntu0.20.04.1) over (2022g-0ubuntu0.20.04.1) ...
+#9 19.86 Preparing to unpack .../10-krb5-locales_1.17-6ubuntu4.8_all.deb ...
+#9 19.86 Unpacking krb5-locales (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 19.89 Preparing to unpack .../11-libgssapi-krb5-2_1.17-6ubuntu4.8_amd64.deb ...
+#9 19.89 Unpacking libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 19.92 Preparing to unpack .../12-libkrb5-3_1.17-6ubuntu4.8_amd64.deb ...
+#9 19.92 Unpacking libkrb5-3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 19.97 Preparing to unpack .../13-libkrb5support0_1.17-6ubuntu4.8_amd64.deb ...
+#9 19.97 Unpacking libkrb5support0:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 20.00 Preparing to unpack .../14-libk5crypto3_1.17-6ubuntu4.8_amd64.deb ...
+#9 20.00 Unpacking libk5crypto3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 20.03 Preparing to unpack .../15-libx11-data_2%3a1.6.9-2ubuntu1.6_all.deb ...
+#9 20.03 Unpacking libx11-data (2:1.6.9-2ubuntu1.6) over (2:1.6.9-2ubuntu1.2) ...
+#9 20.17 Preparing to unpack .../16-git-man_1%3a2.25.1-1ubuntu3.14_all.deb ...
+#9 20.17 Unpacking git-man (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.8) ...
+#9 20.24 Preparing to unpack .../17-libroken18-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.25 Unpacking libroken18-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.27 Preparing to unpack .../18-libasn1-8-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.27 Unpacking libasn1-8-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.31 Preparing to unpack .../19-libheimbase1-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.31 Unpacking libheimbase1-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.34 Preparing to unpack .../20-libhcrypto4-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.34 Unpacking libhcrypto4-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.37 Preparing to unpack .../21-libwind0-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.37 Unpacking libwind0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.40 Preparing to unpack .../22-libhx509-5-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.40 Unpacking libhx509-5-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.43 Preparing to unpack .../23-libkrb5-26-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.43 Unpacking libkrb5-26-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.47 Preparing to unpack .../24-libheimntlm0-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.47 Unpacking libheimntlm0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.50 Preparing to unpack .../25-libgssapi3-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 20.50 Unpacking libgssapi3-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 20.53 Preparing to unpack .../26-libldap-common_2.4.49+dfsg-2ubuntu1.10_all.deb ...
+#9 20.53 Unpacking libldap-common (2.4.49+dfsg-2ubuntu1.10) over (2.4.49+dfsg-2ubuntu1.9) ...
+#9 20.55 Preparing to unpack .../27-libldap-2.4-2_2.4.49+dfsg-2ubuntu1.10_amd64.deb ...
+#9 20.55 Unpacking libldap-2.4-2:amd64 (2.4.49+dfsg-2ubuntu1.10) over (2.4.49+dfsg-2ubuntu1.9) ...
+#9 20.60 Preparing to unpack .../28-libnghttp2-14_1.40.0-1ubuntu0.3_amd64.deb ...
+#9 20.60 Unpacking libnghttp2-14:amd64 (1.40.0-1ubuntu0.3) over (1.40.0-1build1) ...
+#9 20.63 Preparing to unpack .../29-libssh-4_0.9.3-2ubuntu2.5_amd64.deb ...
+#9 20.63 Unpacking libssh-4:amd64 (0.9.3-2ubuntu2.5) over (0.9.3-2ubuntu2.2) ...
+#9 20.67 Preparing to unpack .../30-libcurl3-gnutls_7.68.0-1ubuntu2.25_amd64.deb ...
+#9 20.67 Unpacking libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) over (7.68.0-1ubuntu2.15) ...
+#9 20.71 Preparing to unpack .../31-git_1%3a2.25.1-1ubuntu3.14_amd64.deb ...
+#9 20.76 Unpacking git (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.13) ...
+#9 21.31 Preparing to unpack .../32-openssh-client_1%3a8.2p1-4ubuntu0.12_amd64.deb ...
+#9 21.33 Unpacking openssh-client (1:8.2p1-4ubuntu0.12) over (1:8.2p1-4ubuntu0.5) ...
+#9 21.41 Preparing to unpack .../33-binutils-dev_2.34-6ubuntu1.10_amd64.deb ...
+#9 21.41 Unpacking binutils-dev (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 21.79 Preparing to unpack .../34-libctf0_2.34-6ubuntu1.10_amd64.deb ...
+#9 21.79 Unpacking libctf0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 21.81 Preparing to unpack .../35-binutils-x86-64-linux-gnu_2.34-6ubuntu1.10_amd64.deb ...
+#9 21.81 Unpacking binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 22.06 Preparing to unpack .../36-libbinutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 22.06 Unpacking libbinutils:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 22.12 Preparing to unpack .../37-binutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 22.12 Unpacking binutils (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 22.15 Preparing to unpack .../38-binutils-common_2.34-6ubuntu1.10_amd64.deb ...
+#9 22.16 Unpacking binutils-common:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 22.19 Preparing to unpack .../39-libctf-nobfd0_2.34-6ubuntu1.10_amd64.deb ...
+#9 22.19 Unpacking libctf-nobfd0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 22.22 Preparing to unpack .../40-libharfbuzz-dev_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 22.22 Unpacking libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 22.30 Preparing to unpack .../41-libharfbuzz0b_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 22.31 Unpacking libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 22.37 Preparing to unpack .../42-libharfbuzz-icu0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 22.38 Unpacking libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 22.40 Preparing to unpack .../43-libharfbuzz-gobject0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 22.40 Unpacking libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 22.43 Preparing to unpack .../44-gir1.2-harfbuzz-0.0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 22.43 Unpacking gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 22.45 Preparing to unpack .../45-libaprutil1_1.6.1-4ubuntu2.2_amd64.deb ...
+#9 22.45 Unpacking libaprutil1:amd64 (1.6.1-4ubuntu2.2) over (1.6.1-4ubuntu2) ...
+#9 22.48 Preparing to unpack .../46-libapr1_1.6.5-1ubuntu1.1_amd64.deb ...
+#9 22.49 Unpacking libapr1:amd64 (1.6.5-1ubuntu1.1) over (1.6.5-1ubuntu1) ...
+#9 22.51 Preparing to unpack .../47-unzip_6.0-25ubuntu1.2_amd64.deb ...
+#9 22.52 Unpacking unzip (6.0-25ubuntu1.2) over (6.0-25ubuntu1.1) ...
+#9 22.57 Setting up perl-modules-5.30 (5.30.0-9ubuntu0.5) ...
+#9 22.57 Setting up libssl1.1:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 22.65 Setting up unzip (6.0-25ubuntu1.2) ...
+#9 22.66 Setting up libsqlite3-0:amd64 (3.31.1-4ubuntu0.6) ...
+#9 22.66 Setting up binutils-common:amd64 (2.34-6ubuntu1.10) ...
+#9 22.66 Setting up libnghttp2-14:amd64 (1.40.0-1ubuntu0.3) ...
+#9 22.66 Setting up libapr1:amd64 (1.6.5-1ubuntu1.1) ...
+#9 22.66 Setting up less (551-1ubuntu0.3) ...
+#9 22.67 Setting up linux-libc-dev:amd64 (5.4.0-208.228) ...
+#9 22.67 Setting up libctf-nobfd0:amd64 (2.34-6ubuntu1.10) ...
+#9 22.67 Setting up krb5-locales (1.17-6ubuntu4.8) ...
+#9 22.67 Setting up libcom-err2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 22.67 Setting up libldap-common (2.4.49+dfsg-2ubuntu1.10) ...
+#9 22.68 Setting up libcap2:amd64 (1:2.32-1ubuntu0.2) ...
+#9 22.68 Setting up libkrb5support0:amd64 (1.17-6ubuntu4.8) ...
+#9 22.68 Setting up libc6-x32 (2.31-0ubuntu9.17) ...
+#9 22.68 Setting up tzdata (2024b-0ubuntu0.20.04.1) ...
+#9 22.77 
+#9 22.77 Current default time zone: 'Etc/UTC'
+#9 22.77 Local time is now:      Sat Mar  1 15:28:41 UTC 2025.
+#9 22.77 Universal Time is now:  Sat Mar  1 15:28:41 UTC 2025.
+#9 22.77 Run 'dpkg-reconfigure tzdata' if you wish to change it.
+#9 22.77 
+#9 22.78 Setting up libx11-data (2:1.6.9-2ubuntu1.6) ...
+#9 22.78 Setting up libssl-dev:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 22.78 Setting up libss2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 22.78 Setting up libk5crypto3:amd64 (1.17-6ubuntu4.8) ...
+#9 22.78 Setting up logsave (1.45.5-2ubuntu1.2) ...
+#9 22.79 Setting up libroken18-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 22.79 Setting up libfdisk1:amd64 (2.34-0.1ubuntu9.6) ...
+#9 22.79 Setting up mount (2.34-0.1ubuntu9.6) ...
+#9 22.79 Setting up libc6-i386 (2.31-0ubuntu9.17) ...
+#9 22.79 Setting up libperl5.30:amd64 (5.30.0-9ubuntu0.5) ...
+#9 22.79 Setting up git-man (1:2.25.1-1ubuntu3.14) ...
+#9 22.80 Setting up libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) ...
+#9 22.80 Setting up libkrb5-3:amd64 (1.17-6ubuntu4.8) ...
+#9 22.80 Setting up libbinutils:amd64 (2.34-6ubuntu1.10) ...
+#9 22.80 Setting up libc-dev-bin (2.31-0ubuntu9.17) ...
+#9 22.80 Setting up openssl (1.1.1f-1ubuntu2.24) ...
+#9 22.80 Setting up libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) ...
+#9 22.81 Setting up libprocps8:amd64 (2:3.3.16-1ubuntu2.4) ...
+#9 22.81 Setting up rsync (3.1.3-8ubuntu0.9) ...
+#9 22.82 invoke-rc.d: could not determine current runlevel
+#9 22.82 invoke-rc.d: policy-rc.d denied execution of restart.
+#9 22.93 Setting up libheimbase1-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 22.93 Setting up libaprutil1:amd64 (1.6.1-4ubuntu2.2) ...
+#9 22.93 Setting up libctf0:amd64 (2.34-6ubuntu1.10) ...
+#9 22.93 Setting up libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 22.94 Setting up libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 22.94 Setting up libasn1-8-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 22.94 Setting up e2fsprogs (1.45.5-2ubuntu1.2) ...
+#9 23.15 Setting up libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 23.16 Setting up gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 23.16 Setting up libhcrypto4-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 23.16 Setting up fdisk (2.34-0.1ubuntu9.6) ...
+#9 23.16 Setting up ca-certificates (20240203~20.04.1) ...
+#9 24.65 Updating certificates in /etc/ssl/certs...
+#9 25.47 rehash: warning: skipping ca-certificates.crt,it does not contain exactly one certificate or CRL
+#9 25.48 30 added, 8 removed; done.
+#9 25.50 Setting up perl (5.30.0-9ubuntu0.5) ...
+#9 25.51 Setting up libwind0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.51 Setting up libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) ...
+#9 25.52 Setting up libssh-4:amd64 (0.9.3-2ubuntu2.5) ...
+#9 25.52 Setting up python3.8-minimal (3.8.10-0ubuntu1~20.04.15) ...
+#9 25.98 Setting up procps (2:3.3.16-1ubuntu2.4) ...
+#9 26.01 Setting up libc6-dev:amd64 (2.31-0ubuntu9.17) ...
+#9 26.01 Setting up libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 26.01 Setting up python3.8 (3.8.10-0ubuntu1~20.04.15) ...
+#9 26.53 Setting up binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) ...
+#9 26.54 Setting up libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) ...
+#9 26.54 Setting up libc6-dev-i386 (2.31-0ubuntu9.17) ...
+#9 26.54 Setting up openssh-client (1:8.2p1-4ubuntu0.12) ...
+#9 26.56 Setting up libhx509-5-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 26.56 Setting up binutils (2.34-6ubuntu1.10) ...
+#9 26.56 Setting up libc6-dev-x32 (2.31-0ubuntu9.17) ...
+#9 26.56 Setting up libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 26.57 Setting up libkrb5-26-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 26.57 Setting up binutils-dev (2.34-6ubuntu1.10) ...
+#9 26.57 Setting up libheimntlm0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 26.57 Setting up libgssapi3-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 26.57 Setting up libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 26.57 Setting up python3.8-dev (3.8.10-0ubuntu1~20.04.15) ...
+#9 26.58 Setting up libldap-2.4-2:amd64 (2.4.49+dfsg-2ubuntu1.10) ...
+#9 26.58 Setting up libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) ...
+#9 26.58 Setting up git (1:2.25.1-1ubuntu3.14) ...
+#9 26.61 Processing triggers for libc-bin (2.31-0ubuntu9.17) ...
+#9 26.62 Processing triggers for systemd (245.4-4ubuntu3.24) ...
+#9 26.64 Processing triggers for mime-support (3.64ubuntu1) ...
+#9 26.65 Processing triggers for ca-certificates (20240203~20.04.1) ...
+#9 26.65 Updating certificates in /etc/ssl/certs...
+#9 27.25 0 added, 0 removed; done.
+#9 27.25 Running hooks in /etc/ca-certificates/update.d...
+#9 27.25 done.
+#9 27.34 Reading package lists...
+#9 28.41 Building dependency tree...
+#9 28.58 Reading state information...
+#9 28.75 libffi-dev is already the newest version (3.3-4).
+#9 28.75 libffi-dev set to manually installed.
+#9 28.75 curl is already the newest version (7.68.0-1ubuntu2.25).
+#9 28.75 libssl-dev is already the newest version (1.1.1f-1ubuntu2.24).
+#9 28.75 xz-utils is already the newest version (5.2.4-1ubuntu1.1).
+#9 28.75 xz-utils set to manually installed.
+#9 28.75 zlib1g-dev is already the newest version (1:1.2.11.dfsg-2ubuntu1.5).
+#9 28.75 zlib1g-dev set to manually installed.
+#9 28.75 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 DONE 28.8s
+
+#10 [stage-1  3/15] RUN rm -rf /usr/local/bin/python3.8* /usr/local/bin/pip3 /usr/local/lib/python3.8     /usr/local/include/python3.8 /usr/local/lib/python3.8/site-packages
+#10 DONE 0.5s
+
+#11 [stage-1  4/15] COPY --from=base-image /usr/local/bin/python3* /usr/local/bin/
+#11 DONE 0.1s
+
+#12 [stage-1  5/15] COPY --from=base-image /usr/local/bin/pip3* /usr/local/bin/
+#12 DONE 0.0s
+
+#13 [stage-1  6/15] COPY --from=base-image /usr/local/lib/python3.10 /usr/local/lib/python3.10
+#13 DONE 8.8s
+
+#14 [stage-1  7/15] COPY --from=base-image /usr/local/include/python3.10 /usr/local/include/python3.10
+#14 DONE 0.1s
+
+#15 [stage-1  8/15] COPY --from=base-image /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+#15 DONE 9.6s
+
+#16 [stage-1  9/15] COPY fuzzers /src/fuzzers
+#16 DONE 0.1s
+
+#17 [stage-1 10/15] COPY benchmarks/jsoncpp_jsoncpp_fuzzer/benchmark.yaml /
+#17 DONE 0.0s
+
+#18 [stage-1 11/15] RUN mkdir /opt/fuzzbench/
+#18 DONE 0.2s
+
+#19 [stage-1 12/15] COPY docker/benchmark-builder/checkout_commit.py /opt/fuzzbench/
+#19 DONE 0.0s
+
+#20 [stage-1 13/15] RUN export CHECKOUT_COMMIT=$(cat /benchmark.yaml | tr -d ' ' | grep 'commit:' | cut -d ':' -f2) &&     python3 -u /opt/fuzzbench/checkout_commit.py $CHECKOUT_COMMIT /src
+#20 0.270 Checking out commit 8190e061bc2d95da37479a638aa2c9e483e58ec6
+#20 0.294 Note: switching to '8190e061bc2d95da37479a638aa2c9e483e58ec6'.
+#20 0.294 
+#20 0.294 You are in 'detached HEAD' state. You can look around, make experimental
+#20 0.294 changes and commit them, and you can discard any commits you make in this
+#20 0.294 state without impacting any branches by switching back to a branch.
+#20 0.294 
+#20 0.294 If you want to create a new branch to retain commits you create, you may
+#20 0.294 do so (now or later) by using -c with the switch command. Example:
+#20 0.294 
+#20 0.294   git switch -c <new-branch-name>
+#20 0.294 
+#20 0.294 Or undo this operation with:
+#20 0.294 
+#20 0.294   git switch -
+#20 0.294 
+#20 0.294 Turn off this advice by setting config variable advice.detachedHead to false
+#20 0.294 
+#20 0.294 HEAD is now at 8190e06 Fix wrong usage of doxygen groups (#1417)
+#20 DONE 0.3s
+
+#21 [stage-1 14/15] COPY docker/benchmark-builder/fuzzer_build /usr/bin/fuzzer_build
+#21 DONE 0.1s
+
+#22 [stage-1 15/15] RUN echo "Run fuzzer_build to build the target" && if [ -z "$debug_builder" ] ; then fuzzer_build; fi
+#22 0.168 Run fuzzer_build to build the target
+#22 0.234 FUZZ_TARGET = jsoncpp_fuzzer
+#22 0.234 CFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3
+#22 0.234 CXXFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3
+#22 0.240 AFL++ build: 
+#22 0.240 ['tracepc', 'cmplog', 'dict2file']
+#22 0.604 Building benchmark jsoncpp_jsoncpp_fuzzer with fuzzer aflmmbb
+#22 0.606 + mkdir -p build
+#22 0.608 + cd build
+#22 0.608 + cmake -DCMAKE_CXX_COMPILER=/afl/afl-clang-fast++ '-DCMAKE_CXX_FLAGS=-DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3' -DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF -DJSONCPP_WITH_TESTS=OFF -DBUILD_SHARED_LIBS=OFF -G 'Unix Makefiles' ..
+#22 0.677 -- The CXX compiler identification is Clang 15.0.0
+#22 0.682 -- Check for working CXX compiler: /afl/afl-clang-fast++
+#22 0.747 -- Check for working CXX compiler: /afl/afl-clang-fast++ -- works
+#22 0.748 -- Detecting CXX compiler ABI info
+#22 0.816 -- Detecting CXX compiler ABI info - done
+#22 0.827 -- Detecting CXX compile features
+#22 1.205 -- Detecting CXX compile features - done
+#22 1.206 -- JsonCpp Version: 1.9.5
+#22 1.212 -- Looking for C++ include clocale
+#22 1.283 -- Looking for C++ include clocale - found
+#22 1.283 -- Looking for localeconv
+#22 1.353 -- Looking for localeconv - found
+#22 1.354 -- Looking for C++ include sys/types.h
+#22 1.429 -- Looking for C++ include sys/types.h - found
+#22 1.429 -- Looking for C++ include stdint.h
+#22 1.501 -- Looking for C++ include stdint.h - found
+#22 1.502 -- Looking for C++ include stddef.h
+#22 1.574 -- Looking for C++ include stddef.h - found
+#22 1.574 -- Check size of lconv
+#22 1.648 -- Check size of lconv - done
+#22 1.648 -- Performing Test HAVE_DECIMAL_POINT
+#22 1.723 -- Performing Test HAVE_DECIMAL_POINT - Success
+#22 1.725 -- Configuring done
+#22 1.733 -- Generating done
+#22 1.734 -- Build files have been written to: /src/jsoncpp/build
+#22 1.736 + make
+#22 1.751 Scanning dependencies of target jsoncpp_object
+#22 1.756 [ 14%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_object.dir/json_reader.cpp.o
+#22 5.473 [ 28%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_object.dir/json_value.cpp.o
+#22 7.849 [ 42%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_object.dir/json_writer.cpp.o
+#22 9.949 [ 42%] Built target jsoncpp_object
+#22 9.956 Scanning dependencies of target jsoncpp_static
+#22 9.961 [ 57%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_static.dir/json_reader.cpp.o
+#22 13.64 [ 71%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_static.dir/json_value.cpp.o
+#22 15.99 [ 85%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_static.dir/json_writer.cpp.o
+#22 18.09 [100%] Linking CXX static library ../../lib/libjsoncpp.a
+#22 18.13 [100%] Built target jsoncpp_static
+#22 18.13 + /afl/afl-clang-fast++ -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -I../include /libAFLDriver.a ../src/test_lib_json/fuzz.cpp -o /out/jsoncpp_fuzzer lib/libjsoncpp.a
+#22 18.95 + cp /src/jsoncpp/src/test_lib_json/fuzz.dict /out/jsoncpp_fuzzer.dict
+#22 19.11 Re-building benchmark for CmpLog fuzzing target
+#22 19.11 Building benchmark jsoncpp_jsoncpp_fuzzer with fuzzer aflmmbb
+#22 19.12 + mkdir -p build
+#22 19.12 + cd build
+#22 19.12 + cmake -DCMAKE_CXX_COMPILER=/afl/afl-clang-fast++ '-DCMAKE_CXX_FLAGS=-DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3' -DJSONCPP_WITH_POST_BUILD_UNITTEST=OFF -DJSONCPP_WITH_TESTS=OFF -DBUILD_SHARED_LIBS=OFF -G 'Unix Makefiles' ..
+#22 19.19 -- The CXX compiler identification is Clang 15.0.0
+#22 19.19 -- Check for working CXX compiler: /afl/afl-clang-fast++
+#22 19.26 -- Check for working CXX compiler: /afl/afl-clang-fast++ -- works
+#22 19.26 -- Detecting CXX compiler ABI info
+#22 19.33 -- Detecting CXX compiler ABI info - done
+#22 19.34 -- Detecting CXX compile features
+#22 19.71 -- Detecting CXX compile features - done
+#22 19.71 -- JsonCpp Version: 1.9.5
+#22 19.72 -- Looking for C++ include clocale
+#22 19.78 -- Looking for C++ include clocale - found
+#22 19.79 -- Looking for localeconv
+#22 19.85 -- Looking for localeconv - found
+#22 19.86 -- Looking for C++ include sys/types.h
+#22 19.93 -- Looking for C++ include sys/types.h - found
+#22 19.93 -- Looking for C++ include stdint.h
+#22 19.99 -- Looking for C++ include stdint.h - found
+#22 20.00 -- Looking for C++ include stddef.h
+#22 20.06 -- Looking for C++ include stddef.h - found
+#22 20.06 -- Check size of lconv
+#22 20.14 -- Check size of lconv - done
+#22 20.14 -- Performing Test HAVE_DECIMAL_POINT
+#22 20.21 -- Performing Test HAVE_DECIMAL_POINT - Success
+#22 20.21 -- Configuring done
+#22 20.22 -- Generating done
+#22 20.22 -- Build files have been written to: /src/jsoncpp/build
+#22 20.22 + make
+#22 20.24 Scanning dependencies of target jsoncpp_object
+#22 20.24 [ 14%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_object.dir/json_reader.cpp.o
+#22 23.52 [ 28%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_object.dir/json_value.cpp.o
+#22 25.97 [ 42%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_object.dir/json_writer.cpp.o
+#22 27.81 [ 42%] Built target jsoncpp_object
+#22 27.81 Scanning dependencies of target jsoncpp_static
+#22 27.82 [ 57%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_static.dir/json_reader.cpp.o
+#22 31.14 [ 71%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_static.dir/json_value.cpp.o
+#22 33.62 [ 85%] Building CXX object src/lib_json/CMakeFiles/jsoncpp_static.dir/json_writer.cpp.o
+#22 35.41 [100%] Linking CXX static library ../../lib/libjsoncpp.a
+#22 35.48 [100%] Built target jsoncpp_static
+#22 35.49 + /afl/afl-clang-fast++ -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -I../include /libAFLDriver.a ../src/test_lib_json/fuzz.cpp -o /out/cmplog/jsoncpp_fuzzer lib/libjsoncpp.a
+#22 36.39 + cp /src/jsoncpp/src/test_lib_json/fuzz.dict /out/cmplog/jsoncpp_fuzzer.dict
+#22 DONE 36.4s
+
+#23 exporting to image
+#23 exporting layers
+#23 exporting layers 4.9s done
+#23 preparing layers for inline cache 0.1s done
+#23 writing image sha256:3a31b14ae109203e72d512fee78e68769c1df2261dfdde00ae02d513b9efc09a done
+#23 naming to gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer done
+#23 DONE 5.0s
+
+ [33m4 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate \
+--file fuzzers/aflmmbb/runner.Dockerfile \
+fuzzers/aflmmbb
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from runner.Dockerfile
+#1 transferring dockerfile: 1.13kB done
+#1 WARN: UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate
+#4 DONE 0.0s
+
+#5 [1/1] FROM gcr.io/fuzzbench/base-image:latest
+#5 CACHED
+
+#6 exporting to image
+#6 exporting layers done
+#6 preparing layers for inline cache done
+#6 writing image sha256:0dcae0633340983dc0f0325a60e3ded9110cef498f835801c6f3e1c84d756bd0 done
+#6 naming to gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate done
+#6 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer \
+--build-arg benchmark=jsoncpp_jsoncpp_fuzzer \
+--build-arg fuzzer=aflmmbb \
+--file docker/benchmark-runner/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 3.23kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+#1 WARN: JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 [stage-1  1/12] FROM gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer-intermediate:latest
+#5 DONE 0.0s
+
+#6 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 7.26MB 0.1s done
+#7 DONE 0.2s
+
+#8 [builder 1/1] FROM gcr.io/fuzzbench/builders/aflmmbb/jsoncpp_jsoncpp_fuzzer:latest
+#8 DONE 0.2s
+
+#9 [stage-1  4/12] WORKDIR /out
+#9 CACHED
+
+#10 [stage-1  9/12] COPY common /src/common
+#10 CACHED
+
+#11 [stage-1 11/12] COPY docker/benchmark-runner /src/docker/benchmark-runner
+#11 CACHED
+
+#12 [stage-1  3/12] RUN mkdir -p /out
+#12 CACHED
+
+#13 [stage-1  8/12] RUN mkdir -p /out/seeds /out/corpus
+#13 CACHED
+
+#14 [stage-1 10/12] COPY experiment/runner.py /src/experiment/runner.py
+#14 CACHED
+
+#15 [stage-1  2/12] RUN apt-get update -y &&     DEBIAN_FRONTEND="noninteractive" apt-get install -y     libglib2.0-0     libxml2     libarchive13     libgss3
+#15 CACHED
+
+#16 [stage-1  5/12] COPY --from=builder /out/ ./
+#16 CACHED
+
+#17 [stage-1  6/12] COPY benchmarks /src/benchmarks
+#17 CACHED
+
+#18 [stage-1  7/12] COPY fuzzers /src/fuzzers
+#18 CACHED
+
+#19 [stage-1 12/12] RUN chmod +x /src/docker/benchmark-runner/startup-runner.sh
+#19 CACHED
+
+#20 exporting to image
+#20 exporting layers done
+#20 preparing layers for inline cache 0.0s done
+#20 writing image sha256:2f6134f4291fabf85d43ba6d0867c985f31446fe559bd44c6d858e67147990ca done
+#20 naming to gcr.io/fuzzbench/runners/aflmmbb/jsoncpp_jsoncpp_fuzzer done
+#20 DONE 0.0s
+
+ [33m5 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+ - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+ - JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)

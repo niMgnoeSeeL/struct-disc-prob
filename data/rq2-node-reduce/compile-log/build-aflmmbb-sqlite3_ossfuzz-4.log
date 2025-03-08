@@ -1,0 +1,1040 @@
+docker build \
+--tag gcr.io/fuzzbench/builders/benchmark/sqlite3_ossfuzz \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/benchmark/sqlite3_ossfuzz \
+--file benchmarks/sqlite3_ossfuzz/Dockerfile \
+benchmarks/sqlite3_ossfuzz
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.35kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#2 DONE 0.3s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/6] FROM gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/benchmark/sqlite3_ossfuzz
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 10.05kB 0.0s done
+#6 DONE 0.0s
+
+#7 [3/6] RUN mkdir /src/sqlite3 &&     cd /src/sqlite3 &&     curl 'https://sqlite.org/src/tarball/sqlite.tar.gz?r=c78cbf2e86850cc6' -o sqlite3.tar.gz &&         tar xzf sqlite3.tar.gz --strip-components 1
+#7 CACHED
+
+#8 [5/6] WORKDIR sqlite3
+#8 CACHED
+
+#9 [4/6] RUN find /src/sqlite3 -name "*.test" | xargs zip /src/ossfuzz_seed_corpus.zip
+#9 CACHED
+
+#10 [2/6] RUN apt-get update && apt-get upgrade -y && apt-get install -y make autoconf automake libtool curl tcl zlib1g-dev
+#10 CACHED
+
+#11 [6/6] COPY build.sh *.dict /src/
+#11 CACHED
+
+#12 exporting to image
+#12 exporting layers done
+#12 preparing layers for inline cache done
+#12 writing image sha256:d704b31a80c3598570236b524b01683c40360fbdfc8bbb7edfd0fe2a312d5b59 done
+#12 naming to gcr.io/fuzzbench/builders/benchmark/sqlite3_ossfuzz done
+#12 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - WorkdirRelativePath: Relative workdir "sqlite3" can have unexpected results if the base image changes (line 27)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz-intermediate \
+--build-arg parent_image=gcr.io/fuzzbench/builders/benchmark/sqlite3_ossfuzz \
+--file fuzzers/aflmmbb/builder.Dockerfile \
+fuzzers/aflmmbb
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from builder.Dockerfile
+#1 transferring dockerfile: 2.90kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/builders/benchmark/sqlite3_ossfuzz:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz-intermediate
+#4 DONE 0.0s
+
+#5 [ 1/13] FROM gcr.io/fuzzbench/builders/benchmark/sqlite3_ossfuzz:latest
+#5 DONE 0.0s
+
+#6 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#6 CACHED
+
+#7 [ 3/13] RUN apt-get install -y lld-14 llvm-14 llvm-14-dev clang-14 ||     apt-get install -y lld llvm llvm-dev clang
+#7 CACHED
+
+#8 [ 8/13] RUN apt-get install -y python3-pip # for Unicorn mode
+#8 CACHED
+
+#9 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install
+#9 CACHED
+
+#10 [11/13] RUN cd /afl &&     unset CFLAGS CXXFLAGS &&     export CC=clang AFL_NO_X86=1 &&     PYTHON_INCLUDE=/ make &&     cp utils/aflpp_driver/libAFLDriver.a /
+#10 CACHED
+
+#11 [ 9/13] RUN echo "dont cache3"
+#11 CACHED
+
+#12 [ 6/13] RUN apt-get install -y cpio libcapstone-dev # for Nyx mode
+#12 CACHED
+
+#13 [ 4/13] RUN apt-get install -y gcc-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-plugin-dev     libstdc++-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-dev
+#13 CACHED
+
+#14 [ 5/13] RUN apt-get install -y ninja-build # for QEMU mode
+#14 CACHED
+
+#15 [ 7/13] RUN apt-get install -y wget curl # for Frida mode
+#15 CACHED
+
+#16 [ 2/13] RUN apt-get update &&     apt-get install -y     build-essential python3-dev automake cmake git flex bison     libglib2.0-dev libpixman-1-dev python3-setuptools cargo libgtk-3-dev
+#16 CACHED
+
+#17 [13/13] RUN cd /afl/custom_mutators/examples &&     cc -O3 -fPIC -shared -g -o custom_post_run.so -I../../include set.c custom_post_run.c
+#17 CACHED
+
+#18 exporting to image
+#18 exporting layers done
+#18 preparing layers for inline cache 0.0s done
+#18 writing image sha256:7b718c8bf8594e91223d0943d6035cabd069e8e03947db70c82820e16ca71df8 done
+#18 naming to gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz-intermediate done
+#18 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+docker pull ubuntu:focal
+focal: Pulling from library/ubuntu
+Digest: sha256:8e5c4f0285ecbb4ead070431d29b576a530d3166df73ec44affc1cd27555141b
+Status: Image is up to date for ubuntu:focal
+docker.io/library/ubuntu:focal
+docker build \
+--tag gcr.io/fuzzbench/base-image \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/base-image \
+--file docker/base-image/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.34kB done
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:focal
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 220B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/base-image
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/ubuntu:focal
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 711B done
+#6 DONE 0.0s
+
+#7 [2/7] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     build-essential     zlib1g-dev     libssl-dev     libffi-dev     libsqlite3-dev     libbz2-dev     liblzma-dev
+#7 CACHED
+
+#8 [4/7] COPY ./requirements.txt /tmp
+#8 CACHED
+
+#9 [5/7] RUN pip install -r /tmp/requirements.txt
+#9 CACHED
+
+#10 [6/7] RUN apt-get update &&     apt-get install -y     apt-transport-https     ca-certificates     rsync     gnupg
+#10 CACHED
+
+#11 [3/7] RUN cd /tmp/ &&     curl -O https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tar.xz &&     tar -xvf Python-3.10.8.tar.xz > /dev/null &&     cd Python-3.10.8 &&     ./configure         --enable-loadable-sqlite-extensions         --enable-optimizations         > /dev/null &&     make -j install > /dev/null &&     rm -r /tmp/Python-3.10.8.tar.xz /tmp/Python-3.10.8 &&     ln -s /usr/local/bin/python3 /usr/local/bin/python &&     ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+#11 CACHED
+
+#12 [7/7] RUN echo "deb https://packages.cloud.google.com/apt cloud-sdk main"     | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg     | apt-key add - &&     apt-get update &&     apt-get install -y google-cloud-cli
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 preparing layers for inline cache 0.0s done
+#13 writing image sha256:86bec3f6133245e28c277de23b9de9aec9c5115b87358d549acbc2647626fcb9 done
+#13 naming to gcr.io/fuzzbench/base-image done
+#13 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz \
+--build-arg benchmark=sqlite3_ossfuzz \
+--build-arg fuzzer=aflmmbb \
+--build-arg parent_image=gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz-intermediate \
+--no-cache \
+--file docker/benchmark-builder/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.50kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz-intermediate:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz
+#5 DONE 0.0s
+
+#6 [stage-1  1/15] FROM gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz-intermediate:latest
+#6 CACHED
+
+#7 [base-image 1/1] FROM gcr.io/fuzzbench/base-image:latest
+#7 CACHED
+
+#8 [internal] load build context
+#8 transferring context: 979.15kB 0.1s done
+#8 DONE 0.1s
+
+#9 [stage-1  2/15] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     zlib1g-dev     libssl-dev     libffi-dev
+#9 0.400 Hit:1 http://archive.ubuntu.com/ubuntu focal InRelease
+#9 0.407 Get:2 http://archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+#9 0.468 Get:3 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+#9 0.482 Get:4 http://archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
+#9 0.650 Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main i386 Packages [1332 kB]
+#9 0.740 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1593 kB]
+#9 0.766 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [4577 kB]
+#9 0.845 Get:8 http://archive.ubuntu.com/ubuntu focal-updates/universe i386 Packages [1021 kB]
+#9 0.861 Get:9 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [4730 kB]
+#9 1.042 Get:10 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [4389 kB]
+#9 1.689 Get:11 http://security.ubuntu.com/ubuntu focal-security/universe i386 Packages [861 kB]
+#9 1.703 Get:12 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [4252 kB]
+#9 1.806 Get:13 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1301 kB]
+#9 1.831 Get:14 http://security.ubuntu.com/ubuntu focal-security/main i386 Packages [1053 kB]
+#9 2.171 Fetched 25.5 MB in 2s (13.5 MB/s)
+#9 2.171 Reading package lists...
+#9 3.291 Reading package lists...
+#9 4.381 Building dependency tree...
+#9 4.554 Reading state information...
+#9 4.573 Calculating upgrade...
+#9 4.889 The following packages will be upgraded:
+#9 4.889   binutils binutils-common binutils-dev binutils-x86-64-linux-gnu
+#9 4.889   gir1.2-harfbuzz-0.0 git git-man krb5-locales libbinutils libc-bin
+#9 4.889   libc-dev-bin libc6 libc6-dev libc6-dev-i386 libc6-dev-x32 libc6-i386
+#9 4.889   libc6-x32 libcap2 libctf-nobfd0 libctf0 libgnutls30 libgssapi-krb5-2
+#9 4.889   libharfbuzz-dev libharfbuzz-gobject0 libharfbuzz-icu0 libharfbuzz0b
+#9 4.889   libk5crypto3 libkrb5-3 libkrb5support0 libpython3.8 libpython3.8-dev
+#9 4.889   libpython3.8-minimal libpython3.8-stdlib libssl-dev libssl1.1 libtasn1-6
+#9 4.890   libxml2 linux-libc-dev openssh-client openssl python3.8 python3.8-dev
+#9 4.890   python3.8-minimal tzdata
+#9 4.947 44 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 4.947 Need to get 46.3 MB of archives.
+#9 4.947 After this operation, 61.4 kB of additional disk space will be used.
+#9 4.947 Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-x32 amd64 2.31-0ubuntu9.17 [1975 kB]
+#9 5.103 Get:2 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-i386 amd64 2.31-0ubuntu9.17 [1902 kB]
+#9 5.135 Get:3 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev amd64 2.31-0ubuntu9.17 [2521 kB]
+#9 5.179 Get:4 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-dev-bin amd64 2.31-0ubuntu9.17 [71.8 kB]
+#9 5.180 Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-i386 amd64 2.31-0ubuntu9.17 [2726 kB]
+#9 5.225 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-x32 amd64 2.31-0ubuntu9.17 [2779 kB]
+#9 5.272 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 linux-libc-dev amd64 5.4.0-208.228 [1118 kB]
+#9 5.291 Get:8 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6 amd64 2.31-0ubuntu9.17 [2721 kB]
+#9 5.340 Get:9 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-bin amd64 2.31-0ubuntu9.17 [634 kB]
+#9 5.349 Get:10 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [514 kB]
+#9 5.358 Get:11 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [3950 kB]
+#9 5.425 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8 amd64 3.8.10-0ubuntu1~20.04.15 [1626 kB]
+#9 5.451 Get:13 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl-dev amd64 1.1.1f-1ubuntu2.24 [1586 kB]
+#9 5.478 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl1.1 amd64 1.1.1f-1ubuntu2.24 [1323 kB]
+#9 5.501 Get:15 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8 amd64 3.8.10-0ubuntu1~20.04.15 [387 kB]
+#9 5.507 Get:16 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-stdlib amd64 3.8.10-0ubuntu1~20.04.15 [1675 kB]
+#9 5.536 Get:17 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [1901 kB]
+#9 5.569 Get:18 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [720 kB]
+#9 5.581 Get:19 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libtasn1-6 amd64 4.16.0-2ubuntu0.1 [38.6 kB]
+#9 5.581 Get:20 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgnutls30 amd64 3.6.13-2ubuntu1.12 [829 kB]
+#9 5.597 Get:21 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcap2 amd64 1:2.32-1ubuntu0.2 [15.7 kB]
+#9 5.597 Get:22 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libxml2 amd64 2.9.10+dfsg-5ubuntu0.20.04.9 [641 kB]
+#9 5.608 Get:23 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssl amd64 1.1.1f-1ubuntu2.24 [621 kB]
+#9 5.618 Get:24 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tzdata all 2024b-0ubuntu0.20.04.1 [299 kB]
+#9 5.623 Get:25 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 krb5-locales all 1.17-6ubuntu4.8 [11.6 kB]
+#9 5.624 Get:26 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi-krb5-2 amd64 1.17-6ubuntu4.8 [121 kB]
+#9 5.625 Get:27 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-3 amd64 1.17-6ubuntu4.8 [329 kB]
+#9 5.630 Get:28 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5support0 amd64 1.17-6ubuntu4.8 [31.1 kB]
+#9 5.631 Get:29 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libk5crypto3 amd64 1.17-6ubuntu4.8 [80.4 kB]
+#9 5.632 Get:30 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git-man all 1:2.25.1-1ubuntu3.14 [887 kB]
+#9 5.647 Get:31 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git amd64 1:2.25.1-1ubuntu3.14 [4613 kB]
+#9 5.727 Get:32 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssh-client amd64 1:8.2p1-4ubuntu0.12 [671 kB]
+#9 5.737 Get:33 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-dev amd64 2.34-6ubuntu1.10 [3636 kB]
+#9 5.800 Get:34 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf0 amd64 2.34-6ubuntu1.10 [46.7 kB]
+#9 5.800 Get:35 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-x86-64-linux-gnu amd64 2.34-6ubuntu1.10 [1613 kB]
+#9 5.827 Get:36 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libbinutils amd64 2.34-6ubuntu1.10 [474 kB]
+#9 5.835 Get:37 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils amd64 2.34-6ubuntu1.10 [3380 B]
+#9 5.835 Get:38 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-common amd64 2.34-6ubuntu1.10 [208 kB]
+#9 5.838 Get:39 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf-nobfd0 amd64 2.34-6ubuntu1.10 [48.1 kB]
+#9 5.839 Get:40 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-dev amd64 2.6.4-1ubuntu4.3 [526 kB]
+#9 5.848 Get:41 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz0b amd64 2.6.4-1ubuntu4.3 [391 kB]
+#9 5.855 Get:42 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-icu0 amd64 2.6.4-1ubuntu4.3 [5592 B]
+#9 5.855 Get:43 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-gobject0 amd64 2.6.4-1ubuntu4.3 [20.3 kB]
+#9 5.856 Get:44 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 gir1.2-harfbuzz-0.0 amd64 2.6.4-1ubuntu4.3 [26.3 kB]
+#9 6.012 debconf: delaying package configuration, since apt-utils is not installed
+#9 6.054 Fetched 46.3 MB in 1s (48.3 MB/s)
+#9 6.076 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46551 files and directories currently installed.)
+#9 6.104 Preparing to unpack .../0-libc6-dev-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 6.106 Unpacking libc6-dev-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.16) ...
+#9 6.328 Preparing to unpack .../1-libc6-dev-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 6.330 Unpacking libc6-dev-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.16) ...
+#9 6.556 Preparing to unpack .../2-libc6-dev_2.31-0ubuntu9.17_amd64.deb ...
+#9 6.558 Unpacking libc6-dev:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.16) ...
+#9 7.112 Preparing to unpack .../3-libc-dev-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 7.114 Unpacking libc-dev-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.16) ...
+#9 7.144 Preparing to unpack .../4-libc6-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 7.146 Unpacking libc6-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.16) ...
+#9 7.538 Preparing to unpack .../5-libc6-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 7.539 Unpacking libc6-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.16) ...
+#9 7.931 Preparing to unpack .../6-linux-libc-dev_5.4.0-208.228_amd64.deb ...
+#9 7.932 Unpacking linux-libc-dev:amd64 (5.4.0-208.228) over (5.4.0-205.225) ...
+#9 8.534 Preparing to unpack .../7-libc6_2.31-0ubuntu9.17_amd64.deb ...
+#9 8.697 Unpacking libc6:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.16) ...
+#9 9.094 Setting up libc6:amd64 (2.31-0ubuntu9.17) ...
+#9 10.25 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46551 files and directories currently installed.)
+#9 10.27 Preparing to unpack .../libc-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 10.27 Unpacking libc-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.16) ...
+#9 10.38 Setting up libc-bin (2.31-0ubuntu9.17) ...
+#9 10.45 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46551 files and directories currently installed.)
+#9 10.47 Preparing to unpack .../0-python3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 10.47 Unpacking python3.8-dev (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 10.50 Preparing to unpack .../1-libpython3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 10.50 Unpacking libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 10.94 Preparing to unpack .../2-libpython3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 10.94 Unpacking libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 11.09 Preparing to unpack .../3-libssl-dev_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 11.09 Unpacking libssl-dev:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.23) ...
+#9 11.29 Preparing to unpack .../4-libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 11.29 Unpacking libssl1.1:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.23) ...
+#9 11.41 Preparing to unpack .../5-python3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 11.47 Unpacking python3.8 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 11.51 Preparing to unpack .../6-libpython3.8-stdlib_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 11.56 Unpacking libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 11.81 Preparing to unpack .../7-python3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 11.82 Unpacking python3.8-minimal (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 11.98 Preparing to unpack .../8-libpython3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 12.05 Unpacking libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 12.25 Preparing to unpack .../9-libtasn1-6_4.16.0-2ubuntu0.1_amd64.deb ...
+#9 12.25 Unpacking libtasn1-6:amd64 (4.16.0-2ubuntu0.1) over (4.16.0-2) ...
+#9 12.29 Setting up libtasn1-6:amd64 (4.16.0-2ubuntu0.1) ...
+#9 12.32 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46551 files and directories currently installed.)
+#9 12.34 Preparing to unpack .../libgnutls30_3.6.13-2ubuntu1.12_amd64.deb ...
+#9 12.34 Unpacking libgnutls30:amd64 (3.6.13-2ubuntu1.12) over (3.6.13-2ubuntu1.11) ...
+#9 12.42 Setting up libgnutls30:amd64 (3.6.13-2ubuntu1.12) ...
+#9 12.45 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46551 files and directories currently installed.)
+#9 12.48 Preparing to unpack .../00-libcap2_1%3a2.32-1ubuntu0.2_amd64.deb ...
+#9 12.48 Unpacking libcap2:amd64 (1:2.32-1ubuntu0.2) over (1:2.32-1ubuntu0.1) ...
+#9 12.51 Preparing to unpack .../01-libxml2_2.9.10+dfsg-5ubuntu0.20.04.9_amd64.deb ...
+#9 12.51 Unpacking libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) over (2.9.10+dfsg-5ubuntu0.20.04.8) ...
+#9 12.58 Preparing to unpack .../02-openssl_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 12.58 Unpacking openssl (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.23) ...
+#9 12.65 Preparing to unpack .../03-tzdata_2024b-0ubuntu0.20.04.1_all.deb ...
+#9 12.65 Unpacking tzdata (2024b-0ubuntu0.20.04.1) over (2024b-0ubuntu0.20.04) ...
+#9 13.55 Preparing to unpack .../04-krb5-locales_1.17-6ubuntu4.8_all.deb ...
+#9 13.55 Unpacking krb5-locales (1.17-6ubuntu4.8) over (1.17-6ubuntu4.7) ...
+#9 13.57 Preparing to unpack .../05-libgssapi-krb5-2_1.17-6ubuntu4.8_amd64.deb ...
+#9 13.57 Unpacking libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.7) ...
+#9 13.60 Preparing to unpack .../06-libkrb5-3_1.17-6ubuntu4.8_amd64.deb ...
+#9 13.61 Unpacking libkrb5-3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.7) ...
+#9 13.65 Preparing to unpack .../07-libkrb5support0_1.17-6ubuntu4.8_amd64.deb ...
+#9 13.66 Unpacking libkrb5support0:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.7) ...
+#9 13.68 Preparing to unpack .../08-libk5crypto3_1.17-6ubuntu4.8_amd64.deb ...
+#9 13.68 Unpacking libk5crypto3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.7) ...
+#9 13.71 Preparing to unpack .../09-git-man_1%3a2.25.1-1ubuntu3.14_all.deb ...
+#9 13.71 Unpacking git-man (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.13) ...
+#9 13.79 Preparing to unpack .../10-git_1%3a2.25.1-1ubuntu3.14_amd64.deb ...
+#9 13.83 Unpacking git (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.13) ...
+#9 14.36 Preparing to unpack .../11-openssh-client_1%3a8.2p1-4ubuntu0.12_amd64.deb ...
+#9 14.38 Unpacking openssh-client (1:8.2p1-4ubuntu0.12) over (1:8.2p1-4ubuntu0.11) ...
+#9 14.47 Preparing to unpack .../12-binutils-dev_2.34-6ubuntu1.10_amd64.deb ...
+#9 14.47 Unpacking binutils-dev (2.34-6ubuntu1.10) over (2.34-6ubuntu1.9) ...
+#9 14.87 Preparing to unpack .../13-libctf0_2.34-6ubuntu1.10_amd64.deb ...
+#9 14.87 Unpacking libctf0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.9) ...
+#9 14.89 Preparing to unpack .../14-binutils-x86-64-linux-gnu_2.34-6ubuntu1.10_amd64.deb ...
+#9 14.89 Unpacking binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) over (2.34-6ubuntu1.9) ...
+#9 15.15 Preparing to unpack .../15-libbinutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 15.16 Unpacking libbinutils:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.9) ...
+#9 15.22 Preparing to unpack .../16-binutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 15.22 Unpacking binutils (2.34-6ubuntu1.10) over (2.34-6ubuntu1.9) ...
+#9 15.25 Preparing to unpack .../17-binutils-common_2.34-6ubuntu1.10_amd64.deb ...
+#9 15.25 Unpacking binutils-common:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.9) ...
+#9 15.29 Preparing to unpack .../18-libctf-nobfd0_2.34-6ubuntu1.10_amd64.deb ...
+#9 15.29 Unpacking libctf-nobfd0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.9) ...
+#9 15.31 Preparing to unpack .../19-libharfbuzz-dev_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 15.32 Unpacking libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 15.41 Preparing to unpack .../20-libharfbuzz0b_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 15.41 Unpacking libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 15.46 Preparing to unpack .../21-libharfbuzz-icu0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 15.46 Unpacking libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 15.48 Preparing to unpack .../22-libharfbuzz-gobject0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 15.49 Unpacking libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 15.51 Preparing to unpack .../23-gir1.2-harfbuzz-0.0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 15.51 Unpacking gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 15.55 Setting up libssl1.1:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 15.63 Setting up binutils-common:amd64 (2.34-6ubuntu1.10) ...
+#9 15.63 Setting up linux-libc-dev:amd64 (5.4.0-208.228) ...
+#9 15.63 Setting up libctf-nobfd0:amd64 (2.34-6ubuntu1.10) ...
+#9 15.63 Setting up krb5-locales (1.17-6ubuntu4.8) ...
+#9 15.63 Setting up libcap2:amd64 (1:2.32-1ubuntu0.2) ...
+#9 15.64 Setting up libkrb5support0:amd64 (1.17-6ubuntu4.8) ...
+#9 15.64 Setting up libc6-x32 (2.31-0ubuntu9.17) ...
+#9 15.64 Setting up tzdata (2024b-0ubuntu0.20.04.1) ...
+#9 15.72 
+#9 15.72 Current default time zone: 'Etc/UTC'
+#9 15.73 Local time is now:      Sat Mar  1 17:31:36 UTC 2025.
+#9 15.73 Universal Time is now:  Sat Mar  1 17:31:36 UTC 2025.
+#9 15.73 Run 'dpkg-reconfigure tzdata' if you wish to change it.
+#9 15.73 
+#9 15.73 Setting up libssl-dev:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 15.74 Setting up libk5crypto3:amd64 (1.17-6ubuntu4.8) ...
+#9 15.74 Setting up libc6-i386 (2.31-0ubuntu9.17) ...
+#9 15.74 Setting up git-man (1:2.25.1-1ubuntu3.14) ...
+#9 15.74 Setting up libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) ...
+#9 15.74 Setting up libkrb5-3:amd64 (1.17-6ubuntu4.8) ...
+#9 15.74 Setting up libbinutils:amd64 (2.34-6ubuntu1.10) ...
+#9 15.75 Setting up libc-dev-bin (2.31-0ubuntu9.17) ...
+#9 15.75 Setting up openssl (1.1.1f-1ubuntu2.24) ...
+#9 15.75 Setting up libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) ...
+#9 15.75 Setting up libctf0:amd64 (2.34-6ubuntu1.10) ...
+#9 15.75 Setting up libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 15.76 Setting up libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 15.76 Setting up libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 15.76 Setting up gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 15.76 Setting up libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) ...
+#9 15.76 Setting up git (1:2.25.1-1ubuntu3.14) ...
+#9 15.79 Setting up python3.8-minimal (3.8.10-0ubuntu1~20.04.15) ...
+#9 16.27 Setting up libc6-dev:amd64 (2.31-0ubuntu9.17) ...
+#9 16.27 Setting up libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 16.27 Setting up python3.8 (3.8.10-0ubuntu1~20.04.15) ...
+#9 16.79 Setting up binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) ...
+#9 16.79 Setting up libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) ...
+#9 16.79 Setting up libc6-dev-i386 (2.31-0ubuntu9.17) ...
+#9 16.79 Setting up openssh-client (1:8.2p1-4ubuntu0.12) ...
+#9 16.82 Setting up binutils (2.34-6ubuntu1.10) ...
+#9 16.82 Setting up libc6-dev-x32 (2.31-0ubuntu9.17) ...
+#9 16.82 Setting up libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 16.82 Setting up binutils-dev (2.34-6ubuntu1.10) ...
+#9 16.82 Setting up libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 16.82 Setting up python3.8-dev (3.8.10-0ubuntu1~20.04.15) ...
+#9 16.83 Processing triggers for libc-bin (2.31-0ubuntu9.17) ...
+#9 16.84 Processing triggers for mime-support (3.64ubuntu1) ...
+#9 16.94 Reading package lists...
+#9 18.04 Building dependency tree...
+#9 18.26 Reading state information...
+#9 18.45 libffi-dev is already the newest version (3.3-4).
+#9 18.45 libffi-dev set to manually installed.
+#9 18.45 curl is already the newest version (7.68.0-1ubuntu2.25).
+#9 18.45 libssl-dev is already the newest version (1.1.1f-1ubuntu2.24).
+#9 18.45 xz-utils is already the newest version (5.2.4-1ubuntu1.1).
+#9 18.45 xz-utils set to manually installed.
+#9 18.45 zlib1g-dev is already the newest version (1:1.2.11.dfsg-2ubuntu1.5).
+#9 18.45 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 DONE 18.5s
+
+#10 [stage-1  3/15] RUN rm -rf /usr/local/bin/python3.8* /usr/local/bin/pip3 /usr/local/lib/python3.8     /usr/local/include/python3.8 /usr/local/lib/python3.8/site-packages
+#10 DONE 0.5s
+
+#11 [stage-1  4/15] COPY --from=base-image /usr/local/bin/python3* /usr/local/bin/
+#11 DONE 0.1s
+
+#12 [stage-1  5/15] COPY --from=base-image /usr/local/bin/pip3* /usr/local/bin/
+#12 DONE 0.0s
+
+#13 [stage-1  6/15] COPY --from=base-image /usr/local/lib/python3.10 /usr/local/lib/python3.10
+#13 DONE 9.0s
+
+#14 [stage-1  7/15] COPY --from=base-image /usr/local/include/python3.10 /usr/local/include/python3.10
+#14 DONE 0.0s
+
+#15 [stage-1  8/15] COPY --from=base-image /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+#15 DONE 9.9s
+
+#16 [stage-1  9/15] COPY fuzzers /src/fuzzers
+#16 DONE 0.1s
+
+#17 [stage-1 10/15] COPY benchmarks/sqlite3_ossfuzz/benchmark.yaml /
+#17 DONE 0.0s
+
+#18 [stage-1 11/15] RUN mkdir /opt/fuzzbench/
+#18 DONE 0.2s
+
+#19 [stage-1 12/15] COPY docker/benchmark-builder/checkout_commit.py /opt/fuzzbench/
+#19 DONE 0.1s
+
+#20 [stage-1 13/15] RUN export CHECKOUT_COMMIT=$(cat /benchmark.yaml | tr -d ' ' | grep 'commit:' | cut -d ':' -f2) &&     python3 -u /opt/fuzzbench/checkout_commit.py $CHECKOUT_COMMIT /src
+#20 0.245 Usage: /opt/fuzzbench/checkout_commit.py" <commit> <src_dir>
+#20 DONE 0.3s
+
+#21 [stage-1 14/15] COPY docker/benchmark-builder/fuzzer_build /usr/bin/fuzzer_build
+#21 DONE 0.0s
+
+#22 [stage-1 15/15] RUN echo "Run fuzzer_build to build the target" && if [ -z "$debug_builder" ] ; then fuzzer_build; fi
+#22 0.179 Run fuzzer_build to build the target
+#22 0.246 FUZZ_TARGET = ossfuzz
+#22 0.246 CFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3
+#22 0.246 CXXFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3
+#22 0.251 AFL++ build: 
+#22 0.251 ['tracepc', 'cmplog', 'dict2file']
+#22 1.162 Building benchmark sqlite3_ossfuzz with fuzzer aflmmbb
+#22 1.164 + mkdir bld
+#22 1.166 + cd bld
+#22 1.166 + export ASAN_OPTIONS=detect_leaks=0
+#22 1.166 + ASAN_OPTIONS=detect_leaks=0
+#22 1.166 + export 'CFLAGS=-DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000                -DSQLITE_MAX_SQL_LENGTH=128000000                -DSQLITE_MAX_MEMORY=25000000                -DSQLITE_PRINTF_PRECISION_LIMIT=1048576                -DSQLITE_DEBUG=1                -DSQLITE_MAX_PAGE_COUNT=16384'
+#22 1.166 + CFLAGS='-DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000                -DSQLITE_MAX_SQL_LENGTH=128000000                -DSQLITE_MAX_MEMORY=25000000                -DSQLITE_PRINTF_PRECISION_LIMIT=1048576                -DSQLITE_DEBUG=1                -DSQLITE_MAX_PAGE_COUNT=16384'
+#22 1.166 + ../configure
+#22 1.307 checking build system type... x86_64-pc-linux-gnu
+#22 1.348 checking host system type... x86_64-pc-linux-gnu
+#22 1.348 checking for gcc... /afl/afl-clang-fast
+#22 1.396 checking whether the C compiler works... yes
+#22 1.447 checking for C compiler default output file name... a.out
+#22 1.449 checking for suffix of executables... 
+#22 1.498 checking whether we are cross compiling... no
+#22 1.556 checking for suffix of object files... o
+#22 1.577 checking whether we are using the GNU C compiler... yes
+#22 1.598 checking whether /afl/afl-clang-fast accepts -g... yes
+#22 1.617 checking for /afl/afl-clang-fast option to accept ISO C89... none needed
+#22 1.648 checking for a sed that does not truncate output... /usr/bin/sed
+#22 1.655 checking for grep that handles long lines and -e... /usr/bin/grep
+#22 1.657 checking for egrep... /usr/bin/grep -E
+#22 1.659 checking for fgrep... /usr/bin/grep -F
+#22 1.661 checking for ld used by /afl/afl-clang-fast... /usr/bin/ld
+#22 1.674 checking if the linker (/usr/bin/ld) is GNU ld... yes
+#22 1.677 checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+#22 1.681 checking the name lister (/usr/bin/nm -B) interface... BSD nm
+#22 1.704 checking whether ln -s works... yes
+#22 1.704 checking the maximum length of command line arguments... 1572864
+#22 1.709 checking whether the shell understands some XSI constructs... yes
+#22 1.710 checking whether the shell understands "+="... yes
+#22 1.714 checking for /usr/bin/ld option to reload object files... -r
+#22 1.715 checking for objdump... objdump
+#22 1.715 checking how to recognize dependent libraries... pass_all
+#22 1.716 checking for ar... ar
+#22 1.716 checking for strip... strip
+#22 1.717 checking for ranlib... ranlib
+#22 1.717 checking command to parse /usr/bin/nm -B output from /afl/afl-clang-fast object... ok
+#22 1.820 checking how to run the C preprocessor... /afl/afl-clang-fast -E
+#22 1.884 checking for ANSI C header files... yes
+#22 2.019 checking for sys/types.h... yes
+#22 2.052 checking for sys/stat.h... yes
+#22 2.086 checking for stdlib.h... yes
+#22 2.121 checking for string.h... yes
+#22 2.158 checking for memory.h... yes
+#22 2.193 checking for strings.h... yes
+#22 2.229 checking for inttypes.h... yes
+#22 2.266 checking for stdint.h... yes
+#22 2.301 checking for unistd.h... yes
+#22 2.338 checking for dlfcn.h... yes
+#22 2.370 checking for objdir... .libs
+#22 2.448 checking if /afl/afl-clang-fast supports -fno-rtti -fno-exceptions... yes
+#22 2.471 checking for /afl/afl-clang-fast option to produce PIC... -fPIC -DPIC
+#22 2.471 checking if /afl/afl-clang-fast PIC flag -fPIC -DPIC works... yes
+#22 2.496 checking if /afl/afl-clang-fast static flag -static works... yes
+#22 2.588 checking if /afl/afl-clang-fast supports -c -o file.o... yes
+#22 2.621 checking if /afl/afl-clang-fast supports -c -o file.o... (cached) yes
+#22 2.621 checking whether the /afl/afl-clang-fast linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+#22 2.638 checking whether -lc should be explicitly linked in... no
+#22 2.675 checking dynamic linker characteristics... GNU/Linux ld.so
+#22 2.768 checking how to hardcode library paths into programs... immediate
+#22 2.768 checking whether stripping libraries is possible... yes
+#22 2.770 checking if libtool supports shared libraries... yes
+#22 2.770 checking whether to build shared libraries... yes
+#22 2.770 checking whether to build static libraries... yes
+#22 2.771 checking for a BSD-compatible install... /usr/bin/install -c
+#22 2.783 checking for special C compiler options needed for large files... no
+#22 2.783 checking for _FILE_OFFSET_BITS value needed for large files... no
+#22 2.810 checking for int8_t... yes
+#22 2.886 checking for int16_t... yes
+#22 2.964 checking for int32_t... yes
+#22 3.044 checking for int64_t... yes
+#22 3.126 checking for intptr_t... yes
+#22 3.205 checking for uint8_t... yes
+#22 3.280 checking for uint16_t... yes
+#22 3.359 checking for uint32_t... yes
+#22 3.437 checking for uint64_t... yes
+#22 3.517 checking for uintptr_t... yes
+#22 3.598 checking for sys/types.h... (cached) yes
+#22 3.608 checking for stdlib.h... (cached) yes
+#22 3.617 checking for stdint.h... (cached) yes
+#22 3.626 checking for inttypes.h... (cached) yes
+#22 3.636 checking malloc.h usability... yes
+#22 3.670 checking malloc.h presence... yes
+#22 3.688 checking for malloc.h... yes
+#22 3.698 checking for fdatasync... yes
+#22 3.766 checking for gmtime_r... yes
+#22 3.834 checking for isnan... yes
+#22 3.902 checking for localtime_r... yes
+#22 3.970 checking for localtime_s... no
+#22 4.037 checking for malloc_usable_size... yes
+#22 4.114 checking for strchrnul... yes
+#22 4.183 checking for usleep... yes
+#22 4.249 checking for utime... yes
+#22 4.316 checking for pread... yes
+#22 4.383 checking for pread64... yes
+#22 4.449 checking for pwrite... yes
+#22 4.515 checking for pwrite64... yes
+#22 4.580 checking for tclsh8.7... no
+#22 4.580 checking for tclsh8.6... tclsh8.6
+#22 4.591 configure: Version set to 3.33
+#22 4.592 configure: Release set to 3.33.0
+#22 4.596 configure: Version number set to 3033000
+#22 4.596 checking whether to support threadsafe operation... yes
+#22 4.596 checking for library containing pthread_create... none required
+#22 4.654 checking for library containing pthread_mutexattr_init... none required
+#22 4.710 checking whether to support shared library linked as release mode or not... no
+#22 4.710 checking whether to use an in-ram database for temporary tables... no
+#22 4.710 checking if executables have the .exe suffix... unknown
+#22 4.711 checking for Tcl configuration... configure: WARNING: Can't find Tcl configuration definitions
+#22 4.766 configure: WARNING: *** Without Tcl the regression tests cannot be executed ***
+#22 4.766 configure: WARNING: *** Consider using --with-tcl=... to define location of Tcl ***
+#22 4.766 checking for library containing readline... no
+#22 4.877 checking for library containing tgetent... -lncurses
+#22 5.045 checking for readline in -lreadline... no
+#22 5.096 checking readline.h usability... no
+#22 5.134 checking readline.h presence... no
+#22 5.153 checking for readline.h... no
+#22 5.157 checking for /usr/include/readline.h... no
+#22 5.161 checking for /usr/include/readline/readline.h... no
+#22 5.165 checking for /usr/local/include/readline.h... no
+#22 5.169 checking for /usr/local/include/readline/readline.h... no
+#22 5.173 checking for /usr/local/readline/include/readline.h... no
+#22 5.176 checking for /usr/local/readline/include/readline/readline.h... no
+#22 5.180 checking for /usr/contrib/include/readline.h... no
+#22 5.184 checking for /usr/contrib/include/readline/readline.h... no
+#22 5.187 checking for /mingw/include/readline.h... no
+#22 5.191 checking for /mingw/include/readline/readline.h... no
+#22 5.192 checking for library containing fdatasync... none required
+#22 5.248 checking zlib.h usability... yes
+#22 5.285 checking zlib.h presence... yes
+#22 5.304 checking for zlib.h... yes
+#22 5.306 checking for library containing deflate... -lz
+#22 5.426 checking for library containing dlopen... none required
+#22 5.488 checking whether to support MEMSYS5... no
+#22 5.488 checking whether to support MEMSYS3... no
+#22 5.512 configure: creating ./config.status
+#22 6.085 config.status: creating Makefile
+#22 6.100 config.status: creating sqlite3.pc
+#22 6.116 config.status: creating config.h
+#22 6.125 config.status: executing libtool commands
+#22 6.173 ++ nproc
+#22 6.173 + make -j128
+#22 6.178 /afl/afl-clang-fast  -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -o mksourceid /src/sqlite3/bld/../tool/mksourceid.c
+#22 6.182 /afl/afl-clang-fast  -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -o mkkeywordhash   /src/sqlite3/bld/../tool/mkkeywordhash.c
+#22 6.183 /afl/afl-clang-fast  -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -o lemon /src/sqlite3/bld/../tool/lemon.c
+#22 6.184 tclsh8.6 /src/sqlite3/bld/../tool/mkshellc.tcl >shell.c
+#22 6.427 ./mkkeywordhash >keywordhash.h
+#22 6.692 tclsh8.6 /src/sqlite3/bld/../tool/mksqlite3h.tcl /src/sqlite3/bld/.. >sqlite3.h
+#22 8.457 cp /src/sqlite3/bld/../tool/lempar.c .
+#22 8.459 cp /src/sqlite3/bld/../src/parse.y .
+#22 8.459 cp /src/sqlite3/bld/../ext/fts5/fts5parse.y .
+#22 8.461 ./lemon   -S parse.y
+#22 8.461 rm -f fts5parse.h
+#22 8.462 ./lemon  -S fts5parse.y
+#22 8.464 tclsh8.6 /src/sqlite3/bld/../ext/fts5/tool/mkfts5c.tcl
+#22 8.507 cp /src/sqlite3/bld/../ext/fts5/fts5.h .
+#22 8.511 cat parse.h /src/sqlite3/bld/../src/vdbe.c | tclsh8.6 /src/sqlite3/bld/../tool/mkopcodeh.tcl >opcodes.h
+#22 8.540 tclsh8.6 /src/sqlite3/bld/../tool/mkopcodec.tcl opcodes.h >opcodes.c
+#22 8.547 rm -rf tsrc
+#22 8.548 mkdir tsrc
+#22 8.549 cp -f /src/sqlite3/bld/../src/alter.c /src/sqlite3/bld/../src/analyze.c /src/sqlite3/bld/../src/attach.c /src/sqlite3/bld/../src/auth.c /src/sqlite3/bld/../src/backup.c /src/sqlite3/bld/../src/bitvec.c /src/sqlite3/bld/../src/btmutex.c /src/sqlite3/bld/../src/btree.c /src/sqlite3/bld/../src/btree.h /src/sqlite3/bld/../src/btreeInt.h /src/sqlite3/bld/../src/build.c /src/sqlite3/bld/../src/callback.c /src/sqlite3/bld/../src/complete.c /src/sqlite3/bld/../src/ctime.c /src/sqlite3/bld/../src/date.c /src/sqlite3/bld/../src/dbpage.c /src/sqlite3/bld/../src/dbstat.c /src/sqlite3/bld/../src/delete.c /src/sqlite3/bld/../src/expr.c /src/sqlite3/bld/../src/fault.c /src/sqlite3/bld/../src/fkey.c /src/sqlite3/bld/../src/func.c /src/sqlite3/bld/../src/global.c /src/sqlite3/bld/../src/hash.c /src/sqlite3/bld/../src/hash.h /src/sqlite3/bld/../src/hwtime.h /src/sqlite3/bld/../src/insert.c /src/sqlite3/bld/../src/legacy.c /src/sqlite3/bld/../src/loadext.c /src/sqlite3/bld/../src/main.c /src/sqlite3/bld/../src/malloc.c /src/sqlite3/bld/../src/mem0.c /src/sqlite3/bld/../src/mem1.c /src/sqlite3/bld/../src/mem2.c /src/sqlite3/bld/../src/mem3.c /src/sqlite3/bld/../src/mem5.c /src/sqlite3/bld/../src/memdb.c /src/sqlite3/bld/../src/memjournal.c /src/sqlite3/bld/../src/msvc.h /src/sqlite3/bld/../src/mutex.c /src/sqlite3/bld/../src/mutex.h /src/sqlite3/bld/../src/mutex_noop.c /src/sqlite3/bld/../src/mutex_unix.c /src/sqlite3/bld/../src/mutex_w32.c /src/sqlite3/bld/../src/notify.c /src/sqlite3/bld/../src/os.c /src/sqlite3/bld/../src/os.h /src/sqlite3/bld/../src/os_common.h /src/sqlite3/bld/../src/os_setup.h /src/sqlite3/bld/../src/os_unix.c /src/sqlite3/bld/../src/os_win.c /src/sqlite3/bld/../src/os_win.h /src/sqlite3/bld/../src/pager.c /src/sqlite3/bld/../src/pager.h /src/sqlite3/bld/../src/parse.y /src/sqlite3/bld/../src/pcache.c /src/sqlite3/bld/../src/pcache.h /src/sqlite3/bld/../src/pcache1.c /src/sqlite3/bld/../src/pragma.c /src/sqlite3/bld/../src/pragma.h /src/sqlite3/bld/../src/prepare.c /src/sqlite3/bld/../src/printf.c /src/sqlite3/bld/../src/random.c /src/sqlite3/bld/../src/resolve.c /src/sqlite3/bld/../src/rowset.c /src/sqlite3/bld/../src/select.c /src/sqlite3/bld/../src/status.c /src/sqlite3/bld/../src/shell.c.in /src/sqlite3/bld/../src/sqlite.h.in /src/sqlite3/bld/../src/sqlite3ext.h /src/sqlite3/bld/../src/sqliteInt.h /src/sqlite3/bld/../src/sqliteLimit.h /src/sqlite3/bld/../src/table.c /src/sqlite3/bld/../src/tclsqlite.c /src/sqlite3/bld/../src/threads.c /src/sqlite3/bld/../src/tokenize.c /src/sqlite3/bld/../src/treeview.c /src/sqlite3/bld/../src/trigger.c /src/sqlite3/bld/../src/utf.c /src/sqlite3/bld/../src/update.c /src/sqlite3/bld/../src/upsert.c /src/sqlite3/bld/../src/util.c /src/sqlite3/bld/../src/vacuum.c /src/sqlite3/bld/../src/vdbe.c /src/sqlite3/bld/../src/vdbe.h /src/sqlite3/bld/../src/vdbeapi.c /src/sqlite3/bld/../src/vdbeaux.c /src/sqlite3/bld/../src/vdbeblob.c /src/sqlite3/bld/../src/vdbemem.c /src/sqlite3/bld/../src/vdbesort.c /src/sqlite3/bld/../src/vdbetrace.c /src/sqlite3/bld/../src/vdbevtab.c /src/sqlite3/bld/../src/vdbeInt.h /src/sqlite3/bld/../src/vtab.c /src/sqlite3/bld/../src/vxworks.h /src/sqlite3/bld/../src/wal.c /src/sqlite3/bld/../src/wal.h /src/sqlite3/bld/../src/walker.c /src/sqlite3/bld/../src/where.c /src/sqlite3/bld/../src/wherecode.c /src/sqlite3/bld/../src/whereexpr.c /src/sqlite3/bld/../src/whereInt.h /src/sqlite3/bld/../src/window.c /src/sqlite3/bld/../ext/fts1/fts1.c /src/sqlite3/bld/../ext/fts1/fts1.h /src/sqlite3/bld/../ext/fts1/fts1_hash.c /src/sqlite3/bld/../ext/fts1/fts1_hash.h /src/sqlite3/bld/../ext/fts1/fts1_porter.c /src/sqlite3/bld/../ext/fts1/fts1_tokenizer.h /src/sqlite3/bld/../ext/fts1/fts1_tokenizer1.c /src/sqlite3/bld/../ext/fts2/fts2.c /src/sqlite3/bld/../ext/fts2/fts2.h /src/sqlite3/bld/../ext/fts2/fts2_hash.c /src/sqlite3/bld/../ext/fts2/fts2_hash.h /src/sqlite3/bld/../ext/fts2/fts2_icu.c /src/sqlite3/bld/../ext/fts2/fts2_porter.c /src/sqlite3/bld/../ext/fts2/fts2_tokenizer.h /src/sqlite3/bld/../ext/fts2/fts2_tokenizer.c /src/sqlite3/bld/../ext/fts2/fts2_tokenizer1.c /src/sqlite3/bld/../ext/fts3/fts3.c /src/sqlite3/bld/../ext/fts3/fts3.h /src/sqlite3/bld/../ext/fts3/fts3Int.h /src/sqlite3/bld/../ext/fts3/fts3_aux.c /src/sqlite3/bld/../ext/fts3/fts3_expr.c /src/sqlite3/bld/../ext/fts3/fts3_hash.c /src/sqlite3/bld/../ext/fts3/fts3_hash.h /src/sqlite3/bld/../ext/fts3/fts3_icu.c /src/sqlite3/bld/../ext/fts3/fts3_porter.c /src/sqlite3/bld/../ext/fts3/fts3_snippet.c /src/sqlite3/bld/../ext/fts3/fts3_tokenizer.h /src/sqlite3/bld/../ext/fts3/fts3_tokenizer.c /src/sqlite3/bld/../ext/fts3/fts3_tokenizer1.c /src/sqlite3/bld/../ext/fts3/fts3_tokenize_vtab.c /src/sqlite3/bld/../ext/fts3/fts3_unicode.c /src/sqlite3/bld/../ext/fts3/fts3_unicode2.c /src/sqlite3/bld/../ext/fts3/fts3_write.c /src/sqlite3/bld/../ext/icu/sqliteicu.h /src/sqlite3/bld/../ext/icu/icu.c /src/sqlite3/bld/../ext/rtree/rtree.h /src/sqlite3/bld/../ext/rtree/rtree.c /src/sqlite3/bld/../ext/rtree/geopoly.c /src/sqlite3/bld/../ext/session/sqlite3session.c /src/sqlite3/bld/../ext/session/sqlite3session.h /src/sqlite3/bld/../ext/userauth/userauth.c /src/sqlite3/bld/../ext/userauth/sqlite3userauth.h /src/sqlite3/bld/../ext/rbu/sqlite3rbu.h /src/sqlite3/bld/../ext/rbu/sqlite3rbu.c /src/sqlite3/bld/../ext/misc/json1.c /src/sqlite3/bld/../ext/misc/stmt.c keywordhash.h opcodes.c opcodes.h parse.c parse.h config.h shell.c sqlite3.h tsrc
+#22 8.571 rm tsrc/sqlite.h.in tsrc/parse.y
+#22 8.572 tclsh8.6 /src/sqlite3/bld/../tool/vdbe-compress.tcl  <tsrc/vdbe.c >vdbe.new
+#22 8.600 mv vdbe.new tsrc/vdbe.c
+#22 8.602 cp fts5.c fts5.h tsrc
+#22 8.605 touch .target_source
+#22 8.605 tclsh8.6 /src/sqlite3/bld/../tool/mksqlite3c.tcl
+#22 9.739 cp tsrc/sqlite3ext.h .
+#22 9.741 cp /src/sqlite3/bld/../ext/session/sqlite3session.h .
+#22 9.743 ./libtool --mode=compile --tag=CC /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG  -DSQLITE_THREADSAFE=1   -DSQLITE_HAVE_ZLIB=1  -DSQLITE_TEMP_STORE=1 -c sqlite3.c
+#22 9.743 ./libtool --mode=link /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG  -DSQLITE_THREADSAFE=1   -DSQLITE_HAVE_ZLIB=1    -DHAVE_READLINE=0  -DHAVE_EDITLINE=0 -DSQLITE_ENABLE_JSON1 -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_ENABLE_EXPLAIN_COMMENTS -DSQLITE_ENABLE_UNKNOWN_SQL_FUNCTION -DSQLITE_ENABLE_STMTVTAB -DSQLITE_ENABLE_DBPAGE_VTAB -DSQLITE_ENABLE_DBSTAT_VTAB -DSQLITE_ENABLE_BYTECODE_VTAB -DSQLITE_ENABLE_OFFSET_SQL_FUNC -DSQLITE_ENABLE_DESERIALIZE -o sqlite3 \
+#22 9.743 	shell.c sqlite3.c \
+#22 9.743 	 -lz   -rpath "/usr/local/lib"
+#22 9.760 libtool: compile:  /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG -DSQLITE_THREADSAFE=1 -DSQLITE_HAVE_ZLIB=1 -DSQLITE_TEMP_STORE=1 -c sqlite3.c  -fPIC -DPIC -o .libs/sqlite3.o
+#22 9.795 libtool: link: /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG -DSQLITE_THREADSAFE=1 -DSQLITE_HAVE_ZLIB=1 -DHAVE_READLINE=0 -DHAVE_EDITLINE=0 -DSQLITE_ENABLE_JSON1 -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_ENABLE_EXPLAIN_COMMENTS -DSQLITE_ENABLE_UNKNOWN_SQL_FUNCTION -DSQLITE_ENABLE_STMTVTAB -DSQLITE_ENABLE_DBPAGE_VTAB -DSQLITE_ENABLE_DBSTAT_VTAB -DSQLITE_ENABLE_BYTECODE_VTAB -DSQLITE_ENABLE_OFFSET_SQL_FUNC -DSQLITE_ENABLE_DESERIALIZE -o sqlite3 shell.c sqlite3.c  -lz -pthread -Wl,-rpath -Wl,/usr/local/lib
+#22 27.90 WARNING: dlopen() detected. To have coverage for a library that your target dlopen()'s this must either happen before __AFL_INIT() or you must use AFL_PRELOAD to preload all dlopen()'ed libraries!
+#22 40.20 WARNING: dlopen() detected. To have coverage for a library that your target dlopen()'s this must either happen before __AFL_INIT() or you must use AFL_PRELOAD to preload all dlopen()'ed libraries!
+#22 69.34 libtool: compile:  /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG -DSQLITE_THREADSAFE=1 -DSQLITE_HAVE_ZLIB=1 -DSQLITE_TEMP_STORE=1 -c sqlite3.c -o sqlite3.o >/dev/null 2>&1
+#22 130.9 ./libtool --mode=link /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG  -DSQLITE_THREADSAFE=1   -DSQLITE_HAVE_ZLIB=1    -no-undefined -o libsqlite3.la sqlite3.lo -lz   \
+#22 130.9 	 -rpath "/usr/local/lib" -version-info "8:6:8"
+#22 130.9 libtool: link: /afl/afl-clang-fast -shared  .libs/sqlite3.o   -lz  -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm   -pthread -Wl,-soname -Wl,libsqlite3.so.0 -o .libs/libsqlite3.so.0.8.6
+#22 131.1 libtool: link: (cd ".libs" && rm -f "libsqlite3.so.0" && ln -s "libsqlite3.so.0.8.6" "libsqlite3.so.0")
+#22 131.1 libtool: link: (cd ".libs" && rm -f "libsqlite3.so" && ln -s "libsqlite3.so.0.8.6" "libsqlite3.so")
+#22 131.1 libtool: link: ar cru .libs/libsqlite3.a  sqlite3.o
+#22 131.1 ar: `u' modifier ignored since `D' is the default (see `U')
+#22 131.1 libtool: link: ranlib .libs/libsqlite3.a
+#22 131.2 libtool: link: ( cd ".libs" && rm -f "libsqlite3.la" && ln -s "../libsqlite3.la" "libsqlite3.la" )
+#22 131.2 + make sqlite3.c
+#22 131.2 make: 'sqlite3.c' is up to date.
+#22 131.2 + /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -I. -c /src/sqlite3/test/ossfuzz.c -o /src/sqlite3/test/ossfuzz.o
+#22 131.2 + /afl/afl-clang-fast++ -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 /src/sqlite3/test/ossfuzz.o -o /out/ossfuzz /libAFLDriver.a ./sqlite3.o -pthread -ldl -lz
+#22 131.4 + cp /src/ossfuzz.dict /src/ossfuzz_seed_corpus.zip /out/
+#22 131.6 Re-building benchmark for CmpLog fuzzing target
+#22 131.6 Building benchmark sqlite3_ossfuzz with fuzzer aflmmbb
+#22 131.6 + mkdir bld
+#22 131.6 + cd bld
+#22 131.6 + export ASAN_OPTIONS=detect_leaks=0
+#22 131.6 + ASAN_OPTIONS=detect_leaks=0
+#22 131.6 + export 'CFLAGS=-DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000                -DSQLITE_MAX_SQL_LENGTH=128000000                -DSQLITE_MAX_MEMORY=25000000                -DSQLITE_PRINTF_PRECISION_LIMIT=1048576                -DSQLITE_DEBUG=1                -DSQLITE_MAX_PAGE_COUNT=16384'
+#22 131.6 + CFLAGS='-DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000                -DSQLITE_MAX_SQL_LENGTH=128000000                -DSQLITE_MAX_MEMORY=25000000                -DSQLITE_PRINTF_PRECISION_LIMIT=1048576                -DSQLITE_DEBUG=1                -DSQLITE_MAX_PAGE_COUNT=16384'
+#22 131.6 + ../configure
+#22 131.8 checking build system type... x86_64-pc-linux-gnu
+#22 131.8 checking host system type... x86_64-pc-linux-gnu
+#22 131.8 checking for gcc... /afl/afl-clang-fast
+#22 131.9 checking whether the C compiler works... yes
+#22 132.0 checking for C compiler default output file name... a.out
+#22 132.0 checking for suffix of executables... 
+#22 132.0 checking whether we are cross compiling... no
+#22 132.1 checking for suffix of object files... o
+#22 132.1 checking whether we are using the GNU C compiler... yes
+#22 132.1 checking whether /afl/afl-clang-fast accepts -g... yes
+#22 132.1 checking for /afl/afl-clang-fast option to accept ISO C89... none needed
+#22 132.2 checking for a sed that does not truncate output... /usr/bin/sed
+#22 132.2 checking for grep that handles long lines and -e... /usr/bin/grep
+#22 132.2 checking for egrep... /usr/bin/grep -E
+#22 132.2 checking for fgrep... /usr/bin/grep -F
+#22 132.2 checking for ld used by /afl/afl-clang-fast... /usr/bin/ld
+#22 132.2 checking if the linker (/usr/bin/ld) is GNU ld... yes
+#22 132.2 checking for BSD- or MS-compatible name lister (nm)... /usr/bin/nm -B
+#22 132.2 checking the name lister (/usr/bin/nm -B) interface... BSD nm
+#22 132.2 checking whether ln -s works... yes
+#22 132.2 checking the maximum length of command line arguments... 1572864
+#22 132.2 checking whether the shell understands some XSI constructs... yes
+#22 132.2 checking whether the shell understands "+="... yes
+#22 132.3 checking for /usr/bin/ld option to reload object files... -r
+#22 132.3 checking for objdump... objdump
+#22 132.3 checking how to recognize dependent libraries... pass_all
+#22 132.3 checking for ar... ar
+#22 132.3 checking for strip... strip
+#22 132.3 checking for ranlib... ranlib
+#22 132.3 checking command to parse /usr/bin/nm -B output from /afl/afl-clang-fast object... ok
+#22 132.4 checking how to run the C preprocessor... /afl/afl-clang-fast -E
+#22 132.4 checking for ANSI C header files... yes
+#22 132.6 checking for sys/types.h... yes
+#22 132.6 checking for sys/stat.h... yes
+#22 132.6 checking for stdlib.h... yes
+#22 132.7 checking for string.h... yes
+#22 132.7 checking for memory.h... yes
+#22 132.7 checking for strings.h... yes
+#22 132.8 checking for inttypes.h... yes
+#22 132.8 checking for stdint.h... yes
+#22 132.8 checking for unistd.h... yes
+#22 132.9 checking for dlfcn.h... yes
+#22 132.9 checking for objdir... .libs
+#22 133.0 checking if /afl/afl-clang-fast supports -fno-rtti -fno-exceptions... yes
+#22 133.0 checking for /afl/afl-clang-fast option to produce PIC... -fPIC -DPIC
+#22 133.0 checking if /afl/afl-clang-fast PIC flag -fPIC -DPIC works... yes
+#22 133.0 checking if /afl/afl-clang-fast static flag -static works... yes
+#22 133.1 checking if /afl/afl-clang-fast supports -c -o file.o... yes
+#22 133.2 checking if /afl/afl-clang-fast supports -c -o file.o... (cached) yes
+#22 133.2 checking whether the /afl/afl-clang-fast linker (/usr/bin/ld -m elf_x86_64) supports shared libraries... yes
+#22 133.2 checking whether -lc should be explicitly linked in... no
+#22 133.2 checking dynamic linker characteristics... GNU/Linux ld.so
+#22 133.3 checking how to hardcode library paths into programs... immediate
+#22 133.3 checking whether stripping libraries is possible... yes
+#22 133.3 checking if libtool supports shared libraries... yes
+#22 133.3 checking whether to build shared libraries... yes
+#22 133.3 checking whether to build static libraries... yes
+#22 133.3 checking for a BSD-compatible install... /usr/bin/install -c
+#22 133.3 checking for special C compiler options needed for large files... no
+#22 133.3 checking for _FILE_OFFSET_BITS value needed for large files... no
+#22 133.3 checking for int8_t... yes
+#22 133.4 checking for int16_t... yes
+#22 133.5 checking for int32_t... yes
+#22 133.5 checking for int64_t... yes
+#22 133.6 checking for intptr_t... yes
+#22 133.7 checking for uint8_t... yes
+#22 133.8 checking for uint16_t... yes
+#22 133.8 checking for uint32_t... yes
+#22 133.9 checking for uint64_t... yes
+#22 134.0 checking for uintptr_t... yes
+#22 134.0 checking for sys/types.h... (cached) yes
+#22 134.1 checking for stdlib.h... (cached) yes
+#22 134.1 checking for stdint.h... (cached) yes
+#22 134.1 checking for inttypes.h... (cached) yes
+#22 134.1 checking malloc.h usability... yes
+#22 134.1 checking malloc.h presence... yes
+#22 134.1 checking for malloc.h... yes
+#22 134.1 checking for fdatasync... yes
+#22 134.2 checking for gmtime_r... yes
+#22 134.3 checking for isnan... yes
+#22 134.3 checking for localtime_r... yes
+#22 134.4 checking for localtime_s... no
+#22 134.4 checking for malloc_usable_size... yes
+#22 134.5 checking for strchrnul... yes
+#22 134.6 checking for usleep... yes
+#22 134.6 checking for utime... yes
+#22 134.7 checking for pread... yes
+#22 134.8 checking for pread64... yes
+#22 134.8 checking for pwrite... yes
+#22 134.9 checking for pwrite64... yes
+#22 134.9 checking for tclsh8.7... no
+#22 134.9 checking for tclsh8.6... tclsh8.6
+#22 134.9 configure: Version set to 3.33
+#22 135.0 configure: Release set to 3.33.0
+#22 135.0 configure: Version number set to 3033000
+#22 135.0 checking whether to support threadsafe operation... yes
+#22 135.0 checking for library containing pthread_create... none required
+#22 135.0 checking for library containing pthread_mutexattr_init... none required
+#22 135.1 checking whether to support shared library linked as release mode or not... no
+#22 135.1 checking whether to use an in-ram database for temporary tables... no
+#22 135.1 checking if executables have the .exe suffix... unknown
+#22 135.1 checking for Tcl configuration... configure: WARNING: Can't find Tcl configuration definitions
+#22 135.1 configure: WARNING: *** Without Tcl the regression tests cannot be executed ***
+#22 135.1 configure: WARNING: *** Consider using --with-tcl=... to define location of Tcl ***
+#22 135.1 checking for library containing readline... no
+#22 135.2 checking for library containing tgetent... -lncurses
+#22 135.4 checking for readline in -lreadline... no
+#22 135.4 checking readline.h usability... no
+#22 135.5 checking readline.h presence... no
+#22 135.5 checking for readline.h... no
+#22 135.5 checking for /usr/include/readline.h... no
+#22 135.5 checking for /usr/include/readline/readline.h... no
+#22 135.5 checking for /usr/local/include/readline.h... no
+#22 135.5 checking for /usr/local/include/readline/readline.h... no
+#22 135.5 checking for /usr/local/readline/include/readline.h... no
+#22 135.5 checking for /usr/local/readline/include/readline/readline.h... no
+#22 135.5 checking for /usr/contrib/include/readline.h... no
+#22 135.5 checking for /usr/contrib/include/readline/readline.h... no
+#22 135.5 checking for /mingw/include/readline.h... no
+#22 135.5 checking for /mingw/include/readline/readline.h... no
+#22 135.5 checking for library containing fdatasync... none required
+#22 135.6 checking zlib.h usability... yes
+#22 135.6 checking zlib.h presence... yes
+#22 135.6 checking for zlib.h... yes
+#22 135.6 checking for library containing deflate... -lz
+#22 135.7 checking for library containing dlopen... none required
+#22 135.8 checking whether to support MEMSYS5... no
+#22 135.8 checking whether to support MEMSYS3... no
+#22 135.8 configure: creating ./config.status
+#22 136.3 config.status: creating Makefile
+#22 136.3 config.status: creating sqlite3.pc
+#22 136.3 config.status: creating config.h
+#22 136.4 config.status: executing libtool commands
+#22 136.4 ++ nproc
+#22 136.4 + make -j128
+#22 136.4 /afl/afl-clang-fast  -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -o mksourceid /src/sqlite3/bld/../tool/mksourceid.c
+#22 136.4 /afl/afl-clang-fast  -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -o mkkeywordhash   /src/sqlite3/bld/../tool/mkkeywordhash.c
+#22 136.4 /afl/afl-clang-fast  -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -o lemon /src/sqlite3/bld/../tool/lemon.c
+#22 136.4 tclsh8.6 /src/sqlite3/bld/../tool/mkshellc.tcl >shell.c
+#22 136.7 ./mkkeywordhash >keywordhash.h
+#22 136.9 tclsh8.6 /src/sqlite3/bld/../tool/mksqlite3h.tcl /src/sqlite3/bld/.. >sqlite3.h
+#22 138.3 cp /src/sqlite3/bld/../tool/lempar.c .
+#22 138.3 cp /src/sqlite3/bld/../src/parse.y .
+#22 138.3 cp /src/sqlite3/bld/../ext/fts5/fts5parse.y .
+#22 138.3 ./lemon   -S parse.y
+#22 138.3 rm -f fts5parse.h
+#22 138.3 ./lemon  -S fts5parse.y
+#22 138.3 tclsh8.6 /src/sqlite3/bld/../ext/fts5/tool/mkfts5c.tcl
+#22 138.4 cat parse.h /src/sqlite3/bld/../src/vdbe.c | tclsh8.6 /src/sqlite3/bld/../tool/mkopcodeh.tcl >opcodes.h
+#22 138.4 cp /src/sqlite3/bld/../ext/fts5/fts5.h .
+#22 138.4 tclsh8.6 /src/sqlite3/bld/../tool/mkopcodec.tcl opcodes.h >opcodes.c
+#22 138.4 rm -rf tsrc
+#22 138.4 mkdir tsrc
+#22 138.4 cp -f /src/sqlite3/bld/../src/alter.c /src/sqlite3/bld/../src/analyze.c /src/sqlite3/bld/../src/attach.c /src/sqlite3/bld/../src/auth.c /src/sqlite3/bld/../src/backup.c /src/sqlite3/bld/../src/bitvec.c /src/sqlite3/bld/../src/btmutex.c /src/sqlite3/bld/../src/btree.c /src/sqlite3/bld/../src/btree.h /src/sqlite3/bld/../src/btreeInt.h /src/sqlite3/bld/../src/build.c /src/sqlite3/bld/../src/callback.c /src/sqlite3/bld/../src/complete.c /src/sqlite3/bld/../src/ctime.c /src/sqlite3/bld/../src/date.c /src/sqlite3/bld/../src/dbpage.c /src/sqlite3/bld/../src/dbstat.c /src/sqlite3/bld/../src/delete.c /src/sqlite3/bld/../src/expr.c /src/sqlite3/bld/../src/fault.c /src/sqlite3/bld/../src/fkey.c /src/sqlite3/bld/../src/func.c /src/sqlite3/bld/../src/global.c /src/sqlite3/bld/../src/hash.c /src/sqlite3/bld/../src/hash.h /src/sqlite3/bld/../src/hwtime.h /src/sqlite3/bld/../src/insert.c /src/sqlite3/bld/../src/legacy.c /src/sqlite3/bld/../src/loadext.c /src/sqlite3/bld/../src/main.c /src/sqlite3/bld/../src/malloc.c /src/sqlite3/bld/../src/mem0.c /src/sqlite3/bld/../src/mem1.c /src/sqlite3/bld/../src/mem2.c /src/sqlite3/bld/../src/mem3.c /src/sqlite3/bld/../src/mem5.c /src/sqlite3/bld/../src/memdb.c /src/sqlite3/bld/../src/memjournal.c /src/sqlite3/bld/../src/msvc.h /src/sqlite3/bld/../src/mutex.c /src/sqlite3/bld/../src/mutex.h /src/sqlite3/bld/../src/mutex_noop.c /src/sqlite3/bld/../src/mutex_unix.c /src/sqlite3/bld/../src/mutex_w32.c /src/sqlite3/bld/../src/notify.c /src/sqlite3/bld/../src/os.c /src/sqlite3/bld/../src/os.h /src/sqlite3/bld/../src/os_common.h /src/sqlite3/bld/../src/os_setup.h /src/sqlite3/bld/../src/os_unix.c /src/sqlite3/bld/../src/os_win.c /src/sqlite3/bld/../src/os_win.h /src/sqlite3/bld/../src/pager.c /src/sqlite3/bld/../src/pager.h /src/sqlite3/bld/../src/parse.y /src/sqlite3/bld/../src/pcache.c /src/sqlite3/bld/../src/pcache.h /src/sqlite3/bld/../src/pcache1.c /src/sqlite3/bld/../src/pragma.c /src/sqlite3/bld/../src/pragma.h /src/sqlite3/bld/../src/prepare.c /src/sqlite3/bld/../src/printf.c /src/sqlite3/bld/../src/random.c /src/sqlite3/bld/../src/resolve.c /src/sqlite3/bld/../src/rowset.c /src/sqlite3/bld/../src/select.c /src/sqlite3/bld/../src/status.c /src/sqlite3/bld/../src/shell.c.in /src/sqlite3/bld/../src/sqlite.h.in /src/sqlite3/bld/../src/sqlite3ext.h /src/sqlite3/bld/../src/sqliteInt.h /src/sqlite3/bld/../src/sqliteLimit.h /src/sqlite3/bld/../src/table.c /src/sqlite3/bld/../src/tclsqlite.c /src/sqlite3/bld/../src/threads.c /src/sqlite3/bld/../src/tokenize.c /src/sqlite3/bld/../src/treeview.c /src/sqlite3/bld/../src/trigger.c /src/sqlite3/bld/../src/utf.c /src/sqlite3/bld/../src/update.c /src/sqlite3/bld/../src/upsert.c /src/sqlite3/bld/../src/util.c /src/sqlite3/bld/../src/vacuum.c /src/sqlite3/bld/../src/vdbe.c /src/sqlite3/bld/../src/vdbe.h /src/sqlite3/bld/../src/vdbeapi.c /src/sqlite3/bld/../src/vdbeaux.c /src/sqlite3/bld/../src/vdbeblob.c /src/sqlite3/bld/../src/vdbemem.c /src/sqlite3/bld/../src/vdbesort.c /src/sqlite3/bld/../src/vdbetrace.c /src/sqlite3/bld/../src/vdbevtab.c /src/sqlite3/bld/../src/vdbeInt.h /src/sqlite3/bld/../src/vtab.c /src/sqlite3/bld/../src/vxworks.h /src/sqlite3/bld/../src/wal.c /src/sqlite3/bld/../src/wal.h /src/sqlite3/bld/../src/walker.c /src/sqlite3/bld/../src/where.c /src/sqlite3/bld/../src/wherecode.c /src/sqlite3/bld/../src/whereexpr.c /src/sqlite3/bld/../src/whereInt.h /src/sqlite3/bld/../src/window.c /src/sqlite3/bld/../ext/fts1/fts1.c /src/sqlite3/bld/../ext/fts1/fts1.h /src/sqlite3/bld/../ext/fts1/fts1_hash.c /src/sqlite3/bld/../ext/fts1/fts1_hash.h /src/sqlite3/bld/../ext/fts1/fts1_porter.c /src/sqlite3/bld/../ext/fts1/fts1_tokenizer.h /src/sqlite3/bld/../ext/fts1/fts1_tokenizer1.c /src/sqlite3/bld/../ext/fts2/fts2.c /src/sqlite3/bld/../ext/fts2/fts2.h /src/sqlite3/bld/../ext/fts2/fts2_hash.c /src/sqlite3/bld/../ext/fts2/fts2_hash.h /src/sqlite3/bld/../ext/fts2/fts2_icu.c /src/sqlite3/bld/../ext/fts2/fts2_porter.c /src/sqlite3/bld/../ext/fts2/fts2_tokenizer.h /src/sqlite3/bld/../ext/fts2/fts2_tokenizer.c /src/sqlite3/bld/../ext/fts2/fts2_tokenizer1.c /src/sqlite3/bld/../ext/fts3/fts3.c /src/sqlite3/bld/../ext/fts3/fts3.h /src/sqlite3/bld/../ext/fts3/fts3Int.h /src/sqlite3/bld/../ext/fts3/fts3_aux.c /src/sqlite3/bld/../ext/fts3/fts3_expr.c /src/sqlite3/bld/../ext/fts3/fts3_hash.c /src/sqlite3/bld/../ext/fts3/fts3_hash.h /src/sqlite3/bld/../ext/fts3/fts3_icu.c /src/sqlite3/bld/../ext/fts3/fts3_porter.c /src/sqlite3/bld/../ext/fts3/fts3_snippet.c /src/sqlite3/bld/../ext/fts3/fts3_tokenizer.h /src/sqlite3/bld/../ext/fts3/fts3_tokenizer.c /src/sqlite3/bld/../ext/fts3/fts3_tokenizer1.c /src/sqlite3/bld/../ext/fts3/fts3_tokenize_vtab.c /src/sqlite3/bld/../ext/fts3/fts3_unicode.c /src/sqlite3/bld/../ext/fts3/fts3_unicode2.c /src/sqlite3/bld/../ext/fts3/fts3_write.c /src/sqlite3/bld/../ext/icu/sqliteicu.h /src/sqlite3/bld/../ext/icu/icu.c /src/sqlite3/bld/../ext/rtree/rtree.h /src/sqlite3/bld/../ext/rtree/rtree.c /src/sqlite3/bld/../ext/rtree/geopoly.c /src/sqlite3/bld/../ext/session/sqlite3session.c /src/sqlite3/bld/../ext/session/sqlite3session.h /src/sqlite3/bld/../ext/userauth/userauth.c /src/sqlite3/bld/../ext/userauth/sqlite3userauth.h /src/sqlite3/bld/../ext/rbu/sqlite3rbu.h /src/sqlite3/bld/../ext/rbu/sqlite3rbu.c /src/sqlite3/bld/../ext/misc/json1.c /src/sqlite3/bld/../ext/misc/stmt.c keywordhash.h opcodes.c opcodes.h parse.c parse.h config.h shell.c sqlite3.h tsrc
+#22 138.4 rm tsrc/sqlite.h.in tsrc/parse.y
+#22 138.4 tclsh8.6 /src/sqlite3/bld/../tool/vdbe-compress.tcl  <tsrc/vdbe.c >vdbe.new
+#22 138.5 mv vdbe.new tsrc/vdbe.c
+#22 138.5 cp fts5.c fts5.h tsrc
+#22 138.5 touch .target_source
+#22 138.5 tclsh8.6 /src/sqlite3/bld/../tool/mksqlite3c.tcl
+#22 139.6 cp tsrc/sqlite3ext.h .
+#22 139.6 cp /src/sqlite3/bld/../ext/session/sqlite3session.h .
+#22 139.6 ./libtool --mode=compile --tag=CC /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG  -DSQLITE_THREADSAFE=1   -DSQLITE_HAVE_ZLIB=1  -DSQLITE_TEMP_STORE=1 -c sqlite3.c
+#22 139.6 ./libtool --mode=link /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG  -DSQLITE_THREADSAFE=1   -DSQLITE_HAVE_ZLIB=1    -DHAVE_READLINE=0  -DHAVE_EDITLINE=0 -DSQLITE_ENABLE_JSON1 -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_ENABLE_EXPLAIN_COMMENTS -DSQLITE_ENABLE_UNKNOWN_SQL_FUNCTION -DSQLITE_ENABLE_STMTVTAB -DSQLITE_ENABLE_DBPAGE_VTAB -DSQLITE_ENABLE_DBSTAT_VTAB -DSQLITE_ENABLE_BYTECODE_VTAB -DSQLITE_ENABLE_OFFSET_SQL_FUNC -DSQLITE_ENABLE_DESERIALIZE -o sqlite3 \
+#22 139.6 	shell.c sqlite3.c \
+#22 139.6 	 -lz   -rpath "/usr/local/lib"
+#22 139.6 libtool: compile:  /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG -DSQLITE_THREADSAFE=1 -DSQLITE_HAVE_ZLIB=1 -DSQLITE_TEMP_STORE=1 -c sqlite3.c  -fPIC -DPIC -o .libs/sqlite3.o
+#22 139.6 libtool: link: /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG -DSQLITE_THREADSAFE=1 -DSQLITE_HAVE_ZLIB=1 -DHAVE_READLINE=0 -DHAVE_EDITLINE=0 -DSQLITE_ENABLE_JSON1 -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE -DSQLITE_ENABLE_EXPLAIN_COMMENTS -DSQLITE_ENABLE_UNKNOWN_SQL_FUNCTION -DSQLITE_ENABLE_STMTVTAB -DSQLITE_ENABLE_DBPAGE_VTAB -DSQLITE_ENABLE_DBSTAT_VTAB -DSQLITE_ENABLE_BYTECODE_VTAB -DSQLITE_ENABLE_OFFSET_SQL_FUNC -DSQLITE_ENABLE_DESERIALIZE -o sqlite3 shell.c sqlite3.c  -lz -pthread -Wl,-rpath -Wl,/usr/local/lib
+#22 149.0 WARNING: dlopen() detected. To have coverage for a library that your target dlopen()'s this must either happen before __AFL_INIT() or you must use AFL_PRELOAD to preload all dlopen()'ed libraries!
+#22 157.0 WARNING: dlopen() detected. To have coverage for a library that your target dlopen()'s this must either happen before __AFL_INIT() or you must use AFL_PRELOAD to preload all dlopen()'ed libraries!
+#22 170.4 libtool: compile:  /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG -DSQLITE_THREADSAFE=1 -DSQLITE_HAVE_ZLIB=1 -DSQLITE_TEMP_STORE=1 -c sqlite3.c -o sqlite3.o >/dev/null 2>&1
+#22 201.2 ./libtool --mode=link /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -DSQLITE_OS_UNIX=1 -I. -I/src/sqlite3/bld/../src -I/src/sqlite3/bld/../ext/rtree -I/src/sqlite3/bld/../ext/icu -I/src/sqlite3/bld/../ext/fts3 -I/src/sqlite3/bld/../ext/async -I/src/sqlite3/bld/../ext/session -I/src/sqlite3/bld/../ext/userauth -D_HAVE_SQLITE_CONFIG_H -DBUILD_sqlite -DNDEBUG  -DSQLITE_THREADSAFE=1   -DSQLITE_HAVE_ZLIB=1    -no-undefined -o libsqlite3.la sqlite3.lo -lz   \
+#22 201.2 	 -rpath "/usr/local/lib" -version-info "8:6:8"
+#22 201.3 libtool: link: /afl/afl-clang-fast -shared  .libs/sqlite3.o   -lz  -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm   -pthread -Wl,-soname -Wl,libsqlite3.so.0 -o .libs/libsqlite3.so.0.8.6
+#22 201.4 libtool: link: (cd ".libs" && rm -f "libsqlite3.so.0" && ln -s "libsqlite3.so.0.8.6" "libsqlite3.so.0")
+#22 201.4 libtool: link: (cd ".libs" && rm -f "libsqlite3.so" && ln -s "libsqlite3.so.0.8.6" "libsqlite3.so")
+#22 201.4 libtool: link: ar cru .libs/libsqlite3.a  sqlite3.o
+#22 201.4 ar: `u' modifier ignored since `D' is the default (see `U')
+#22 201.5 libtool: link: ranlib .libs/libsqlite3.a
+#22 201.5 libtool: link: ( cd ".libs" && rm -f "libsqlite3.la" && ln -s "../libsqlite3.la" "libsqlite3.la" )
+#22 201.5 + make sqlite3.c
+#22 201.5 make: 'sqlite3.c' is up to date.
+#22 201.5 + /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -DSQLITE_MAX_LENGTH=128000000 -DSQLITE_MAX_SQL_LENGTH=128000000 -DSQLITE_MAX_MEMORY=25000000 -DSQLITE_PRINTF_PRECISION_LIMIT=1048576 -DSQLITE_DEBUG=1 -DSQLITE_MAX_PAGE_COUNT=16384 -I. -c /src/sqlite3/test/ossfuzz.c -o /src/sqlite3/test/ossfuzz.o
+#22 201.6 + /afl/afl-clang-fast++ -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 /src/sqlite3/test/ossfuzz.o -o /out/cmplog/ossfuzz /libAFLDriver.a ./sqlite3.o -pthread -ldl -lz
+#22 201.8 + cp /src/ossfuzz.dict /src/ossfuzz_seed_corpus.zip /out/cmplog/
+#22 DONE 201.9s
+
+#23 exporting to image
+#23 exporting layers
+#23 exporting layers 5.1s done
+#23 preparing layers for inline cache 0.1s done
+#23 writing image sha256:96e8d4c8057a495a685459832b8d2a03cc42349ef4f1cbb963ff37d59788fca3 done
+#23 naming to gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz done
+#23 DONE 5.1s
+
+ [33m4 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz-intermediate \
+--file fuzzers/aflmmbb/runner.Dockerfile \
+fuzzers/aflmmbb
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from runner.Dockerfile
+#1 transferring dockerfile: 1.13kB done
+#1 WARN: UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz-intermediate
+#4 DONE 0.0s
+
+#5 [1/1] FROM gcr.io/fuzzbench/base-image:latest
+#5 CACHED
+
+#6 exporting to image
+#6 exporting layers done
+#6 preparing layers for inline cache done
+#6 writing image sha256:0dcae0633340983dc0f0325a60e3ded9110cef498f835801c6f3e1c84d756bd0 done
+#6 naming to gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz-intermediate done
+#6 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz \
+--build-arg benchmark=sqlite3_ossfuzz \
+--build-arg fuzzer=aflmmbb \
+--file docker/benchmark-runner/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 3.23kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+#1 WARN: JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz-intermediate:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz
+#5 DONE 0.0s
+
+#6 [stage-1  1/12] FROM gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz-intermediate:latest
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 ...
+
+#8 [builder 1/1] FROM gcr.io/fuzzbench/builders/aflmmbb/sqlite3_ossfuzz:latest
+#8 DONE 0.2s
+
+#7 [internal] load build context
+#7 transferring context: 7.26MB 0.3s done
+#7 DONE 0.3s
+
+#9 [stage-1  4/12] WORKDIR /out
+#9 CACHED
+
+#10 [stage-1  6/12] COPY benchmarks /src/benchmarks
+#10 CACHED
+
+#11 [stage-1 10/12] COPY experiment/runner.py /src/experiment/runner.py
+#11 CACHED
+
+#12 [stage-1 11/12] COPY docker/benchmark-runner /src/docker/benchmark-runner
+#12 CACHED
+
+#13 [stage-1  2/12] RUN apt-get update -y &&     DEBIAN_FRONTEND="noninteractive" apt-get install -y     libglib2.0-0     libxml2     libarchive13     libgss3
+#13 CACHED
+
+#14 [stage-1  3/12] RUN mkdir -p /out
+#14 CACHED
+
+#15 [stage-1  8/12] RUN mkdir -p /out/seeds /out/corpus
+#15 CACHED
+
+#16 [stage-1  9/12] COPY common /src/common
+#16 CACHED
+
+#17 [stage-1  7/12] COPY fuzzers /src/fuzzers
+#17 CACHED
+
+#18 [stage-1  5/12] COPY --from=builder /out/ ./
+#18 CACHED
+
+#19 [stage-1 12/12] RUN chmod +x /src/docker/benchmark-runner/startup-runner.sh
+#19 CACHED
+
+#20 exporting to image
+#20 exporting layers done
+#20 preparing layers for inline cache done
+#20 writing image sha256:7dfd8d8f2012f9bb95307ab8344dee098ce9a3cc09f9674e7ce660dcff47bfae done
+#20 naming to gcr.io/fuzzbench/runners/aflmmbb/sqlite3_ossfuzz done
+#20 DONE 0.0s
+
+ [33m5 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+ - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+ - JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)

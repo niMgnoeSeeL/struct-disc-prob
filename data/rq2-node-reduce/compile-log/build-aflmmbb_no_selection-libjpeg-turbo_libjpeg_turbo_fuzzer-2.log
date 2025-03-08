@@ -1,0 +1,2711 @@
+docker build \
+--tag gcr.io/fuzzbench/builders/benchmark/libjpeg-turbo_libjpeg_turbo_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/benchmark/libjpeg-turbo_libjpeg_turbo_fuzzer \
+--file benchmarks/libjpeg-turbo_libjpeg_turbo_fuzzer/Dockerfile \
+benchmarks/libjpeg-turbo_libjpeg_turbo_fuzzer
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.81kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#2 DONE 0.2s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/8] FROM gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/benchmark/libjpeg-turbo_libjpeg_turbo_fuzzer
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 948B 0.0s done
+#6 DONE 0.0s
+
+#7 [5/8] RUN cd seed-corpora &&     zip -r ../decompress_fuzzer_seed_corpus.zip         afl-testcases/jpeg*         bugs/decompress*         /src/libjpeg-turbo/testimages/*.jpg
+#7 CACHED
+
+#8 [6/8] RUN cd seed-corpora &&     zip -r ../compress_fuzzer_seed_corpus.zip         afl-testcases/bmp         afl-testcases/gif*         bugs/compress*         /src/libjpeg-turbo/testimages/*.bmp         /src/libjpeg-turbo/testimages/*.ppm
+#8 CACHED
+
+#9 [2/8] RUN apt-get update &&     apt-get install -y make yasm cmake
+#9 CACHED
+
+#10 [4/8] RUN git clone https://github.com/libjpeg-turbo/seed-corpora &&     git -C seed-corpora checkout 7c9ea5ffaac76ef618657978c9fdfa845d310b93
+#10 CACHED
+
+#11 [7/8] RUN rm -rf seed-corpora
+#11 CACHED
+
+#12 [3/8] RUN git clone https://github.com/libjpeg-turbo/fuzz &&     cat fuzz/branches.txt | while read branch; do       git clone https://github.com/libjpeg-turbo/libjpeg-turbo           -b $branch libjpeg-turbo.$branch;     done
+#12 CACHED
+
+#13 [8/8] COPY build.sh /src/
+#13 CACHED
+
+#14 exporting to image
+#14 exporting layers done
+#14 preparing layers for inline cache done
+#14 writing image sha256:16725b678f825b8c27853babce2c705fa60091173a36f0727be936ded24fc4e3 done
+#14 naming to gcr.io/fuzzbench/builders/benchmark/libjpeg-turbo_libjpeg_turbo_fuzzer done
+#14 DONE 0.0s
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate \
+--build-arg parent_image=gcr.io/fuzzbench/builders/benchmark/libjpeg-turbo_libjpeg_turbo_fuzzer \
+--file fuzzers/aflmmbb_no_selection/builder.Dockerfile \
+fuzzers/aflmmbb_no_selection
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from builder.Dockerfile
+#1 transferring dockerfile: 2.91kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/builders/benchmark/libjpeg-turbo_libjpeg_turbo_fuzzer:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate
+#4 DONE 0.0s
+
+#5 [ 1/13] FROM gcr.io/fuzzbench/builders/benchmark/libjpeg-turbo_libjpeg_turbo_fuzzer:latest
+#5 DONE 0.0s
+
+#6 [ 9/13] RUN echo "dont cache2"
+#6 CACHED
+
+#7 [11/13] RUN cd /afl &&     unset CFLAGS CXXFLAGS &&     export CC=clang AFL_NO_X86=1 &&     PYTHON_INCLUDE=/ make &&     cp utils/aflpp_driver/libAFLDriver.a /
+#7 CACHED
+
+#8 [ 5/13] RUN apt-get install -y ninja-build # for QEMU mode
+#8 CACHED
+
+#9 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#9 CACHED
+
+#10 [ 7/13] RUN apt-get install -y wget curl # for Frida mode
+#10 CACHED
+
+#11 [ 3/13] RUN apt-get install -y lld-14 llvm-14 llvm-14-dev clang-14 ||     apt-get install -y lld llvm llvm-dev clang
+#11 CACHED
+
+#12 [ 4/13] RUN apt-get install -y gcc-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-plugin-dev     libstdc++-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-dev
+#12 CACHED
+
+#13 [ 6/13] RUN apt-get install -y cpio libcapstone-dev # for Nyx mode
+#13 CACHED
+
+#14 [ 8/13] RUN apt-get install -y python3-pip # for Unicorn mode
+#14 CACHED
+
+#15 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install
+#15 CACHED
+
+#16 [ 2/13] RUN apt-get update &&     apt-get install -y     build-essential python3-dev automake cmake git flex bison     libglib2.0-dev libpixman-1-dev python3-setuptools cargo libgtk-3-dev
+#16 CACHED
+
+#17 [13/13] RUN cd /afl/custom_mutators/examples &&     cc -O3 -fPIC -shared -g -o custom_post_run.so -I../../include set.c custom_post_run.c
+#17 CACHED
+
+#18 exporting to image
+#18 exporting layers done
+#18 preparing layers for inline cache 0.0s done
+#18 writing image sha256:f67c117434700aaf3e796986f648ebb277736eacf23ca41a1d988b2884df48a7 done
+#18 naming to gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate done
+#18 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+docker pull ubuntu:focal
+focal: Pulling from library/ubuntu
+Digest: sha256:8e5c4f0285ecbb4ead070431d29b576a530d3166df73ec44affc1cd27555141b
+Status: Image is up to date for ubuntu:focal
+docker.io/library/ubuntu:focal
+docker build \
+--tag gcr.io/fuzzbench/base-image \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/base-image \
+--file docker/base-image/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.34kB done
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:focal
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 220B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/base-image
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/ubuntu:focal
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 711B done
+#6 DONE 0.0s
+
+#7 [4/7] COPY ./requirements.txt /tmp
+#7 CACHED
+
+#8 [5/7] RUN pip install -r /tmp/requirements.txt
+#8 CACHED
+
+#9 [3/7] RUN cd /tmp/ &&     curl -O https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tar.xz &&     tar -xvf Python-3.10.8.tar.xz > /dev/null &&     cd Python-3.10.8 &&     ./configure         --enable-loadable-sqlite-extensions         --enable-optimizations         > /dev/null &&     make -j install > /dev/null &&     rm -r /tmp/Python-3.10.8.tar.xz /tmp/Python-3.10.8 &&     ln -s /usr/local/bin/python3 /usr/local/bin/python &&     ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+#9 CACHED
+
+#10 [6/7] RUN apt-get update &&     apt-get install -y     apt-transport-https     ca-certificates     rsync     gnupg
+#10 CACHED
+
+#11 [2/7] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     build-essential     zlib1g-dev     libssl-dev     libffi-dev     libsqlite3-dev     libbz2-dev     liblzma-dev
+#11 CACHED
+
+#12 [7/7] RUN echo "deb https://packages.cloud.google.com/apt cloud-sdk main"     | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg     | apt-key add - &&     apt-get update &&     apt-get install -y google-cloud-cli
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 preparing layers for inline cache 0.0s done
+#13 writing image sha256:d6459d72950a1a83d34297d28166e48288b99a34d2a585e3c150e20a398588bd done
+#13 naming to gcr.io/fuzzbench/base-image done
+#13 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer \
+--build-arg benchmark=libjpeg-turbo_libjpeg_turbo_fuzzer \
+--build-arg fuzzer=aflmmbb_no_selection \
+--build-arg parent_image=gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate \
+--no-cache \
+--file docker/benchmark-builder/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.50kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer
+#5 DONE 0.0s
+
+#6 [stage-1  1/15] FROM gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate:latest
+#6 CACHED
+
+#7 [base-image 1/1] FROM gcr.io/fuzzbench/base-image:latest
+#7 CACHED
+
+#8 [internal] load build context
+#8 transferring context: 979.20kB 0.1s done
+#8 DONE 0.1s
+
+#9 [stage-1  2/15] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     zlib1g-dev     libssl-dev     libffi-dev
+#9 0.470 Hit:1 http://archive.ubuntu.com/ubuntu focal InRelease
+#9 0.511 Get:2 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+#9 0.555 Get:3 http://archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+#9 0.969 Get:4 http://archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
+#9 0.988 Get:5 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [4389 kB]
+#9 1.149 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1593 kB]
+#9 1.490 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/main i386 Packages [1332 kB]
+#9 1.536 Get:8 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [4252 kB]
+#9 1.595 Get:9 http://archive.ubuntu.com/ubuntu focal-updates/universe i386 Packages [1021 kB]
+#9 1.632 Get:10 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [4577 kB]
+#9 1.645 Get:11 http://security.ubuntu.com/ubuntu focal-security/main i386 Packages [1053 kB]
+#9 1.672 Get:12 http://security.ubuntu.com/ubuntu focal-security/universe i386 Packages [861 kB]
+#9 1.692 Get:13 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1301 kB]
+#9 1.774 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [4730 kB]
+#9 2.637 Fetched 25.5 MB in 2s (10.8 MB/s)
+#9 2.637 Reading package lists...
+#9 3.764 Reading package lists...
+#9 4.850 Building dependency tree...
+#9 5.027 Reading state information...
+#9 5.046 Calculating upgrade...
+#9 5.550 The following packages will be upgraded:
+#9 5.550   apt base-files binutils binutils-common binutils-dev
+#9 5.550   binutils-x86-64-linux-gnu bsdutils ca-certificates e2fsprogs fdisk
+#9 5.551   gir1.2-harfbuzz-0.0 git git-man krb5-locales less libapr1 libaprutil1
+#9 5.551   libapt-pkg6.0 libasn1-8-heimdal libbinutils libc-bin libc-dev-bin libc6
+#9 5.551   libc6-dev libc6-dev-i386 libc6-dev-x32 libc6-i386 libc6-x32 libcap2
+#9 5.551   libcom-err2 libctf-nobfd0 libctf0 libcurl3-gnutls libext2fs2 libfdisk1
+#9 5.551   libgnutls30 libgssapi-krb5-2 libgssapi3-heimdal libharfbuzz-dev
+#9 5.551   libharfbuzz-gobject0 libharfbuzz-icu0 libharfbuzz0b libhcrypto4-heimdal
+#9 5.551   libheimbase1-heimdal libheimntlm0-heimdal libhx509-5-heimdal libk5crypto3
+#9 5.551   libkrb5-26-heimdal libkrb5-3 libkrb5support0 libldap-2.4-2 libldap-common
+#9 5.551   libnghttp2-14 libpam-modules libpam-modules-bin libpam-runtime libpam0g
+#9 5.551   libperl5.30 libprocps8 libpython3.8 libpython3.8-dev libpython3.8-minimal
+#9 5.551   libpython3.8-stdlib libroken18-heimdal libsmartcols1 libsqlite3-0 libss2
+#9 5.551   libssh-4 libssl-dev libssl1.1 libtasn1-6 libudev1 libwind0-heimdal
+#9 5.551   libx11-data libxml2 linux-libc-dev login logsave mount ncurses-base
+#9 5.551   ncurses-bin openssh-client openssl passwd perl perl-base perl-modules-5.30
+#9 5.551   procps python3.8 python3.8-dev python3.8-minimal rsync tar tzdata unzip
+#9 5.551   util-linux
+#9 5.772 96 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 5.772 Need to get 64.5 MB of archives.
+#9 5.772 After this operation, 477 kB of additional disk space will be used.
+#9 5.772 Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-x32 amd64 2.31-0ubuntu9.17 [1975 kB]
+#9 6.603 Get:2 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-i386 amd64 2.31-0ubuntu9.17 [1902 kB]
+#9 6.671 Get:3 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev amd64 2.31-0ubuntu9.17 [2521 kB]
+#9 6.783 Get:4 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-dev-bin amd64 2.31-0ubuntu9.17 [71.8 kB]
+#9 6.784 Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-i386 amd64 2.31-0ubuntu9.17 [2726 kB]
+#9 6.853 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-x32 amd64 2.31-0ubuntu9.17 [2779 kB]
+#9 6.916 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 linux-libc-dev amd64 5.4.0-208.228 [1118 kB]
+#9 6.942 Get:8 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6 amd64 2.31-0ubuntu9.17 [2721 kB]
+#9 7.011 Get:9 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 base-files amd64 11ubuntu5.8 [60.3 kB]
+#9 7.012 Get:10 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 bsdutils amd64 1:2.34-0.1ubuntu9.6 [63.3 kB]
+#9 7.013 Get:11 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 login amd64 1:4.8.1-1ubuntu5.20.04.5 [220 kB]
+#9 7.017 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ncurses-bin amd64 6.2-0ubuntu2.1 [172 kB]
+#9 7.021 Get:13 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libperl5.30 amd64 5.30.0-9ubuntu0.5 [3941 kB]
+#9 7.118 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl amd64 5.30.0-9ubuntu0.5 [224 kB]
+#9 7.122 Get:15 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl-base amd64 5.30.0-9ubuntu0.5 [1514 kB]
+#9 7.157 Get:16 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl-modules-5.30 all 5.30.0-9ubuntu0.5 [2739 kB]
+#9 7.226 Get:17 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tar amd64 1.30+dfsg-7ubuntu0.20.04.4 [240 kB]
+#9 7.229 Get:18 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libfdisk1 amd64 2.34-0.1ubuntu9.6 [175 kB]
+#9 7.233 Get:19 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libsmartcols1 amd64 2.34-0.1ubuntu9.6 [100 kB]
+#9 7.235 Get:20 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 fdisk amd64 2.34-0.1ubuntu9.6 [120 kB]
+#9 7.237 Get:21 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 util-linux amd64 2.34-0.1ubuntu9.6 [1022 kB]
+#9 7.261 Get:22 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-bin amd64 2.31-0ubuntu9.17 [634 kB]
+#9 7.290 Get:23 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ncurses-base all 6.2-0ubuntu2.1 [18.9 kB]
+#9 7.291 Get:24 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libudev1 amd64 245.4-4ubuntu3.24 [75.2 kB]
+#9 7.293 Get:25 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libapt-pkg6.0 amd64 2.0.10 [843 kB]
+#9 7.391 Get:26 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libtasn1-6 amd64 4.16.0-2ubuntu0.1 [38.6 kB]
+#9 7.392 Get:27 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgnutls30 amd64 3.6.13-2ubuntu1.12 [829 kB]
+#9 7.411 Get:28 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 apt amd64 2.0.10 [1280 kB]
+#9 7.440 Get:29 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam0g amd64 1.3.1-5ubuntu4.7 [55.4 kB]
+#9 7.441 Get:30 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-modules-bin amd64 1.3.1-5ubuntu4.7 [41.2 kB]
+#9 7.442 Get:31 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-modules amd64 1.3.1-5ubuntu4.7 [261 kB]
+#9 7.448 Get:32 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 logsave amd64 1.45.5-2ubuntu1.2 [10.2 kB]
+#9 7.489 Get:33 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libext2fs2 amd64 1.45.5-2ubuntu1.2 [183 kB]
+#9 7.494 Get:34 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 e2fsprogs amd64 1.45.5-2ubuntu1.2 [527 kB]
+#9 7.506 Get:35 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 mount amd64 2.34-0.1ubuntu9.6 [115 kB]
+#9 7.588 Get:36 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [514 kB]
+#9 7.601 Get:37 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [3950 kB]
+#9 7.696 Get:38 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8 amd64 3.8.10-0ubuntu1~20.04.15 [1626 kB]
+#9 7.733 Get:39 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl-dev amd64 1.1.1f-1ubuntu2.24 [1586 kB]
+#9 7.770 Get:40 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl1.1 amd64 1.1.1f-1ubuntu2.24 [1323 kB]
+#9 7.803 Get:41 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8 amd64 3.8.10-0ubuntu1~20.04.15 [387 kB]
+#9 7.810 Get:42 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-stdlib amd64 3.8.10-0ubuntu1~20.04.15 [1675 kB]
+#9 7.850 Get:43 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [1901 kB]
+#9 7.895 Get:44 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [720 kB]
+#9 7.912 Get:45 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libsqlite3-0 amd64 3.31.1-4ubuntu0.6 [549 kB]
+#9 7.923 Get:46 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 rsync amd64 3.1.3-8ubuntu0.9 [323 kB]
+#9 7.931 Get:47 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-runtime all 1.3.1-5ubuntu4.7 [37.3 kB]
+#9 7.933 Get:48 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 passwd amd64 1:4.8.1-1ubuntu5.20.04.5 [797 kB]
+#9 7.951 Get:49 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcom-err2 amd64 1.45.5-2ubuntu1.2 [9580 B]
+#9 7.980 Get:50 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libprocps8 amd64 2:3.3.16-1ubuntu2.4 [33.1 kB]
+#9 7.980 Get:51 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libss2 amd64 1.45.5-2ubuntu1.2 [11.3 kB]
+#9 7.981 Get:52 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 procps amd64 2:3.3.16-1ubuntu2.4 [232 kB]
+#9 8.079 Get:53 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssl amd64 1.1.1f-1ubuntu2.24 [621 kB]
+#9 8.092 Get:54 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ca-certificates all 20240203~20.04.1 [159 kB]
+#9 8.095 Get:55 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 less amd64 551-1ubuntu0.3 [123 kB]
+#9 8.097 Get:56 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcap2 amd64 1:2.32-1ubuntu0.2 [15.7 kB]
+#9 8.098 Get:57 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libxml2 amd64 2.9.10+dfsg-5ubuntu0.20.04.9 [641 kB]
+#9 8.109 Get:58 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tzdata all 2024b-0ubuntu0.20.04.1 [299 kB]
+#9 8.114 Get:59 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 krb5-locales all 1.17-6ubuntu4.8 [11.6 kB]
+#9 8.177 Get:60 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi-krb5-2 amd64 1.17-6ubuntu4.8 [121 kB]
+#9 8.180 Get:61 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-3 amd64 1.17-6ubuntu4.8 [329 kB]
+#9 8.187 Get:62 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5support0 amd64 1.17-6ubuntu4.8 [31.1 kB]
+#9 8.276 Get:63 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libk5crypto3 amd64 1.17-6ubuntu4.8 [80.4 kB]
+#9 8.278 Get:64 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libx11-data all 2:1.6.9-2ubuntu1.6 [114 kB]
+#9 8.281 Get:65 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git-man all 1:2.25.1-1ubuntu3.14 [887 kB]
+#9 8.297 Get:66 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libroken18-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [42.5 kB]
+#9 8.298 Get:67 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libasn1-8-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [181 kB]
+#9 8.301 Get:68 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libheimbase1-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [30.4 kB]
+#9 8.302 Get:69 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhcrypto4-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [88.1 kB]
+#9 8.374 Get:70 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libwind0-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [47.7 kB]
+#9 8.376 Get:71 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhx509-5-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [107 kB]
+#9 8.378 Get:72 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-26-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [207 kB]
+#9 8.474 Get:73 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libheimntlm0-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [15.1 kB]
+#9 8.475 Get:74 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi3-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [96.5 kB]
+#9 8.477 Get:75 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libldap-common all 2.4.49+dfsg-2ubuntu1.10 [16.5 kB]
+#9 8.477 Get:76 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libldap-2.4-2 amd64 2.4.49+dfsg-2ubuntu1.10 [155 kB]
+#9 8.480 Get:77 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libnghttp2-14 amd64 1.40.0-1ubuntu0.3 [79.9 kB]
+#9 8.481 Get:78 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssh-4 amd64 0.9.3-2ubuntu2.5 [171 kB]
+#9 8.484 Get:79 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcurl3-gnutls amd64 7.68.0-1ubuntu2.25 [233 kB]
+#9 8.573 Get:80 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git amd64 1:2.25.1-1ubuntu3.14 [4613 kB]
+#9 8.682 Get:81 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssh-client amd64 1:8.2p1-4ubuntu0.12 [671 kB]
+#9 8.694 Get:82 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-dev amd64 2.34-6ubuntu1.10 [3636 kB]
+#9 8.786 Get:83 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf0 amd64 2.34-6ubuntu1.10 [46.7 kB]
+#9 8.787 Get:84 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-x86-64-linux-gnu amd64 2.34-6ubuntu1.10 [1613 kB]
+#9 8.817 Get:85 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libbinutils amd64 2.34-6ubuntu1.10 [474 kB]
+#9 8.826 Get:86 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils amd64 2.34-6ubuntu1.10 [3380 B]
+#9 8.826 Get:87 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-common amd64 2.34-6ubuntu1.10 [208 kB]
+#9 8.829 Get:88 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf-nobfd0 amd64 2.34-6ubuntu1.10 [48.1 kB]
+#9 8.830 Get:89 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-dev amd64 2.6.4-1ubuntu4.3 [526 kB]
+#9 8.840 Get:90 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz0b amd64 2.6.4-1ubuntu4.3 [391 kB]
+#9 8.881 Get:91 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-icu0 amd64 2.6.4-1ubuntu4.3 [5592 B]
+#9 8.979 Get:92 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-gobject0 amd64 2.6.4-1ubuntu4.3 [20.3 kB]
+#9 8.980 Get:93 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 gir1.2-harfbuzz-0.0 amd64 2.6.4-1ubuntu4.3 [26.3 kB]
+#9 8.980 Get:94 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libaprutil1 amd64 1.6.1-4ubuntu2.2 [85.1 kB]
+#9 8.982 Get:95 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libapr1 amd64 1.6.5-1ubuntu1.1 [91.5 kB]
+#9 8.984 Get:96 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 unzip amd64 6.0-25ubuntu1.2 [169 kB]
+#9 9.153 debconf: delaying package configuration, since apt-utils is not installed
+#9 9.196 Fetched 64.5 MB in 3s (18.9 MB/s)
+#9 9.219 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46246 files and directories currently installed.)
+#9 9.247 Preparing to unpack .../0-libc6-dev-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.249 Unpacking libc6-dev-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.468 Preparing to unpack .../1-libc6-dev-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.469 Unpacking libc6-dev-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.692 Preparing to unpack .../2-libc6-dev_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.694 Unpacking libc6-dev:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 10.25 Preparing to unpack .../3-libc-dev-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 10.25 Unpacking libc-dev-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 10.28 Preparing to unpack .../4-libc6-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 10.28 Unpacking libc6-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 10.68 Preparing to unpack .../5-libc6-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 10.68 Unpacking libc6-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 11.07 Preparing to unpack .../6-linux-libc-dev_5.4.0-208.228_amd64.deb ...
+#9 11.07 Unpacking linux-libc-dev:amd64 (5.4.0-208.228) over (5.4.0-137.154) ...
+#9 11.68 Preparing to unpack .../7-libc6_2.31-0ubuntu9.17_amd64.deb ...
+#9 11.83 Unpacking libc6:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 12.23 Setting up libc6:amd64 (2.31-0ubuntu9.17) ...
+#9 13.37 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 13.40 Preparing to unpack .../base-files_11ubuntu5.8_amd64.deb ...
+#9 13.42 Unpacking base-files (11ubuntu5.8) over (11ubuntu5.6) ...
+#9 13.48 Setting up base-files (11ubuntu5.8) ...
+#9 13.48 Installing new version of config file /etc/issue ...
+#9 13.48 Installing new version of config file /etc/issue.net ...
+#9 13.48 Installing new version of config file /etc/lsb-release ...
+#9 13.48 Installing new version of config file /etc/update-motd.d/10-help-text ...
+#9 13.64 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 13.66 Preparing to unpack .../bsdutils_1%3a2.34-0.1ubuntu9.6_amd64.deb ...
+#9 13.66 Unpacking bsdutils (1:2.34-0.1ubuntu9.6) over (1:2.34-0.1ubuntu9.3) ...
+#9 13.70 Setting up bsdutils (1:2.34-0.1ubuntu9.6) ...
+#9 13.73 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 13.75 Preparing to unpack .../login_1%3a4.8.1-1ubuntu5.20.04.5_amd64.deb ...
+#9 13.77 Unpacking login (1:4.8.1-1ubuntu5.20.04.5) over (1:4.8.1-1ubuntu5.20.04.4) ...
+#9 13.82 Setting up login (1:4.8.1-1ubuntu5.20.04.5) ...
+#9 13.85 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 13.88 Preparing to unpack .../ncurses-bin_6.2-0ubuntu2.1_amd64.deb ...
+#9 13.88 Unpacking ncurses-bin (6.2-0ubuntu2.1) over (6.2-0ubuntu2) ...
+#9 13.92 Setting up ncurses-bin (6.2-0ubuntu2.1) ...
+#9 13.94 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 13.97 Preparing to unpack .../libperl5.30_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 13.97 Unpacking libperl5.30:amd64 (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 14.55 Preparing to unpack .../perl_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 14.57 Unpacking perl (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 14.62 Preparing to unpack .../perl-base_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 14.63 Unpacking perl-base (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 15.11 Setting up perl-base (5.30.0-9ubuntu0.5) ...
+#9 15.14 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 15.16 Preparing to unpack .../perl-modules-5.30_5.30.0-9ubuntu0.5_all.deb ...
+#9 15.16 Unpacking perl-modules-5.30 (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 16.03 Preparing to unpack .../tar_1.30+dfsg-7ubuntu0.20.04.4_amd64.deb ...
+#9 16.03 Unpacking tar (1.30+dfsg-7ubuntu0.20.04.4) over (1.30+dfsg-7ubuntu0.20.04.2) ...
+#9 16.08 Setting up tar (1.30+dfsg-7ubuntu0.20.04.4) ...
+#9 16.11 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 16.14 Preparing to unpack .../libfdisk1_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 16.14 Unpacking libfdisk1:amd64 (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 16.17 Preparing to unpack .../libsmartcols1_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 16.18 Unpacking libsmartcols1:amd64 (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 16.21 Setting up libsmartcols1:amd64 (2.34-0.1ubuntu9.6) ...
+#9 16.24 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 16.26 Preparing to unpack .../fdisk_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 16.26 Unpacking fdisk (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 16.30 Preparing to unpack .../util-linux_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 16.31 Unpacking util-linux (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 16.50 Setting up util-linux (2.34-0.1ubuntu9.6) ...
+#9 16.85 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 16.87 Preparing to unpack .../libc-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 16.87 Unpacking libc-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 16.98 Setting up libc-bin (2.31-0ubuntu9.17) ...
+#9 17.05 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 17.07 Preparing to unpack .../ncurses-base_6.2-0ubuntu2.1_all.deb ...
+#9 17.07 Unpacking ncurses-base (6.2-0ubuntu2.1) over (6.2-0ubuntu2) ...
+#9 17.13 Setting up ncurses-base (6.2-0ubuntu2.1) ...
+#9 17.16 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 17.18 Preparing to unpack .../libudev1_245.4-4ubuntu3.24_amd64.deb ...
+#9 17.18 Unpacking libudev1:amd64 (245.4-4ubuntu3.24) over (245.4-4ubuntu3.19) ...
+#9 17.22 Setting up libudev1:amd64 (245.4-4ubuntu3.24) ...
+#9 17.25 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 17.27 Preparing to unpack .../libapt-pkg6.0_2.0.10_amd64.deb ...
+#9 17.27 Unpacking libapt-pkg6.0:amd64 (2.0.10) over (2.0.9) ...
+#9 17.36 Setting up libapt-pkg6.0:amd64 (2.0.10) ...
+#9 17.39 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 17.41 Preparing to unpack .../libtasn1-6_4.16.0-2ubuntu0.1_amd64.deb ...
+#9 17.41 Unpacking libtasn1-6:amd64 (4.16.0-2ubuntu0.1) over (4.16.0-2) ...
+#9 17.44 Setting up libtasn1-6:amd64 (4.16.0-2ubuntu0.1) ...
+#9 17.47 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 17.49 Preparing to unpack .../libgnutls30_3.6.13-2ubuntu1.12_amd64.deb ...
+#9 17.49 Unpacking libgnutls30:amd64 (3.6.13-2ubuntu1.12) over (3.6.13-2ubuntu1.7) ...
+#9 17.58 Setting up libgnutls30:amd64 (3.6.13-2ubuntu1.12) ...
+#9 17.60 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46245 files and directories currently installed.)
+#9 17.63 Preparing to unpack .../archives/apt_2.0.10_amd64.deb ...
+#9 17.66 Unpacking apt (2.0.10) over (2.0.9) ...
+#9 17.81 Setting up apt (2.0.10) ...
+#9 18.11 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46243 files and directories currently installed.)
+#9 18.14 Preparing to unpack .../libpam0g_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 18.14 Unpacking libpam0g:amd64 (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 18.18 Setting up libpam0g:amd64 (1.3.1-5ubuntu4.7) ...
+#9 18.27 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46243 files and directories currently installed.)
+#9 18.30 Preparing to unpack .../libpam-modules-bin_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 18.30 Unpacking libpam-modules-bin (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 18.34 Setting up libpam-modules-bin (1.3.1-5ubuntu4.7) ...
+#9 18.36 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46243 files and directories currently installed.)
+#9 18.39 Preparing to unpack .../libpam-modules_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 18.45 Unpacking libpam-modules:amd64 (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 18.53 Setting up libpam-modules:amd64 (1.3.1-5ubuntu4.7) ...
+#9 18.56 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46243 files and directories currently installed.)
+#9 18.59 Preparing to unpack .../logsave_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.59 Unpacking logsave (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.61 Preparing to unpack .../libext2fs2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.61 Unpacking libext2fs2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.66 Setting up libext2fs2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 18.68 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46243 files and directories currently installed.)
+#9 18.71 Preparing to unpack .../00-e2fsprogs_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.71 Unpacking e2fsprogs (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.78 Preparing to unpack .../01-mount_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 18.78 Unpacking mount (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 18.82 Preparing to unpack .../02-python3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 18.82 Unpacking python3.8-dev (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 18.84 Preparing to unpack .../03-libpython3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 18.84 Unpacking libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.28 Preparing to unpack .../04-libpython3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.28 Unpacking libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.42 Preparing to unpack .../05-libssl-dev_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 19.43 Unpacking libssl-dev:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 19.63 Preparing to unpack .../06-libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 19.63 Unpacking libssl1.1:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 19.75 Preparing to unpack .../07-python3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.81 Unpacking python3.8 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.84 Preparing to unpack .../08-libpython3.8-stdlib_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.89 Unpacking libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 20.15 Preparing to unpack .../09-python3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 20.15 Unpacking python3.8-minimal (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 20.32 Preparing to unpack .../10-libpython3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 20.39 Unpacking libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 20.60 Preparing to unpack .../11-libsqlite3-0_3.31.1-4ubuntu0.6_amd64.deb ...
+#9 20.60 Unpacking libsqlite3-0:amd64 (3.31.1-4ubuntu0.6) over (3.31.1-4ubuntu0.5) ...
+#9 20.66 Preparing to unpack .../12-rsync_3.1.3-8ubuntu0.9_amd64.deb ...
+#9 20.66 Unpacking rsync (3.1.3-8ubuntu0.9) over (3.1.3-8ubuntu0.4) ...
+#9 20.72 Preparing to unpack .../13-libpam-runtime_1.3.1-5ubuntu4.7_all.deb ...
+#9 20.72 Unpacking libpam-runtime (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 20.76 Setting up libpam-runtime (1.3.1-5ubuntu4.7) ...
+#9 20.90 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46243 files and directories currently installed.)
+#9 20.92 Preparing to unpack .../passwd_1%3a4.8.1-1ubuntu5.20.04.5_amd64.deb ...
+#9 20.95 Unpacking passwd (1:4.8.1-1ubuntu5.20.04.5) over (1:4.8.1-1ubuntu5.20.04.4) ...
+#9 21.06 Setting up passwd (1:4.8.1-1ubuntu5.20.04.5) ...
+#9 21.11 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46243 files and directories currently installed.)
+#9 21.14 Preparing to unpack .../00-libcom-err2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 21.14 Unpacking libcom-err2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 21.16 Preparing to unpack .../01-libprocps8_2%3a3.3.16-1ubuntu2.4_amd64.deb ...
+#9 21.17 Unpacking libprocps8:amd64 (2:3.3.16-1ubuntu2.4) over (2:3.3.16-1ubuntu2.3) ...
+#9 21.19 Preparing to unpack .../02-libss2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 21.19 Unpacking libss2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 21.21 Preparing to unpack .../03-procps_2%3a3.3.16-1ubuntu2.4_amd64.deb ...
+#9 21.24 Unpacking procps (2:3.3.16-1ubuntu2.4) over (2:3.3.16-1ubuntu2.3) ...
+#9 21.30 Preparing to unpack .../04-openssl_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 21.30 Unpacking openssl (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 21.36 Preparing to unpack .../05-ca-certificates_20240203~20.04.1_all.deb ...
+#9 21.36 Unpacking ca-certificates (20240203~20.04.1) over (20211016ubuntu0.20.04.1) ...
+#9 21.47 Preparing to unpack .../06-less_551-1ubuntu0.3_amd64.deb ...
+#9 21.47 Unpacking less (551-1ubuntu0.3) over (551-1ubuntu0.1) ...
+#9 21.50 Preparing to unpack .../07-libcap2_1%3a2.32-1ubuntu0.2_amd64.deb ...
+#9 21.50 Unpacking libcap2:amd64 (1:2.32-1ubuntu0.2) over (1:2.32-1ubuntu0.1) ...
+#9 21.53 Preparing to unpack .../08-libxml2_2.9.10+dfsg-5ubuntu0.20.04.9_amd64.deb ...
+#9 21.53 Unpacking libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) over (2.9.10+dfsg-5ubuntu0.20.04.8) ...
+#9 21.60 Preparing to unpack .../09-tzdata_2024b-0ubuntu0.20.04.1_all.deb ...
+#9 21.60 Unpacking tzdata (2024b-0ubuntu0.20.04.1) over (2022g-0ubuntu0.20.04.1) ...
+#9 22.42 Preparing to unpack .../10-krb5-locales_1.17-6ubuntu4.8_all.deb ...
+#9 22.42 Unpacking krb5-locales (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.44 Preparing to unpack .../11-libgssapi-krb5-2_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.44 Unpacking libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.47 Preparing to unpack .../12-libkrb5-3_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.48 Unpacking libkrb5-3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.52 Preparing to unpack .../13-libkrb5support0_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.52 Unpacking libkrb5support0:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.55 Preparing to unpack .../14-libk5crypto3_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.55 Unpacking libk5crypto3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.58 Preparing to unpack .../15-libx11-data_2%3a1.6.9-2ubuntu1.6_all.deb ...
+#9 22.58 Unpacking libx11-data (2:1.6.9-2ubuntu1.6) over (2:1.6.9-2ubuntu1.2) ...
+#9 22.72 Preparing to unpack .../16-git-man_1%3a2.25.1-1ubuntu3.14_all.deb ...
+#9 22.72 Unpacking git-man (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.8) ...
+#9 22.80 Preparing to unpack .../17-libroken18-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.80 Unpacking libroken18-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.82 Preparing to unpack .../18-libasn1-8-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.83 Unpacking libasn1-8-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.86 Preparing to unpack .../19-libheimbase1-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.86 Unpacking libheimbase1-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.89 Preparing to unpack .../20-libhcrypto4-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.89 Unpacking libhcrypto4-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.92 Preparing to unpack .../21-libwind0-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.92 Unpacking libwind0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.95 Preparing to unpack .../22-libhx509-5-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.95 Unpacking libhx509-5-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.98 Preparing to unpack .../23-libkrb5-26-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.98 Unpacking libkrb5-26-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 23.02 Preparing to unpack .../24-libheimntlm0-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 23.02 Unpacking libheimntlm0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 23.04 Preparing to unpack .../25-libgssapi3-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 23.05 Unpacking libgssapi3-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 23.08 Preparing to unpack .../26-libldap-common_2.4.49+dfsg-2ubuntu1.10_all.deb ...
+#9 23.08 Unpacking libldap-common (2.4.49+dfsg-2ubuntu1.10) over (2.4.49+dfsg-2ubuntu1.9) ...
+#9 23.10 Preparing to unpack .../27-libldap-2.4-2_2.4.49+dfsg-2ubuntu1.10_amd64.deb ...
+#9 23.10 Unpacking libldap-2.4-2:amd64 (2.4.49+dfsg-2ubuntu1.10) over (2.4.49+dfsg-2ubuntu1.9) ...
+#9 23.13 Preparing to unpack .../28-libnghttp2-14_1.40.0-1ubuntu0.3_amd64.deb ...
+#9 23.14 Unpacking libnghttp2-14:amd64 (1.40.0-1ubuntu0.3) over (1.40.0-1build1) ...
+#9 23.17 Preparing to unpack .../29-libssh-4_0.9.3-2ubuntu2.5_amd64.deb ...
+#9 23.17 Unpacking libssh-4:amd64 (0.9.3-2ubuntu2.5) over (0.9.3-2ubuntu2.2) ...
+#9 23.20 Preparing to unpack .../30-libcurl3-gnutls_7.68.0-1ubuntu2.25_amd64.deb ...
+#9 23.21 Unpacking libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) over (7.68.0-1ubuntu2.15) ...
+#9 23.24 Preparing to unpack .../31-git_1%3a2.25.1-1ubuntu3.14_amd64.deb ...
+#9 23.29 Unpacking git (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.13) ...
+#9 23.86 Preparing to unpack .../32-openssh-client_1%3a8.2p1-4ubuntu0.12_amd64.deb ...
+#9 23.87 Unpacking openssh-client (1:8.2p1-4ubuntu0.12) over (1:8.2p1-4ubuntu0.5) ...
+#9 23.96 Preparing to unpack .../33-binutils-dev_2.34-6ubuntu1.10_amd64.deb ...
+#9 23.97 Unpacking binutils-dev (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.36 Preparing to unpack .../34-libctf0_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.36 Unpacking libctf0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.38 Preparing to unpack .../35-binutils-x86-64-linux-gnu_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.39 Unpacking binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.65 Preparing to unpack .../36-libbinutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.65 Unpacking libbinutils:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.71 Preparing to unpack .../37-binutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.71 Unpacking binutils (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.74 Preparing to unpack .../38-binutils-common_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.74 Unpacking binutils-common:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.78 Preparing to unpack .../39-libctf-nobfd0_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.78 Unpacking libctf-nobfd0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.81 Preparing to unpack .../40-libharfbuzz-dev_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.81 Unpacking libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.90 Preparing to unpack .../41-libharfbuzz0b_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.90 Unpacking libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.97 Preparing to unpack .../42-libharfbuzz-icu0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.97 Unpacking libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.99 Preparing to unpack .../43-libharfbuzz-gobject0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.99 Unpacking libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 25.02 Preparing to unpack .../44-gir1.2-harfbuzz-0.0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 25.02 Unpacking gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 25.04 Preparing to unpack .../45-libaprutil1_1.6.1-4ubuntu2.2_amd64.deb ...
+#9 25.04 Unpacking libaprutil1:amd64 (1.6.1-4ubuntu2.2) over (1.6.1-4ubuntu2) ...
+#9 25.07 Preparing to unpack .../46-libapr1_1.6.5-1ubuntu1.1_amd64.deb ...
+#9 25.08 Unpacking libapr1:amd64 (1.6.5-1ubuntu1.1) over (1.6.5-1ubuntu1) ...
+#9 25.10 Preparing to unpack .../47-unzip_6.0-25ubuntu1.2_amd64.deb ...
+#9 25.11 Unpacking unzip (6.0-25ubuntu1.2) over (6.0-25ubuntu1.1) ...
+#9 25.16 Setting up perl-modules-5.30 (5.30.0-9ubuntu0.5) ...
+#9 25.16 Setting up libssl1.1:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 25.24 Setting up unzip (6.0-25ubuntu1.2) ...
+#9 25.25 Setting up libsqlite3-0:amd64 (3.31.1-4ubuntu0.6) ...
+#9 25.25 Setting up binutils-common:amd64 (2.34-6ubuntu1.10) ...
+#9 25.25 Setting up libnghttp2-14:amd64 (1.40.0-1ubuntu0.3) ...
+#9 25.26 Setting up libapr1:amd64 (1.6.5-1ubuntu1.1) ...
+#9 25.26 Setting up less (551-1ubuntu0.3) ...
+#9 25.26 Setting up linux-libc-dev:amd64 (5.4.0-208.228) ...
+#9 25.26 Setting up libctf-nobfd0:amd64 (2.34-6ubuntu1.10) ...
+#9 25.27 Setting up krb5-locales (1.17-6ubuntu4.8) ...
+#9 25.27 Setting up libcom-err2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 25.27 Setting up libldap-common (2.4.49+dfsg-2ubuntu1.10) ...
+#9 25.27 Setting up libcap2:amd64 (1:2.32-1ubuntu0.2) ...
+#9 25.27 Setting up libkrb5support0:amd64 (1.17-6ubuntu4.8) ...
+#9 25.27 Setting up libc6-x32 (2.31-0ubuntu9.17) ...
+#9 25.28 Setting up tzdata (2024b-0ubuntu0.20.04.1) ...
+#9 25.36 
+#9 25.36 Current default time zone: 'Etc/UTC'
+#9 25.37 Local time is now:      Sat Mar  1 15:50:44 UTC 2025.
+#9 25.37 Universal Time is now:  Sat Mar  1 15:50:44 UTC 2025.
+#9 25.37 Run 'dpkg-reconfigure tzdata' if you wish to change it.
+#9 25.37 
+#9 25.38 Setting up libx11-data (2:1.6.9-2ubuntu1.6) ...
+#9 25.38 Setting up libssl-dev:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 25.38 Setting up libss2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 25.38 Setting up libk5crypto3:amd64 (1.17-6ubuntu4.8) ...
+#9 25.38 Setting up logsave (1.45.5-2ubuntu1.2) ...
+#9 25.38 Setting up libroken18-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.39 Setting up libfdisk1:amd64 (2.34-0.1ubuntu9.6) ...
+#9 25.39 Setting up mount (2.34-0.1ubuntu9.6) ...
+#9 25.39 Setting up libc6-i386 (2.31-0ubuntu9.17) ...
+#9 25.39 Setting up libperl5.30:amd64 (5.30.0-9ubuntu0.5) ...
+#9 25.39 Setting up git-man (1:2.25.1-1ubuntu3.14) ...
+#9 25.39 Setting up libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.40 Setting up libkrb5-3:amd64 (1.17-6ubuntu4.8) ...
+#9 25.40 Setting up libbinutils:amd64 (2.34-6ubuntu1.10) ...
+#9 25.40 Setting up libc-dev-bin (2.31-0ubuntu9.17) ...
+#9 25.40 Setting up openssl (1.1.1f-1ubuntu2.24) ...
+#9 25.40 Setting up libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) ...
+#9 25.41 Setting up libprocps8:amd64 (2:3.3.16-1ubuntu2.4) ...
+#9 25.41 Setting up rsync (3.1.3-8ubuntu0.9) ...
+#9 25.42 invoke-rc.d: could not determine current runlevel
+#9 25.43 invoke-rc.d: policy-rc.d denied execution of restart.
+#9 25.54 Setting up libheimbase1-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.54 Setting up libaprutil1:amd64 (1.6.1-4ubuntu2.2) ...
+#9 25.54 Setting up libctf0:amd64 (2.34-6ubuntu1.10) ...
+#9 25.54 Setting up libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 25.54 Setting up libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.55 Setting up libasn1-8-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.55 Setting up e2fsprogs (1.45.5-2ubuntu1.2) ...
+#9 25.76 Setting up libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.76 Setting up gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.77 Setting up libhcrypto4-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.77 Setting up fdisk (2.34-0.1ubuntu9.6) ...
+#9 25.77 Setting up ca-certificates (20240203~20.04.1) ...
+#9 27.25 Updating certificates in /etc/ssl/certs...
+#9 28.10 rehash: warning: skipping ca-certificates.crt,it does not contain exactly one certificate or CRL
+#9 28.11 30 added, 8 removed; done.
+#9 28.14 Setting up perl (5.30.0-9ubuntu0.5) ...
+#9 28.16 Setting up libwind0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.16 Setting up libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) ...
+#9 28.16 Setting up libssh-4:amd64 (0.9.3-2ubuntu2.5) ...
+#9 28.17 Setting up python3.8-minimal (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.63 Setting up procps (2:3.3.16-1ubuntu2.4) ...
+#9 28.66 Setting up libc6-dev:amd64 (2.31-0ubuntu9.17) ...
+#9 28.66 Setting up libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.67 Setting up python3.8 (3.8.10-0ubuntu1~20.04.15) ...
+#9 29.20 Setting up binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) ...
+#9 29.20 Setting up libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) ...
+#9 29.20 Setting up libc6-dev-i386 (2.31-0ubuntu9.17) ...
+#9 29.20 Setting up openssh-client (1:8.2p1-4ubuntu0.12) ...
+#9 29.22 Setting up libhx509-5-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 29.23 Setting up binutils (2.34-6ubuntu1.10) ...
+#9 29.23 Setting up libc6-dev-x32 (2.31-0ubuntu9.17) ...
+#9 29.23 Setting up libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 29.23 Setting up libkrb5-26-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 29.23 Setting up binutils-dev (2.34-6ubuntu1.10) ...
+#9 29.23 Setting up libheimntlm0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 29.23 Setting up libgssapi3-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 29.24 Setting up libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 29.24 Setting up python3.8-dev (3.8.10-0ubuntu1~20.04.15) ...
+#9 29.24 Setting up libldap-2.4-2:amd64 (2.4.49+dfsg-2ubuntu1.10) ...
+#9 29.24 Setting up libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) ...
+#9 29.24 Setting up git (1:2.25.1-1ubuntu3.14) ...
+#9 29.27 Processing triggers for libc-bin (2.31-0ubuntu9.17) ...
+#9 29.29 Processing triggers for systemd (245.4-4ubuntu3.24) ...
+#9 29.31 Processing triggers for mime-support (3.64ubuntu1) ...
+#9 29.32 Processing triggers for ca-certificates (20240203~20.04.1) ...
+#9 29.32 Updating certificates in /etc/ssl/certs...
+#9 29.95 0 added, 0 removed; done.
+#9 29.95 Running hooks in /etc/ca-certificates/update.d...
+#9 29.95 done.
+#9 30.04 Reading package lists...
+#9 31.20 Building dependency tree...
+#9 31.37 Reading state information...
+#9 31.54 libffi-dev is already the newest version (3.3-4).
+#9 31.54 libffi-dev set to manually installed.
+#9 31.54 curl is already the newest version (7.68.0-1ubuntu2.25).
+#9 31.54 libssl-dev is already the newest version (1.1.1f-1ubuntu2.24).
+#9 31.54 xz-utils is already the newest version (5.2.4-1ubuntu1.1).
+#9 31.54 xz-utils set to manually installed.
+#9 31.54 zlib1g-dev is already the newest version (1:1.2.11.dfsg-2ubuntu1.5).
+#9 31.54 zlib1g-dev set to manually installed.
+#9 31.54 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 DONE 31.6s
+
+#10 [stage-1  3/15] RUN rm -rf /usr/local/bin/python3.8* /usr/local/bin/pip3 /usr/local/lib/python3.8     /usr/local/include/python3.8 /usr/local/lib/python3.8/site-packages
+#10 DONE 0.5s
+
+#11 [stage-1  4/15] COPY --from=base-image /usr/local/bin/python3* /usr/local/bin/
+#11 DONE 0.1s
+
+#12 [stage-1  5/15] COPY --from=base-image /usr/local/bin/pip3* /usr/local/bin/
+#12 DONE 0.0s
+
+#13 [stage-1  6/15] COPY --from=base-image /usr/local/lib/python3.10 /usr/local/lib/python3.10
+#13 DONE 8.9s
+
+#14 [stage-1  7/15] COPY --from=base-image /usr/local/include/python3.10 /usr/local/include/python3.10
+#14 DONE 0.1s
+
+#15 [stage-1  8/15] COPY --from=base-image /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+#15 DONE 9.8s
+
+#16 [stage-1  9/15] COPY fuzzers /src/fuzzers
+#16 DONE 0.1s
+
+#17 [stage-1 10/15] COPY benchmarks/libjpeg-turbo_libjpeg_turbo_fuzzer/benchmark.yaml /
+#17 DONE 0.0s
+
+#18 [stage-1 11/15] RUN mkdir /opt/fuzzbench/
+#18 DONE 0.2s
+
+#19 [stage-1 12/15] COPY docker/benchmark-builder/checkout_commit.py /opt/fuzzbench/
+#19 DONE 0.1s
+
+#20 [stage-1 13/15] RUN export CHECKOUT_COMMIT=$(cat /benchmark.yaml | tr -d ' ' | grep 'commit:' | cut -d ':' -f2) &&     python3 -u /opt/fuzzbench/checkout_commit.py $CHECKOUT_COMMIT /src
+#20 0.203 Checking out commit 3b19db4e6e7493a748369974819b4c5fa84c7614
+#20 0.306 Note: switching to '3b19db4e6e7493a748369974819b4c5fa84c7614'.
+#20 0.306 
+#20 0.306 You are in 'detached HEAD' state. You can look around, make experimental
+#20 0.306 changes and commit them, and you can discard any commits you make in this
+#20 0.306 state without impacting any branches by switching back to a branch.
+#20 0.306 
+#20 0.306 If you want to create a new branch to retain commits you create, you may
+#20 0.306 do so (now or later) by using -c with the switch command. Example:
+#20 0.306 
+#20 0.306   git switch -c <new-branch-name>
+#20 0.306 
+#20 0.306 Or undo this operation with:
+#20 0.306 
+#20 0.306   git switch -
+#20 0.306 
+#20 0.306 Turn off this advice by setting config variable advice.detachedHead to false
+#20 0.306 
+#20 0.306 HEAD is now at 3b19db4e BUILDING.md: Specify install prefix for MinGW/Un*x
+#20 DONE 0.3s
+
+#21 [stage-1 14/15] COPY docker/benchmark-builder/fuzzer_build /usr/bin/fuzzer_build
+#21 DONE 0.0s
+
+#22 [stage-1 15/15] RUN echo "Run fuzzer_build to build the target" && if [ -z "$debug_builder" ] ; then fuzzer_build; fi
+#22 0.200 Run fuzzer_build to build the target
+#22 0.267 FUZZ_TARGET = libjpeg_turbo_fuzzer
+#22 0.267 CFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3
+#22 0.267 CXXFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3
+#22 0.273 AFL++ build: 
+#22 0.273 ['tracepc', 'cmplog', 'dict2file']
+#22 1.000 Building benchmark libjpeg-turbo_libjpeg_turbo_fuzzer with fuzzer aflmmbb_no_selection
+#22 1.002 + set -e
+#22 1.002 + set -u
+#22 1.002 + cat fuzz/branches.txt
+#22 1.002 + read branch
+#22 1.003 + pushd libjpeg-turbo.main
+#22 1.003 /src/libjpeg-turbo.main /src
+#22 1.003 + '[' main = main ']'
+#22 1.003 + sh fuzz/build.sh
+#22 1.083 -- The C compiler identification is Clang 15.0.0
+#22 1.097 -- Detecting C compiler ABI info
+#22 1.174 -- Detecting C compiler ABI info - done
+#22 1.186 -- Check for working C compiler: /afl/afl-clang-fast - skipped
+#22 1.187 -- Detecting C compile features
+#22 1.187 -- Detecting C compile features - done
+#22 1.188 -- CMAKE_BUILD_TYPE = RelWithDebInfo
+#22 1.188 -- VERSION = 3.1.1, BUILD = 20250301
+#22 1.188 -- 64-bit build (x86_64)
+#22 1.188 -- CMAKE_INSTALL_PREFIX = /work
+#22 1.190 -- CMAKE_INSTALL_BINDIR = bin (/work/bin)
+#22 1.190 -- CMAKE_INSTALL_DATAROOTDIR = share (/work/share)
+#22 1.190 -- CMAKE_INSTALL_DOCDIR = share/doc/libjpeg-turbo (/work/share/doc/libjpeg-turbo)
+#22 1.190 -- CMAKE_INSTALL_INCLUDEDIR = include (/work/include)
+#22 1.190 -- CMAKE_INSTALL_LIBDIR = lib (/work/lib)
+#22 1.190 -- CMAKE_INSTALL_MANDIR = share/man (/work/share/man)
+#22 1.190 -- Shared libraries disabled (ENABLE_SHARED = 0)
+#22 1.190 -- Static libraries enabled (ENABLE_STATIC = 1)
+#22 1.190 -- Arithmetic decoding support enabled (WITH_ARITH_DEC = 1)
+#22 1.191 -- Arithmetic encoding support enabled (WITH_ARITH_ENC = 1)
+#22 1.191 -- TurboJPEG API library enabled (WITH_TURBOJPEG = 1)
+#22 1.191 -- TurboJPEG Java wrapper disabled (WITH_JAVA = 0)
+#22 1.191 -- Emulating libjpeg API/ABI v6.2 (WITH_JPEG7 = 0, WITH_JPEG8 = 0)
+#22 1.191 -- libjpeg API shared library version = 62.4.0
+#22 1.191 -- Compiler flags = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -g -DNDEBUG
+#22 1.191 -- Linker flags =  
+#22 1.192 -- Looking for sys/types.h
+#22 1.272 -- Looking for sys/types.h - found
+#22 1.272 -- Looking for stdint.h
+#22 1.346 -- Looking for stdint.h - found
+#22 1.347 -- Looking for stddef.h
+#22 1.420 -- Looking for stddef.h - found
+#22 1.421 -- Check size of size_t
+#22 1.500 -- Check size of size_t - done
+#22 1.501 -- Check size of unsigned long
+#22 1.581 -- Check size of unsigned long - done
+#22 1.581 -- Performing Test HAVE_BUILTIN_CTZL
+#22 1.658 -- Performing Test HAVE_BUILTIN_CTZL - Success
+#22 1.658 -- Performing Test RIGHT_SHIFT_IS_UNSIGNED
+#22 1.744 -- Performing Test RIGHT_SHIFT_IS_UNSIGNED - Failed
+#22 1.744 -- Performing Test HIDDEN_WORKS
+#22 1.817 -- Performing Test HIDDEN_WORKS - Success
+#22 1.817 -- HIDDEN = __attribute__((visibility("hidden")))
+#22 1.817 -- Performing Test INLINE_WORKS
+#22 1.891 -- Performing Test INLINE_WORKS - Success
+#22 1.891 -- INLINE = __inline__ __attribute__((always_inline)) (FORCE_INLINE = 1)
+#22 1.891 -- Performing Test HAVE_THREAD_LOCAL
+#22 1.963 -- Performing Test HAVE_THREAD_LOCAL - Success
+#22 1.963 -- THREAD_LOCAL = __thread
+#22 1.964 -- Performing Test HAVE_VERSION_SCRIPT
+#22 2.036 -- Performing Test HAVE_VERSION_SCRIPT - Success
+#22 2.036 -- Linker supports GNU-style version scripts
+#22 2.037 -- CMAKE_EXECUTABLE_SUFFIX = 
+#22 2.038 -- Looking for a ASM_NASM compiler
+#22 2.074 -- Looking for a ASM_NASM compiler - /usr/bin/yasm
+#22 2.096 -- The ASM_NASM compiler identification is YASM
+#22 2.097 -- Found assembler: /usr/bin/yasm
+#22 2.098 -- CMAKE_ASM_NASM_COMPILER = /usr/bin/yasm
+#22 2.098 -- CMAKE_ASM_NASM_OBJECT_FORMAT = elf64
+#22 2.098 -- Performing Test HAVE_CET
+#22 2.130 -- Performing Test HAVE_CET - Failed
+#22 2.130 -- CMAKE_ASM_NASM_FLAGS =  -DELF -D__x86_64__ -g dwarf2
+#22 2.132 -- SIMD extensions: x86_64 (WITH_SIMD = 1)
+#22 2.133 -- FUZZ_BINDIR = /out
+#22 2.133 -- FUZZ_LIBRARY = /libAFLDriver.a
+#22 2.194 -- The CXX compiler identification is Clang 15.0.0
+#22 2.200 -- Detecting CXX compiler ABI info
+#22 2.276 -- Detecting CXX compiler ABI info - done
+#22 2.289 -- Check for working CXX compiler: /afl/afl-clang-fast++ - skipped
+#22 2.290 -- Detecting CXX compile features
+#22 2.290 -- Detecting CXX compile features - done
+#22 2.291 -- C++ Compiler flags = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -g -DNDEBUG
+#22 2.293 -- FLOATTEST8 = sse
+#22 2.293 -- FLOATTEST12 = no-fp-contract
+#22 2.301 -- RPM architecture = x86_64, DEB architecture = amd64
+#22 2.306 -- Configuring done
+#22 2.408 -- Generating done
+#22 2.415 -- Build files have been written to: /src/libjpeg-turbo.main
+#22 2.436 Scanning dependencies of target simd
+#22 2.440 [  1%] Building C object CMakeFiles/jpeg12-static.dir/src/jcapistd.c.o
+#22 2.440 [  1%] Building C object CMakeFiles/jpeg12-static.dir/src/jccolor.c.o
+#22 2.440 [  2%] Building C object CMakeFiles/cjpeg12-static.dir/src/rdppm.c.o
+#22 2.440 [  2%] Building C object CMakeFiles/jpeg16-static.dir/src/jcapistd.c.o
+#22 2.440 [  3%] Building C object CMakeFiles/jpeg12-static.dir/src/jcdiffct.c.o
+#22 2.440 [  3%] Building C object CMakeFiles/turbojpeg16-static.dir/src/rdppm.c.o
+#22 2.441 [  4%] Building C object CMakeFiles/jpeg12-static.dir/src/jclossls.c.o
+#22 2.441 [  4%] Building C object CMakeFiles/turbojpeg12-static.dir/src/rdppm.c.o
+#22 2.441 [  4%] Building C object CMakeFiles/jpeg16-static.dir/src/jccolor.c.o
+#22 2.441 [  5%] Building C object CMakeFiles/turbojpeg16-static.dir/src/wrppm.c.o
+#22 2.441 [  5%] Building C object CMakeFiles/jpeg12-static.dir/src/jcmainct.c.o
+#22 2.441 [  6%] Building C object CMakeFiles/turbojpeg12-static.dir/src/wrppm.c.o
+#22 2.441 [  6%] Building C object CMakeFiles/jpeg12-static.dir/src/jcprepct.c.o
+#22 2.441 [  7%] Building C object CMakeFiles/jpeg16-static.dir/src/jclossls.c.o
+#22 2.441 [  7%] Building C object CMakeFiles/jpeg16-static.dir/src/jcdiffct.c.o
+#22 2.442 [  7%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jsimdcpu.asm.o
+#22 2.442 [  8%] Building C object CMakeFiles/cjpeg16-static.dir/src/rdppm.c.o
+#22 2.442 [  8%] Building C object CMakeFiles/djpeg12-static.dir/src/rdcolmap.c.o
+#22 2.442 [  8%] Building C object CMakeFiles/jpeg12-static.dir/src/jcsample.c.o
+#22 2.442 [  9%] Building C object CMakeFiles/djpeg16-static.dir/src/wrppm.c.o
+#22 2.442 [  9%] Building C object CMakeFiles/djpeg12-static.dir/src/wrgif.c.o
+#22 2.442 [  9%] Building C object CMakeFiles/jpeg16-static.dir/src/jcmainct.c.o
+#22 2.442 [ 11%] Building C object CMakeFiles/jpeg16-static.dir/src/jcprepct.c.o
+#22 2.442 [ 10%] Building C object CMakeFiles/jpeg12-static.dir/src/jdapistd.c.o
+#22 2.442 [ 12%] Building C object CMakeFiles/jpeg12-static.dir/src/jdcolor.c.o
+#22 2.442 [ 12%] Building C object CMakeFiles/rdjpgcom.dir/src/rdjpgcom.c.o
+#22 2.442 [ 12%] Building C object CMakeFiles/djpeg12-static.dir/src/wrppm.c.o
+#22 2.443 [ 13%] Building C object CMakeFiles/strtest.dir/src/strtest.c.o
+#22 2.443 [ 13%] Building C object CMakeFiles/jpeg16-static.dir/src/jdapistd.c.o
+#22 2.443 [ 13%] Building C object CMakeFiles/jpeg16-static.dir/src/jcsample.c.o
+#22 2.443 [ 13%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jccolor-sse2.asm.o
+#22 2.443 [ 13%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctflt-sse.asm.o
+#22 2.443 [ 14%] Building C object CMakeFiles/jpeg16-static.dir/src/jdcolor.c.o
+#22 2.443 [ 14%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcgray-sse2.asm.o
+#22 2.443 [ 14%] Building C object src/md5/CMakeFiles/md5cmp.dir/md5.c.o
+#22 2.443 [ 14%] Building C object src/md5/CMakeFiles/md5sum.dir/md5sum.c.o
+#22 2.443 [ 15%] Building C object CMakeFiles/wrjpgcom.dir/src/wrjpgcom.c.o
+#22 2.443 [ 15%] Building C object CMakeFiles/jpeg16-static.dir/src/jddiffct.c.o
+#22 2.443 [ 15%] Building C object src/md5/CMakeFiles/md5sum.dir/md5.c.o
+#22 2.443 [ 15%] Building C object CMakeFiles/jpeg12-static.dir/src/jddiffct.c.o
+#22 2.444 [ 16%] Building C object src/md5/CMakeFiles/md5cmp.dir/md5cmp.c.o
+#22 2.444 [ 17%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jchuff-sse2.asm.o
+#22 2.444 [ 17%] Building C object CMakeFiles/jpeg12-static.dir/src/jdpostct.c.o
+#22 2.444 [ 17%] Building C object CMakeFiles/jpeg12-static.dir/src/jdlossls.c.o
+#22 2.444 [ 19%] Building C object CMakeFiles/jpeg12-static.dir/src/jdmainct.c.o
+#22 2.444 [ 19%] Building C object src/md5/CMakeFiles/md5sum.dir/md5hl.c.o
+#22 2.444 [ 19%] Building C object CMakeFiles/jpeg16-static.dir/src/jdmainct.c.o
+#22 2.444 [ 19%] Building C object CMakeFiles/jpeg16-static.dir/src/jdlossls.c.o
+#22 2.444 [ 19%] Building C object CMakeFiles/jpeg16-static.dir/src/jdpostct.c.o
+#22 2.444 [ 19%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcphuff-sse2.asm.o
+#22 2.444 [ 21%] Building C object CMakeFiles/jpeg12-static.dir/src/jdsample.c.o
+#22 2.444 [ 21%] Building C object CMakeFiles/jpeg16-static.dir/src/jdsample.c.o
+#22 2.444 [ 21%] Building C object src/md5/CMakeFiles/md5cmp.dir/md5hl.c.o
+#22 2.445 [ 21%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdcolor-sse2.asm.o
+#22 2.445 [ 22%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdmerge-sse2.asm.o
+#22 2.445 [ 22%] Building C object CMakeFiles/jpeg16-static.dir/src/jutils.c.o
+#22 2.445 [ 22%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcsample-sse2.asm.o
+#22 2.446 [ 23%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctfst-sse2.asm.o
+#22 2.446 [ 23%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdsample-sse2.asm.o
+#22 2.446 [ 23%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctint-sse2.asm.o
+#22 2.446 [ 23%] Building C object CMakeFiles/jpeg12-static.dir/src/jutils.c.o
+#22 2.447 [ 24%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctfst-sse2.asm.o
+#22 2.447 [ 24%] Building C object CMakeFiles/jpeg12-static.dir/src/jccoefct.c.o
+#22 2.447 [ 24%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctflt-sse2.asm.o
+#22 2.447 [ 24%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctint-sse2.asm.o
+#22 2.447 [ 25%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctred-sse2.asm.o
+#22 2.448 [ 26%] Building C object CMakeFiles/jpeg12-static.dir/src/jcdctmgr.c.o
+#22 2.448 [ 26%] Building C object CMakeFiles/jpeg12-static.dir/src/jdcoefct.c.o
+#22 2.448 [ 26%] Building C object CMakeFiles/jpeg12-static.dir/src/jddctmgr.c.o
+#22 2.449 [ 26%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquantf-sse2.asm.o
+#22 2.450 [ 27%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquanti-sse2.asm.o
+#22 2.450 [ 27%] Building C object CMakeFiles/jpeg12-static.dir/src/jdmerge.c.o
+#22 2.450 [ 28%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jccolor-avx2.asm.o
+#22 2.450 [ 28%] Building C object CMakeFiles/jpeg12-static.dir/src/jfdctfst.c.o
+#22 2.450 [ 29%] Building C object CMakeFiles/jpeg12-static.dir/src/jidctflt.c.o
+#22 2.451 [ 29%] Building C object CMakeFiles/jpeg12-static.dir/src/jfdctint.c.o
+#22 2.451 [ 29%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcgray-avx2.asm.o
+#22 2.451 [ 29%] Building C object CMakeFiles/jpeg12-static.dir/src/jidctfst.c.o
+#22 2.451 [ 29%] Building C object CMakeFiles/jpeg12-static.dir/src/jidctint.c.o
+#22 2.452 [ 30%] Building C object CMakeFiles/jpeg12-static.dir/src/jidctred.c.o
+#22 2.452 /src/libjpeg-turbo.main/simd/x86_64/jchuff-sse2.asm:27: warning: section flags ignored on section redeclaration
+#22 2.452 /src/libjpeg-turbo.main/simd/x86_64/jchuff-sse2.asm:33: warning: section flags ignored on section redeclaration
+#22 2.452 [ 30%] Building C object CMakeFiles/jpeg12-static.dir/src/jquant1.c.o
+#22 2.453 [ 32%] Building C object CMakeFiles/jpeg12-static.dir/src/jquant2.c.o
+#22 2.453 [ 32%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcsample-avx2.asm.o
+#22 2.453 [ 32%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdcolor-avx2.asm.o
+#22 2.454 [ 33%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdsample-avx2.asm.o
+#22 2.454 [ 33%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdmerge-avx2.asm.o
+#22 2.455 [ 33%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctint-avx2.asm.o
+#22 2.455 [ 33%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctint-avx2.asm.o
+#22 2.455 [ 34%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquanti-avx2.asm.o
+#22 2.456 [ 34%] Building C object simd/CMakeFiles/simd.dir/x86_64/jsimd.c.o
+#22 2.514 [ 35%] Linking C executable strtest
+#22 2.537 [ 35%] Linking C executable ../../test/md5sum
+#22 2.558 [ 35%] Built target strtest
+#22 2.580 [ 35%] Built target md5sum
+#22 2.589 [ 36%] Linking C executable ../../test/md5cmp
+#22 2.611 [ 36%] Built target djpeg16-static
+#22 2.631 [ 36%] Linking C executable rdjpgcom
+#22 2.633 [ 36%] Built target md5cmp
+#22 2.641 [ 36%] Built target simd
+#22 2.658 [ 36%] Built target djpeg12-static
+#22 2.672 [ 36%] Built target rdjpgcom
+#22 2.748 [ 37%] Linking C executable wrjpgcom
+#22 2.787 [ 37%] Built target wrjpgcom
+#22 2.806 [ 37%] Built target turbojpeg12-static
+#22 2.813 [ 37%] Built target turbojpeg16-static
+#22 2.818 [ 37%] Built target cjpeg12-static
+#22 2.859 [ 37%] Built target cjpeg16-static
+#22 3.011 [ 37%] Built target jpeg16-static
+#22 3.169 [ 37%] Built target jpeg12-static
+#22 3.180 [ 38%] Building C object CMakeFiles/jpeg-static.dir/src/jcapistd.c.o
+#22 3.180 [ 38%] Building C object CMakeFiles/jpeg-static.dir/src/jccolor.c.o
+#22 3.180 [ 39%] Building C object CMakeFiles/jpeg-static.dir/src/jcdiffct.c.o
+#22 3.180 [ 39%] Building C object CMakeFiles/jpeg-static.dir/src/jclossls.c.o
+#22 3.181 [ 39%] Building C object CMakeFiles/jpeg-static.dir/src/jcmainct.c.o
+#22 3.181 [ 39%] Building C object CMakeFiles/jpeg-static.dir/src/jcprepct.c.o
+#22 3.181 [ 40%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcapistd.c.o
+#22 3.181 [ 41%] Building C object CMakeFiles/jpeg-static.dir/src/jcsample.c.o
+#22 3.181 [ 41%] Building C object CMakeFiles/jpeg-static.dir/src/jdapistd.c.o
+#22 3.181 [ 42%] Building C object CMakeFiles/jpeg-static.dir/src/jdcolor.c.o
+#22 3.182 [ 42%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcdiffct.c.o
+#22 3.182 [ 42%] Building C object CMakeFiles/turbojpeg-static.dir/src/jccolor.c.o
+#22 3.182 [ 42%] Building C object CMakeFiles/jpeg-static.dir/src/jddiffct.c.o
+#22 3.182 [ 43%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcmainct.c.o
+#22 3.182 [ 43%] Building C object CMakeFiles/turbojpeg-static.dir/src/jclossls.c.o
+#22 3.182 [ 42%] Building C object CMakeFiles/jpeg-static.dir/src/jdlossls.c.o
+#22 3.182 [ 43%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcprepct.c.o
+#22 3.182 [ 44%] Building C object CMakeFiles/jpeg-static.dir/src/jdmainct.c.o
+#22 3.182 [ 44%] Building C object CMakeFiles/jpeg-static.dir/src/jdpostct.c.o
+#22 3.182 [ 45%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcsample.c.o
+#22 3.182 [ 45%] Building C object CMakeFiles/jpeg-static.dir/src/jdsample.c.o
+#22 3.182 [ 45%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdapistd.c.o
+#22 3.183 [ 46%] Building C object CMakeFiles/jpeg-static.dir/src/jutils.c.o
+#22 3.183 [ 47%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdcolor.c.o
+#22 3.183 [ 47%] Building C object CMakeFiles/turbojpeg-static.dir/src/jddiffct.c.o
+#22 3.183 [ 47%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdlossls.c.o
+#22 3.184 [ 48%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdmainct.c.o
+#22 3.184 [ 48%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdpostct.c.o
+#22 3.185 [ 48%] Building C object CMakeFiles/jpeg-static.dir/src/jccoefct.c.o
+#22 3.185 [ 48%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdsample.c.o
+#22 3.186 [ 48%] Building C object CMakeFiles/jpeg-static.dir/src/jcdctmgr.c.o
+#22 3.187 [ 49%] Building C object CMakeFiles/jpeg-static.dir/src/jdcoefct.c.o
+#22 3.187 [ 49%] Building C object CMakeFiles/jpeg-static.dir/src/jddctmgr.c.o
+#22 3.187 [ 50%] Building C object CMakeFiles/turbojpeg-static.dir/src/jutils.c.o
+#22 3.187 [ 51%] Building C object CMakeFiles/jpeg-static.dir/src/jdmerge.c.o
+#22 3.187 [ 51%] Building C object CMakeFiles/turbojpeg-static.dir/src/jccoefct.c.o
+#22 3.187 [ 51%] Building C object CMakeFiles/jpeg-static.dir/src/jfdctfst.c.o
+#22 3.188 [ 52%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcdctmgr.c.o
+#22 3.188 [ 53%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdcoefct.c.o
+#22 3.188 [ 52%] Building C object CMakeFiles/jpeg-static.dir/src/jfdctint.c.o
+#22 3.188 [ 53%] Building C object CMakeFiles/jpeg-static.dir/src/jidctflt.c.o
+#22 3.188 [ 53%] Building C object CMakeFiles/jpeg-static.dir/src/jidctfst.c.o
+#22 3.188 [ 53%] Building C object CMakeFiles/turbojpeg-static.dir/src/jddctmgr.c.o
+#22 3.189 [ 54%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdmerge.c.o
+#22 3.189 [ 54%] Building C object CMakeFiles/jpeg-static.dir/src/jidctint.c.o
+#22 3.189 [ 55%] Building C object CMakeFiles/jpeg-static.dir/src/jidctred.c.o
+#22 3.189 [ 55%] Building C object CMakeFiles/jpeg-static.dir/src/jquant1.c.o
+#22 3.189 [ 55%] Building C object CMakeFiles/turbojpeg-static.dir/src/jfdctfst.c.o
+#22 3.189 [ 55%] Building C object CMakeFiles/turbojpeg-static.dir/src/jfdctint.c.o
+#22 3.190 [ 55%] Building C object CMakeFiles/turbojpeg-static.dir/src/jidctfst.c.o
+#22 3.190 [ 56%] Building C object CMakeFiles/turbojpeg-static.dir/src/jidctflt.c.o
+#22 3.190 [ 56%] Building C object CMakeFiles/turbojpeg-static.dir/src/jidctint.c.o
+#22 3.190 [ 56%] Building C object CMakeFiles/jpeg-static.dir/src/jquant2.c.o
+#22 3.191 [ 57%] Building C object CMakeFiles/turbojpeg-static.dir/src/jidctred.c.o
+#22 3.191 [ 58%] Building C object CMakeFiles/jpeg-static.dir/src/jcapimin.c.o
+#22 3.191 [ 58%] Building C object CMakeFiles/turbojpeg-static.dir/src/jquant1.c.o
+#22 3.191 [ 58%] Building C object CMakeFiles/jpeg-static.dir/src/jchuff.c.o
+#22 3.192 [ 58%] Building C object CMakeFiles/jpeg-static.dir/src/jcicc.c.o
+#22 3.193 [ 58%] Building C object CMakeFiles/turbojpeg-static.dir/src/jquant2.c.o
+#22 3.194 [ 58%] Building C object CMakeFiles/jpeg-static.dir/src/jclhuff.c.o
+#22 3.194 [ 59%] Building C object CMakeFiles/jpeg-static.dir/src/jcinit.c.o
+#22 3.194 [ 60%] Building C object CMakeFiles/jpeg-static.dir/src/jcmarker.c.o
+#22 3.194 [ 60%] Building C object CMakeFiles/jpeg-static.dir/src/jcmaster.c.o
+#22 3.194 [ 61%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcapimin.c.o
+#22 3.195 [ 61%] Building C object CMakeFiles/turbojpeg-static.dir/src/jchuff.c.o
+#22 3.196 [ 61%] Building C object CMakeFiles/jpeg-static.dir/src/jcomapi.c.o
+#22 3.196 [ 62%] Building C object CMakeFiles/jpeg-static.dir/src/jcparam.c.o
+#22 3.196 [ 63%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcinit.c.o
+#22 3.196 [ 63%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcicc.c.o
+#22 3.197 [ 63%] Building C object CMakeFiles/jpeg-static.dir/src/jcphuff.c.o
+#22 3.197 [ 63%] Building C object CMakeFiles/jpeg-static.dir/src/jctrans.c.o
+#22 3.197 [ 63%] Building C object CMakeFiles/turbojpeg-static.dir/src/jclhuff.c.o
+#22 3.197 [ 63%] Building C object CMakeFiles/jpeg-static.dir/src/jdatadst.c.o
+#22 3.198 [ 64%] Building C object CMakeFiles/jpeg-static.dir/src/jdapimin.c.o
+#22 3.198 [ 65%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcmarker.c.o
+#22 3.198 [ 65%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcomapi.c.o
+#22 3.199 [ 65%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcmaster.c.o
+#22 3.199 [ 66%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcparam.c.o
+#22 3.200 [ 66%] Building C object CMakeFiles/turbojpeg-static.dir/src/jctrans.c.o
+#22 3.200 [ 66%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcphuff.c.o
+#22 3.200 [ 66%] Building C object CMakeFiles/jpeg-static.dir/src/jdatasrc.c.o
+#22 3.201 [ 67%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdapimin.c.o
+#22 3.202 [ 67%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdatadst.c.o
+#22 3.203 [ 67%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdatasrc.c.o
+#22 3.203 [ 68%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdhuff.c.o
+#22 3.203 [ 69%] Building C object CMakeFiles/jpeg-static.dir/src/jdhuff.c.o
+#22 3.203 [ 69%] Building C object CMakeFiles/jpeg-static.dir/src/jdinput.c.o
+#22 3.203 [ 69%] Building C object CMakeFiles/jpeg-static.dir/src/jdicc.c.o
+#22 3.204 [ 70%] Building C object CMakeFiles/jpeg-static.dir/src/jdlhuff.c.o
+#22 3.204 [ 70%] Building C object CMakeFiles/jpeg-static.dir/src/jdmarker.c.o
+#22 3.205 [ 70%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdicc.c.o
+#22 3.205 [ 71%] Building C object CMakeFiles/jpeg-static.dir/src/jdmaster.c.o
+#22 3.205 [ 71%] Building C object CMakeFiles/jpeg-static.dir/src/jdphuff.c.o
+#22 3.207 [ 71%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdinput.c.o
+#22 3.207 [ 71%] Building C object CMakeFiles/jpeg-static.dir/src/jdtrans.c.o
+#22 3.207 [ 73%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdmarker.c.o
+#22 3.208 [ 73%] Building C object CMakeFiles/jpeg-static.dir/src/jerror.c.o
+#22 3.208 [ 73%] Building C object CMakeFiles/jpeg-static.dir/src/jfdctflt.c.o
+#22 3.208 [ 73%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdlhuff.c.o
+#22 3.208 [ 73%] Building C object CMakeFiles/jpeg-static.dir/src/jmemmgr.c.o
+#22 3.208 [ 75%] Building C object CMakeFiles/jpeg-static.dir/src/jmemnobs.c.o
+#22 3.208 [ 75%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdmaster.c.o
+#22 3.208 [ 75%] Building C object CMakeFiles/jpeg-static.dir/src/jpeg_nbits.c.o
+#22 3.208 [ 75%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdphuff.c.o
+#22 3.209 [ 75%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdtrans.c.o
+#22 3.210 [ 76%] Building C object CMakeFiles/turbojpeg-static.dir/src/jerror.c.o
+#22 3.210 [ 76%] Building C object CMakeFiles/turbojpeg-static.dir/src/jfdctflt.c.o
+#22 3.211 [ 76%] Building C object CMakeFiles/jpeg-static.dir/src/jaricom.c.o
+#22 3.211 [ 77%] Building C object CMakeFiles/turbojpeg-static.dir/src/jmemnobs.c.o
+#22 3.211 [ 77%] Building C object CMakeFiles/turbojpeg-static.dir/src/jmemmgr.c.o
+#22 3.212 [ 78%] Building C object CMakeFiles/jpeg-static.dir/src/jcarith.c.o
+#22 3.212 [ 78%] Building C object CMakeFiles/turbojpeg-static.dir/src/jpeg_nbits.c.o
+#22 3.216 [ 78%] Building C object CMakeFiles/jpeg-static.dir/src/jdarith.c.o
+#22 3.221 [ 79%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcarith.c.o
+#22 3.221 [ 79%] Building C object CMakeFiles/turbojpeg-static.dir/src/jaricom.c.o
+#22 3.221 [ 79%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdarith.c.o
+#22 3.222 [ 79%] Building C object CMakeFiles/turbojpeg-static.dir/src/turbojpeg.c.o
+#22 3.225 [ 80%] Building C object CMakeFiles/turbojpeg-static.dir/src/transupp.c.o
+#22 3.226 [ 80%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdatadst-tj.c.o
+#22 3.228 [ 80%] Building C object CMakeFiles/turbojpeg-static.dir/src/rdbmp.c.o
+#22 3.236 [ 81%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdatasrc-tj.c.o
+#22 3.246 [ 82%] Building C object CMakeFiles/turbojpeg-static.dir/src/wrbmp.c.o
+#22 3.251 [ 82%] Building C object CMakeFiles/turbojpeg-static.dir/src/wrppm.c.o
+#22 3.256 [ 82%] Building C object CMakeFiles/turbojpeg-static.dir/src/rdppm.c.o
+#22 17.28 [ 82%] Linking C static library libturbojpeg.a
+#22 17.30 [ 82%] Built target turbojpeg-static
+#22 17.31 [ 82%] Building C object CMakeFiles/tjunittest-static.dir/src/tjunittest.c.o
+#22 17.31 [ 82%] Building C object CMakeFiles/tjbench-static.dir/src/tjbench.c.o
+#22 17.31 [ 83%] Building CXX object fuzz/CMakeFiles/compress_fuzzer.dir/compress.cc.o
+#22 17.31 [ 83%] Building C object CMakeFiles/tjunittest-static.dir/src/tjutil.c.o
+#22 17.31 [ 83%] Building CXX object fuzz/CMakeFiles/compress12_fuzzer.dir/compress12.cc.o
+#22 17.31 [ 83%] Building C object CMakeFiles/tjunittest-static.dir/src/md5/md5.c.o
+#22 17.31 [ 83%] Building C object CMakeFiles/tjbench-static.dir/src/tjutil.c.o
+#22 17.31 [ 83%] Building CXX object fuzz/CMakeFiles/compress_yuv_fuzzer.dir/compress_yuv.cc.o
+#22 17.31 [ 83%] Building CXX object fuzz/CMakeFiles/compress_lossless_fuzzer.dir/compress_lossless.cc.o
+#22 17.31 [ 83%] Building C object CMakeFiles/tjunittest-static.dir/src/md5/md5hl.c.o
+#22 17.31 [ 84%] Building CXX object fuzz/CMakeFiles/libjpeg_turbo_fuzzer.dir/decompress.cc.o
+#22 17.31 [ 84%] Building CXX object fuzz/CMakeFiles/compress16_lossless_fuzzer.dir/compress16_lossless.cc.o
+#22 17.31 [ 84%] Building CXX object fuzz/CMakeFiles/compress12_lossless_fuzzer.dir/compress12.cc.o
+#22 17.31 [ 84%] Building CXX object fuzz/CMakeFiles/transform_fuzzer.dir/transform.cc.o
+#22 17.32 [ 85%] Building CXX object fuzz/CMakeFiles/decompress_yuv_fuzzer.dir/decompress_yuv.cc.o
+#22 17.39 [ 86%] Linking CXX executable compress_lossless_fuzzer
+#22 17.39 [ 87%] Linking CXX executable compress12_fuzzer
+#22 17.39 [ 87%] Linking CXX executable compress16_lossless_fuzzer
+#22 17.39 [ 87%] Linking CXX executable compress12_lossless_fuzzer
+#22 17.39 [ 88%] Linking CXX executable compress_fuzzer
+#22 17.39 [ 88%] Linking CXX executable compress_yuv_fuzzer
+#22 17.40 [ 88%] Linking CXX executable decompress_yuv_fuzzer
+#22 17.40 [ 88%] Linking CXX executable libjpeg_turbo_fuzzer
+#22 17.41 [ 88%] Linking CXX executable transform_fuzzer
+#22 17.51 [ 88%] Built target compress16_lossless_fuzzer
+#22 17.52 [ 88%] Built target compress12_fuzzer
+#22 17.52 [ 88%] Built target compress12_lossless_fuzzer
+#22 17.52 [ 88%] Built target compress_fuzzer
+#22 17.52 [ 88%] Built target compress_lossless_fuzzer
+#22 17.52 [ 88%] Built target compress_yuv_fuzzer
+#22 17.53 [ 88%] Built target libjpeg_turbo_fuzzer
+#22 17.53 [ 88%] Built target decompress_yuv_fuzzer
+#22 17.53 [ 88%] Built target transform_fuzzer
+#22 18.07 [ 88%] Linking C static library libjpeg.a
+#22 18.09 [ 88%] Built target jpeg-static
+#22 18.10 [ 88%] Building C object CMakeFiles/cjpeg-static.dir/src/cjpeg.c.o
+#22 18.10 [ 88%] Building C object CMakeFiles/jpegtran-static.dir/src/jpegtran.c.o
+#22 18.10 [ 89%] Building C object CMakeFiles/cjpeg-static.dir/src/cdjpeg.c.o
+#22 18.10 [ 89%] Building C object CMakeFiles/cjpeg-static.dir/src/rdbmp.c.o
+#22 18.10 [ 90%] Building C object CMakeFiles/jpegtran-static.dir/src/cdjpeg.c.o
+#22 18.10 [ 90%] Building C object CMakeFiles/jpegtran-static.dir/src/rdswitch.c.o
+#22 18.10 [ 90%] Building C object CMakeFiles/cjpeg-static.dir/src/rdgif.c.o
+#22 18.10 [ 90%] Building C object CMakeFiles/cjpeg-static.dir/src/rdppm.c.o
+#22 18.10 [ 91%] Building C object CMakeFiles/djpeg-static.dir/src/djpeg.c.o
+#22 18.10 [ 91%] Building C object CMakeFiles/cjpeg-static.dir/src/rdtarga.c.o
+#22 18.10 [ 91%] Building C object CMakeFiles/example-static.dir/src/example.c.o
+#22 18.10 [ 91%] Building C object CMakeFiles/cjpeg-static.dir/src/rdswitch.c.o
+#22 18.10 [ 91%] Building C object CMakeFiles/jpegtran-static.dir/src/transupp.c.o
+#22 18.10 [ 92%] Building C object CMakeFiles/djpeg-static.dir/src/cdjpeg.c.o
+#22 18.10 [ 93%] Building C object CMakeFiles/djpeg-static.dir/src/wrbmp.c.o
+#22 18.10 [ 93%] Building C object CMakeFiles/djpeg-static.dir/src/rdcolmap.c.o
+#22 18.10 [ 93%] Building C object CMakeFiles/djpeg-static.dir/src/rdswitch.c.o
+#22 18.10 [ 93%] Building CXX object fuzz/CMakeFiles/cjpeg_fuzzer.dir/cjpeg.cc.o
+#22 18.10 [ 93%] Building C object CMakeFiles/djpeg-static.dir/src/wrgif.c.o
+#22 18.10 [ 94%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdbmp.c.o
+#22 18.10 [ 94%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/cdjpeg.c.o
+#22 18.10 [ 94%] Building C object CMakeFiles/djpeg-static.dir/src/wrppm.c.o
+#22 18.11 [ 96%] Building C object CMakeFiles/djpeg-static.dir/src/wrtarga.c.o
+#22 18.11 [ 96%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdgif.c.o
+#22 18.11 [ 96%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdppm.c.o
+#22 18.11 [ 96%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdswitch.c.o
+#22 18.11 [ 97%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdtarga.c.o
+#22 18.21 [ 97%] Linking C executable example-static
+#22 18.30 [ 97%] Linking CXX executable cjpeg_fuzzer
+#22 18.31 [ 97%] Built target example-static
+#22 18.34 [ 97%] Built target cjpeg_fuzzer
+#22 18.37 [ 97%] Linking C executable djpeg-static
+#22 18.44 [ 98%] Linking C executable tjunittest-static
+#22 18.45 [ 98%] Linking C executable cjpeg-static
+#22 18.45 [ 98%] Built target djpeg-static
+#22 18.52 [ 98%] Built target cjpeg-static
+#22 18.56 [ 98%] Built target tjunittest-static
+#22 18.95 [ 99%] Linking C executable tjbench-static
+#22 19.07 [ 99%] Built target tjbench-static
+#22 19.95 [100%] Linking C executable jpegtran-static
+#22 20.01 [100%] Built target jpegtran-static
+#22 20.05 Consolidate compiler generated dependencies of target jpeg12-static
+#22 20.05 [ 11%] Built target jpeg12-static
+#22 20.06 Consolidate compiler generated dependencies of target jpeg16-static
+#22 20.07 [ 16%] Built target jpeg16-static
+#22 20.07 Consolidate compiler generated dependencies of target simd
+#22 20.08 [ 26%] Built target simd
+#22 20.10 Consolidate compiler generated dependencies of target jpeg-static
+#22 20.11 [ 47%] Built target jpeg-static
+#22 20.12 Consolidate compiler generated dependencies of target turbojpeg12-static
+#22 20.12 [ 48%] Built target turbojpeg12-static
+#22 20.13 Consolidate compiler generated dependencies of target turbojpeg16-static
+#22 20.13 [ 49%] Built target turbojpeg16-static
+#22 20.16 Consolidate compiler generated dependencies of target turbojpeg-static
+#22 20.17 [ 73%] Built target turbojpeg-static
+#22 20.18 Consolidate compiler generated dependencies of target tjunittest-static
+#22 20.18 [ 75%] Built target tjunittest-static
+#22 20.19 Consolidate compiler generated dependencies of target tjbench-static
+#22 20.19 [ 76%] Built target tjbench-static
+#22 20.20 Consolidate compiler generated dependencies of target cjpeg12-static
+#22 20.20 [ 77%] Built target cjpeg12-static
+#22 20.21 Consolidate compiler generated dependencies of target cjpeg16-static
+#22 20.21 [ 77%] Built target cjpeg16-static
+#22 20.22 Consolidate compiler generated dependencies of target cjpeg-static
+#22 20.22 [ 79%] Built target cjpeg-static
+#22 20.23 Consolidate compiler generated dependencies of target djpeg12-static
+#22 20.23 [ 80%] Built target djpeg12-static
+#22 20.24 Consolidate compiler generated dependencies of target djpeg16-static
+#22 20.24 [ 81%] Built target djpeg16-static
+#22 20.25 Consolidate compiler generated dependencies of target djpeg-static
+#22 20.26 [ 84%] Built target djpeg-static
+#22 20.26 Consolidate compiler generated dependencies of target jpegtran-static
+#22 20.27 [ 86%] Built target jpegtran-static
+#22 20.27 Consolidate compiler generated dependencies of target example-static
+#22 20.28 [ 86%] Built target example-static
+#22 20.28 Consolidate compiler generated dependencies of target rdjpgcom
+#22 20.29 [ 87%] Built target rdjpgcom
+#22 20.29 Consolidate compiler generated dependencies of target wrjpgcom
+#22 20.30 [ 88%] Built target wrjpgcom
+#22 20.30 Consolidate compiler generated dependencies of target strtest
+#22 20.31 [ 89%] Built target strtest
+#22 20.32 Consolidate compiler generated dependencies of target cjpeg_fuzzer
+#22 20.32 [ 92%] Built target cjpeg_fuzzer
+#22 20.33 Consolidate compiler generated dependencies of target compress_fuzzer
+#22 20.33 [ 93%] Built target compress_fuzzer
+#22 20.34 Consolidate compiler generated dependencies of target compress_yuv_fuzzer
+#22 20.34 [ 93%] Built target compress_yuv_fuzzer
+#22 20.35 Consolidate compiler generated dependencies of target compress_lossless_fuzzer
+#22 20.35 [ 94%] Built target compress_lossless_fuzzer
+#22 20.36 Consolidate compiler generated dependencies of target compress12_fuzzer
+#22 20.36 [ 95%] Built target compress12_fuzzer
+#22 20.37 Consolidate compiler generated dependencies of target compress12_lossless_fuzzer
+#22 20.37 [ 95%] Built target compress12_lossless_fuzzer
+#22 20.38 Consolidate compiler generated dependencies of target compress16_lossless_fuzzer
+#22 20.38 [ 96%] Built target compress16_lossless_fuzzer
+#22 20.38 Consolidate compiler generated dependencies of target libjpeg_turbo_fuzzer
+#22 20.39 [ 96%] Built target libjpeg_turbo_fuzzer
+#22 20.39 Consolidate compiler generated dependencies of target decompress_yuv_fuzzer
+#22 20.40 [ 97%] Built target decompress_yuv_fuzzer
+#22 20.40 Consolidate compiler generated dependencies of target transform_fuzzer
+#22 20.41 [ 97%] Built target transform_fuzzer
+#22 20.41 Consolidate compiler generated dependencies of target md5cmp
+#22 20.42 [ 99%] Built target md5cmp
+#22 20.42 Consolidate compiler generated dependencies of target md5sum
+#22 20.43 [100%] Built target md5sum
+#22 20.44 Install the project...
+#22 20.44 -- Install configuration: "RelWithDebInfo"
+#22 20.44 -- Installing: /out/cjpeg_fuzzer
+#22 20.44 -- Installing: /out/compress_fuzzer
+#22 20.45 -- Installing: /out/compress_yuv_fuzzer
+#22 20.45 -- Installing: /out/compress_lossless_fuzzer
+#22 20.46 -- Installing: /out/compress12_fuzzer
+#22 20.47 -- Installing: /out/compress12_lossless_fuzzer
+#22 20.47 -- Installing: /out/compress16_lossless_fuzzer
+#22 20.48 -- Installing: /out/libjpeg_turbo_fuzzer
+#22 20.48 -- Installing: /out/decompress_yuv_fuzzer
+#22 20.49 -- Installing: /out/transform_fuzzer
+#22 20.50 -- Installing: /work/lib/libturbojpeg.a
+#22 20.51 -- Installing: /work/bin/tjbench
+#22 20.51 -- Installing: /work/include/turbojpeg.h
+#22 20.52 -- Installing: /work/lib/libjpeg.a
+#22 20.52 -- Installing: /work/bin/cjpeg
+#22 20.53 -- Installing: /work/bin/djpeg
+#22 20.53 -- Installing: /work/bin/jpegtran
+#22 20.53 -- Installing: /work/bin/rdjpgcom
+#22 20.53 -- Installing: /work/bin/wrjpgcom
+#22 20.53 -- Installing: /work/share/doc/libjpeg-turbo/README.ijg
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/README.md
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/example.c
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/tjcomp.c
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/tjdecomp.c
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/tjtran.c
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/libjpeg.txt
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/structure.txt
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/usage.txt
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/wizard.txt
+#22 20.54 -- Installing: /work/share/doc/libjpeg-turbo/LICENSE.md
+#22 20.54 -- Installing: /work/share/man/man1/cjpeg.1
+#22 20.54 -- Installing: /work/share/man/man1/djpeg.1
+#22 20.54 -- Installing: /work/share/man/man1/jpegtran.1
+#22 20.54 -- Installing: /work/share/man/man1/rdjpgcom.1
+#22 20.54 -- Installing: /work/share/man/man1/wrjpgcom.1
+#22 20.54 -- Installing: /work/lib/pkgconfig/libjpeg.pc
+#22 20.54 -- Installing: /work/lib/pkgconfig/libturbojpeg.pc
+#22 20.54 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboConfig.cmake
+#22 20.54 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboConfigVersion.cmake
+#22 20.54 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake
+#22 20.54 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboTargets-relwithdebinfo.cmake
+#22 20.54 -- Installing: /work/include/jconfig.h
+#22 20.54 -- Installing: /work/include/jerror.h
+#22 20.54 -- Installing: /work/include/jmorecfg.h
+#22 20.54 -- Installing: /work/include/jpeglib.h
+#22 20.58 + popd
+#22 20.58 + read branch
+#22 20.58 + pushd libjpeg-turbo.3.0.x
+#22 20.58 /src
+#22 20.58 /src/libjpeg-turbo.3.0.x /src
+#22 20.58 + '[' 3.0.x = main ']'
+#22 20.58 + sh fuzz/build.sh _3.0.x
+#22 20.66 -- The C compiler identification is Clang 15.0.0
+#22 20.67 -- Detecting C compiler ABI info
+#22 20.75 -- Detecting C compiler ABI info - done
+#22 20.77 -- Check for working C compiler: /afl/afl-clang-fast - skipped
+#22 20.77 -- Detecting C compile features
+#22 20.77 -- Detecting C compile features - done
+#22 20.77 -- CMAKE_BUILD_TYPE = RelWithDebInfo
+#22 20.77 -- VERSION = 2.1.5, BUILD = 20250301
+#22 20.77 -- 64-bit build (x86_64)
+#22 20.77 -- CMAKE_INSTALL_PREFIX = /work
+#22 20.77 -- CMAKE_INSTALL_BINDIR = bin (/work/bin)
+#22 20.77 -- CMAKE_INSTALL_DATAROOTDIR = share (/work/share)
+#22 20.77 -- CMAKE_INSTALL_DOCDIR = share/doc/libjpeg-turbo (/work/share/doc/libjpeg-turbo)
+#22 20.77 -- CMAKE_INSTALL_INCLUDEDIR = include (/work/include)
+#22 20.77 -- CMAKE_INSTALL_LIBDIR = lib (/work/lib)
+#22 20.77 -- CMAKE_INSTALL_MANDIR = share/man (/work/share/man)
+#22 20.77 -- Shared libraries disabled (ENABLE_SHARED = 0)
+#22 20.77 -- Static libraries enabled (ENABLE_STATIC = 1)
+#22 20.77 -- 12-bit JPEG support disabled (WITH_12BIT = 0)
+#22 20.77 -- Arithmetic decoding support enabled (WITH_ARITH_DEC = 1)
+#22 20.77 -- Arithmetic encoding support enabled (WITH_ARITH_ENC = 1)
+#22 20.77 -- TurboJPEG API library enabled (WITH_TURBOJPEG = 1)
+#22 20.77 -- TurboJPEG Java wrapper disabled (WITH_JAVA = 0)
+#22 20.77 -- In-memory source/destination managers enabled (WITH_MEM_SRCDST = 1)
+#22 20.77 -- Emulating libjpeg API/ABI v6.2 (WITH_JPEG7 = 0, WITH_JPEG8 = 0)
+#22 20.77 -- libjpeg API shared library version = 62.3.0
+#22 20.77 -- Compiler flags = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -g -DNDEBUG
+#22 20.77 -- Linker flags =  
+#22 20.77 -- Looking for sys/types.h
+#22 20.85 -- Looking for sys/types.h - found
+#22 20.85 -- Looking for stdint.h
+#22 20.93 -- Looking for stdint.h - found
+#22 20.93 -- Looking for stddef.h
+#22 21.01 -- Looking for stddef.h - found
+#22 21.01 -- Check size of size_t
+#22 21.10 -- Check size of size_t - done
+#22 21.10 -- Check size of unsigned long
+#22 21.18 -- Check size of unsigned long - done
+#22 21.18 -- Performing Test HAVE_BUILTIN_CTZL
+#22 21.26 -- Performing Test HAVE_BUILTIN_CTZL - Success
+#22 21.26 -- Performing Test RIGHT_SHIFT_IS_UNSIGNED
+#22 21.35 -- Performing Test RIGHT_SHIFT_IS_UNSIGNED - Failed
+#22 21.35 -- Performing Test INLINE_WORKS
+#22 21.43 -- Performing Test INLINE_WORKS - Success
+#22 21.43 -- INLINE = __inline__ __attribute__((always_inline)) (FORCE_INLINE = 1)
+#22 21.43 -- Performing Test HAVE_THREAD_LOCAL
+#22 21.51 -- Performing Test HAVE_THREAD_LOCAL - Success
+#22 21.51 -- THREAD_LOCAL = __thread
+#22 21.51 -- Performing Test HAVE_VERSION_SCRIPT
+#22 21.59 -- Performing Test HAVE_VERSION_SCRIPT - Success
+#22 21.59 -- Linker supports GNU-style version scripts
+#22 21.59 -- CMAKE_EXECUTABLE_SUFFIX = 
+#22 21.59 -- Looking for a ASM_NASM compiler
+#22 21.63 -- Looking for a ASM_NASM compiler - /usr/bin/yasm
+#22 21.66 -- The ASM_NASM compiler identification is YASM
+#22 21.66 -- Found assembler: /usr/bin/yasm
+#22 21.66 -- CMAKE_ASM_NASM_COMPILER = /usr/bin/yasm
+#22 21.66 -- CMAKE_ASM_NASM_OBJECT_FORMAT = elf64
+#22 21.66 -- CMAKE_ASM_NASM_FLAGS =  -DELF -D__x86_64__ -g dwarf2
+#22 21.66 -- SIMD extensions: x86_64 (WITH_SIMD = 1)
+#22 21.66 -- FUZZ_BINDIR = /out
+#22 21.66 -- FUZZ_LIBRARY = /libAFLDriver.a
+#22 21.73 -- The CXX compiler identification is Clang 15.0.0
+#22 21.74 -- Detecting CXX compiler ABI info
+#22 21.82 -- Detecting CXX compiler ABI info - done
+#22 21.83 -- Check for working CXX compiler: /afl/afl-clang-fast++ - skipped
+#22 21.83 -- Detecting CXX compile features
+#22 21.83 -- Detecting CXX compile features - done
+#22 21.84 -- C++ Compiler flags = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -g -DNDEBUG
+#22 21.84 -- FLOATTEST = sse
+#22 21.84 -- RPM architecture = x86_64, DEB architecture = amd64
+#22 21.85 -- Configuring done
+#22 21.91 -- Generating done
+#22 21.92 -- Build files have been written to: /src/libjpeg-turbo.3.0.x
+#22 21.94 Scanning dependencies of target simd
+#22 21.94 [  0%] Building C object CMakeFiles/rdjpgcom.dir/rdjpgcom.c.o
+#22 21.94 [  0%] Building C object md5/CMakeFiles/md5cmp.dir/md5cmp.c.o
+#22 21.94 [  1%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jsimdcpu.asm.o
+#22 21.94 [  2%] Building C object CMakeFiles/wrjpgcom.dir/wrjpgcom.c.o
+#22 21.94 [  2%] Building C object CMakeFiles/strtest.dir/strtest.c.o
+#22 21.94 [  3%] Building C object md5/CMakeFiles/md5cmp.dir/md5.c.o
+#22 21.94 [  5%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jccolor-sse2.asm.o
+#22 21.94 [  5%] Building C object md5/CMakeFiles/md5cmp.dir/md5hl.c.o
+#22 21.94 [  5%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctflt-sse.asm.o
+#22 21.94 [  5%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcgray-sse2.asm.o
+#22 21.94 [  6%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jchuff-sse2.asm.o
+#22 21.94 [  6%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcphuff-sse2.asm.o
+#22 21.94 [  7%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcsample-sse2.asm.o
+#22 21.94 [  7%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdcolor-sse2.asm.o
+#22 21.94 [  8%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdmerge-sse2.asm.o
+#22 21.94 [  8%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdsample-sse2.asm.o
+#22 21.94 [  9%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctfst-sse2.asm.o
+#22 21.94 [ 10%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctint-sse2.asm.o
+#22 21.94 [ 10%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctflt-sse2.asm.o
+#22 21.95 [ 10%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctfst-sse2.asm.o
+#22 21.95 [ 11%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctint-sse2.asm.o
+#22 21.95 [ 11%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctred-sse2.asm.o
+#22 21.95 /src/libjpeg-turbo.3.0.x/simd/x86_64/jchuff-sse2.asm:30: warning: section flags ignored on section redeclaration
+#22 21.95 /src/libjpeg-turbo.3.0.x/simd/x86_64/jchuff-sse2.asm:36: warning: section flags ignored on section redeclaration
+#22 21.95 [ 12%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquantf-sse2.asm.o
+#22 21.95 [ 12%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquanti-sse2.asm.o
+#22 21.95 [ 13%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jccolor-avx2.asm.o
+#22 21.95 [ 14%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcgray-avx2.asm.o
+#22 21.95 [ 14%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcsample-avx2.asm.o
+#22 21.95 [ 14%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdcolor-avx2.asm.o
+#22 21.95 [ 15%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdmerge-avx2.asm.o
+#22 21.95 [ 15%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdsample-avx2.asm.o
+#22 21.95 [ 16%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctint-avx2.asm.o
+#22 21.95 [ 16%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctint-avx2.asm.o
+#22 21.95 [ 17%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquanti-avx2.asm.o
+#22 21.95 [ 17%] Building C object simd/CMakeFiles/simd.dir/x86_64/jsimd.c.o
+#22 22.00 [ 17%] Linking C executable strtest
+#22 22.02 [ 18%] Linking C executable md5cmp
+#22 22.03 [ 18%] Built target strtest
+#22 22.06 [ 18%] Built target md5cmp
+#22 22.11 [ 18%] Built target simd
+#22 22.12 [ 19%] Building C object CMakeFiles/jpeg-static.dir/jcapimin.c.o
+#22 22.12 [ 19%] Building C object CMakeFiles/jpeg-static.dir/jcapistd.c.o
+#22 22.12 [ 20%] Building C object CMakeFiles/jpeg-static.dir/jccoefct.c.o
+#22 22.12 [ 22%] Building C object CMakeFiles/jpeg-static.dir/jcdctmgr.c.o
+#22 22.12 [ 22%] Building C object CMakeFiles/jpeg-static.dir/jccolor.c.o
+#22 22.12 [ 22%] Building C object CMakeFiles/turbojpeg-static.dir/jcapimin.c.o
+#22 22.12 [ 22%] Building C object CMakeFiles/turbojpeg-static.dir/jcapistd.c.o
+#22 22.12 [ 22%] Building C object CMakeFiles/jpeg-static.dir/jchuff.c.o
+#22 22.12 [ 23%] Building C object CMakeFiles/jpeg-static.dir/jcinit.c.o
+#22 22.12 [ 24%] Building C object CMakeFiles/turbojpeg-static.dir/jccolor.c.o
+#22 22.12 [ 24%] Building C object CMakeFiles/jpeg-static.dir/jcicc.c.o
+#22 22.12 [ 24%] Building C object CMakeFiles/turbojpeg-static.dir/jccoefct.c.o
+#22 22.12 [ 25%] Building C object CMakeFiles/jpeg-static.dir/jcmainct.c.o
+#22 22.12 [ 26%] Building C object CMakeFiles/turbojpeg-static.dir/jcdctmgr.c.o
+#22 22.12 [ 26%] Building C object CMakeFiles/jpeg-static.dir/jcmarker.c.o
+#22 22.12 [ 27%] Building C object CMakeFiles/jpeg-static.dir/jcmaster.c.o
+#22 22.12 [ 27%] Building C object CMakeFiles/turbojpeg-static.dir/jchuff.c.o
+#22 22.12 [ 28%] Building C object CMakeFiles/turbojpeg-static.dir/jcicc.c.o
+#22 22.12 [ 28%] Building C object CMakeFiles/turbojpeg-static.dir/jcinit.c.o
+#22 22.12 [ 28%] Building C object CMakeFiles/jpeg-static.dir/jcomapi.c.o
+#22 22.12 [ 29%] Building C object CMakeFiles/jpeg-static.dir/jcparam.c.o
+#22 22.12 [ 30%] Building C object CMakeFiles/turbojpeg-static.dir/jcmainct.c.o
+#22 22.12 [ 30%] Building C object CMakeFiles/turbojpeg-static.dir/jcmarker.c.o
+#22 22.12 [ 30%] Building C object CMakeFiles/jpeg-static.dir/jcphuff.c.o
+#22 22.12 [ 31%] Building C object CMakeFiles/turbojpeg-static.dir/jcmaster.c.o
+#22 22.12 [ 32%] Building C object CMakeFiles/turbojpeg-static.dir/jcomapi.c.o
+#22 22.12 [ 32%] Building C object CMakeFiles/turbojpeg-static.dir/jcparam.c.o
+#22 22.12 [ 32%] Building C object CMakeFiles/turbojpeg-static.dir/jcphuff.c.o
+#22 22.12 [ 33%] Building C object CMakeFiles/jpeg-static.dir/jcprepct.c.o
+#22 22.12 [ 34%] Building C object CMakeFiles/turbojpeg-static.dir/jcprepct.c.o
+#22 22.12 [ 34%] Building C object CMakeFiles/jpeg-static.dir/jcsample.c.o
+#22 22.12 [ 35%] Building C object CMakeFiles/turbojpeg-static.dir/jcsample.c.o
+#22 22.12 [ 35%] Building C object CMakeFiles/jpeg-static.dir/jctrans.c.o
+#22 22.12 [ 35%] Building C object CMakeFiles/jpeg-static.dir/jdapimin.c.o
+#22 22.13 [ 36%] Building C object CMakeFiles/turbojpeg-static.dir/jctrans.c.o
+#22 22.13 [ 37%] Building C object CMakeFiles/jpeg-static.dir/jdapistd.c.o
+#22 22.13 [ 37%] Building C object CMakeFiles/jpeg-static.dir/jdatadst.c.o
+#22 22.13 [ 38%] Building C object CMakeFiles/turbojpeg-static.dir/jdapimin.c.o
+#22 22.13 [ 38%] Building C object CMakeFiles/jpeg-static.dir/jdatasrc.c.o
+#22 22.13 [ 38%] Building C object CMakeFiles/jpeg-static.dir/jdcoefct.c.o
+#22 22.13 [ 39%] Building C object CMakeFiles/turbojpeg-static.dir/jdapistd.c.o
+#22 22.13 [ 39%] Building C object CMakeFiles/turbojpeg-static.dir/jdatadst.c.o
+#22 22.13 [ 40%] Building C object CMakeFiles/jpeg-static.dir/jddctmgr.c.o
+#22 22.13 [ 40%] Building C object CMakeFiles/jpeg-static.dir/jdcolor.c.o
+#22 22.13 [ 41%] Building C object CMakeFiles/turbojpeg-static.dir/jdatasrc.c.o
+#22 22.13 [ 41%] Building C object CMakeFiles/turbojpeg-static.dir/jdcoefct.c.o
+#22 22.13 [ 43%] Building C object CMakeFiles/turbojpeg-static.dir/jdcolor.c.o
+#22 22.13 [ 43%] Building C object CMakeFiles/turbojpeg-static.dir/jddctmgr.c.o
+#22 22.13 [ 43%] Building C object CMakeFiles/jpeg-static.dir/jdhuff.c.o
+#22 22.13 [ 43%] Building C object CMakeFiles/jpeg-static.dir/jdicc.c.o
+#22 22.13 [ 44%] Building C object CMakeFiles/turbojpeg-static.dir/jdhuff.c.o
+#22 22.13 [ 44%] Building C object CMakeFiles/turbojpeg-static.dir/jdicc.c.o
+#22 22.13 [ 45%] Building C object CMakeFiles/turbojpeg-static.dir/jdinput.c.o
+#22 22.13 [ 45%] Building C object CMakeFiles/turbojpeg-static.dir/jdmainct.c.o
+#22 22.13 [ 46%] Building C object CMakeFiles/jpeg-static.dir/jdinput.c.o
+#22 22.13 [ 46%] Building C object CMakeFiles/jpeg-static.dir/jdmainct.c.o
+#22 22.13 [ 47%] Building C object CMakeFiles/turbojpeg-static.dir/jdmarker.c.o
+#22 22.13 [ 47%] Building C object CMakeFiles/jpeg-static.dir/jdmaster.c.o
+#22 22.13 [ 48%] Building C object CMakeFiles/jpeg-static.dir/jdmarker.c.o
+#22 22.13 [ 48%] Building C object CMakeFiles/turbojpeg-static.dir/jdmaster.c.o
+#22 22.13 [ 49%] Building C object CMakeFiles/jpeg-static.dir/jdmerge.c.o
+#22 22.13 [ 49%] Building C object CMakeFiles/jpeg-static.dir/jdphuff.c.o
+#22 22.13 [ 51%] Building C object CMakeFiles/turbojpeg-static.dir/jdmerge.c.o
+#22 22.13 [ 51%] Building C object CMakeFiles/jpeg-static.dir/jdpostct.c.o
+#22 22.13 [ 51%] Building C object CMakeFiles/jpeg-static.dir/jdsample.c.o
+#22 22.13 [ 51%] Building C object CMakeFiles/turbojpeg-static.dir/jdphuff.c.o
+#22 22.13 [ 52%] Building C object CMakeFiles/turbojpeg-static.dir/jdpostct.c.o
+#22 22.13 [ 53%] Building C object CMakeFiles/jpeg-static.dir/jdtrans.c.o
+#22 22.13 [ 53%] Building C object CMakeFiles/turbojpeg-static.dir/jdsample.c.o
+#22 22.13 [ 53%] Building C object CMakeFiles/jpeg-static.dir/jerror.c.o
+#22 22.13 [ 54%] Building C object CMakeFiles/turbojpeg-static.dir/jdtrans.c.o
+#22 22.14 [ 55%] Building C object CMakeFiles/jpeg-static.dir/jfdctflt.c.o
+#22 22.14 [ 56%] Building C object CMakeFiles/turbojpeg-static.dir/jfdctflt.c.o
+#22 22.14 [ 56%] Building C object CMakeFiles/jpeg-static.dir/jfdctfst.c.o
+#22 22.14 [ 56%] Building C object CMakeFiles/turbojpeg-static.dir/jerror.c.o
+#22 22.14 [ 56%] Building C object CMakeFiles/turbojpeg-static.dir/jfdctfst.c.o
+#22 22.14 [ 57%] Building C object CMakeFiles/jpeg-static.dir/jfdctint.c.o
+#22 22.14 [ 58%] Building C object CMakeFiles/jpeg-static.dir/jidctflt.c.o
+#22 22.14 [ 58%] Building C object CMakeFiles/turbojpeg-static.dir/jfdctint.c.o
+#22 22.14 [ 59%] Building C object CMakeFiles/jpeg-static.dir/jidctfst.c.o
+#22 22.14 [ 59%] Building C object CMakeFiles/jpeg-static.dir/jidctint.c.o
+#22 22.14 [ 60%] Building C object CMakeFiles/turbojpeg-static.dir/jidctflt.c.o
+#22 22.14 [ 60%] Linking C executable rdjpgcom
+#22 22.14 [ 61%] Building C object CMakeFiles/turbojpeg-static.dir/jidctfst.c.o
+#22 22.14 [ 62%] Building C object CMakeFiles/turbojpeg-static.dir/jidctint.c.o
+#22 22.14 [ 62%] Building C object CMakeFiles/jpeg-static.dir/jidctred.c.o
+#22 22.14 [ 63%] Building C object CMakeFiles/turbojpeg-static.dir/jidctred.c.o
+#22 22.14 [ 63%] Building C object CMakeFiles/jpeg-static.dir/jquant1.c.o
+#22 22.14 [ 64%] Building C object CMakeFiles/jpeg-static.dir/jquant2.c.o
+#22 22.14 [ 64%] Building C object CMakeFiles/turbojpeg-static.dir/jquant1.c.o
+#22 22.14 [ 65%] Building C object CMakeFiles/turbojpeg-static.dir/jquant2.c.o
+#22 22.14 [ 66%] Building C object CMakeFiles/turbojpeg-static.dir/jutils.c.o
+#22 22.14 [ 66%] Building C object CMakeFiles/jpeg-static.dir/jmemmgr.c.o
+#22 22.14 [ 66%] Building C object CMakeFiles/jpeg-static.dir/jutils.c.o
+#22 22.14 [ 66%] Building C object CMakeFiles/jpeg-static.dir/jmemnobs.c.o
+#22 22.14 [ 67%] Building C object CMakeFiles/turbojpeg-static.dir/jmemmgr.c.o
+#22 22.14 [ 67%] Building C object CMakeFiles/turbojpeg-static.dir/jmemnobs.c.o
+#22 22.14 [ 68%] Building C object CMakeFiles/turbojpeg-static.dir/jaricom.c.o
+#22 22.14 [ 69%] Building C object CMakeFiles/jpeg-static.dir/jaricom.c.o
+#22 22.15 [ 69%] Building C object CMakeFiles/jpeg-static.dir/jcarith.c.o
+#22 22.15 [ 70%] Building C object CMakeFiles/turbojpeg-static.dir/jdarith.c.o
+#22 22.15 [ 70%] Building C object CMakeFiles/turbojpeg-static.dir/jcarith.c.o
+#22 22.15 [ 70%] Building C object CMakeFiles/turbojpeg-static.dir/turbojpeg.c.o
+#22 22.15 [ 71%] Building C object CMakeFiles/jpeg-static.dir/jdarith.c.o
+#22 22.15 [ 72%] Building C object CMakeFiles/turbojpeg-static.dir/transupp.c.o
+#22 22.15 [ 72%] Building C object CMakeFiles/turbojpeg-static.dir/jdatadst-tj.c.o
+#22 22.15 [ 72%] Building C object CMakeFiles/turbojpeg-static.dir/rdbmp.c.o
+#22 22.15 [ 73%] Building C object CMakeFiles/turbojpeg-static.dir/jdatasrc-tj.c.o
+#22 22.15 [ 74%] Building C object CMakeFiles/turbojpeg-static.dir/rdppm.c.o
+#22 22.15 [ 74%] Building C object CMakeFiles/turbojpeg-static.dir/wrbmp.c.o
+#22 22.15 [ 75%] Building C object CMakeFiles/turbojpeg-static.dir/wrppm.c.o
+#22 22.21 [ 75%] Built target rdjpgcom
+#22 22.26 [ 76%] Linking C executable wrjpgcom
+#22 22.31 [ 76%] Built target wrjpgcom
+#22 34.53 [ 76%] Linking C static library libjpeg.a
+#22 34.55 [ 76%] Built target jpeg-static
+#22 34.56 [ 77%] Building C object CMakeFiles/cjpeg-static.dir/cjpeg.c.o
+#22 34.56 [ 77%] Building C object CMakeFiles/djpeg-static.dir/djpeg.c.o
+#22 34.56 [ 78%] Building C object CMakeFiles/cjpeg-static.dir/cdjpeg.c.o
+#22 34.56 [ 78%] Building C object CMakeFiles/jpegtran-static.dir/jpegtran.c.o
+#22 34.56 [ 80%] Building CXX object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/cjpeg.cc.o
+#22 34.56 [ 80%] Building C object CMakeFiles/cjpeg-static.dir/rdppm.c.o
+#22 34.56 [ 79%] Building C object CMakeFiles/cjpeg-static.dir/rdgif.c.o
+#22 34.56 [ 82%] Building C object CMakeFiles/jpegtran-static.dir/rdswitch.c.o
+#22 34.56 [ 83%] Building C object CMakeFiles/djpeg-static.dir/cdjpeg.c.o
+#22 34.56 [ 83%] Building C object CMakeFiles/jpegtran-static.dir/cdjpeg.c.o
+#22 34.56 [ 83%] Building C object CMakeFiles/djpeg-static.dir/rdcolmap.c.o
+#22 34.56 [ 83%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/cdjpeg.c.o
+#22 34.56 [ 85%] Building C object CMakeFiles/djpeg-static.dir/wrppm.c.o
+#22 34.56 [ 85%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdbmp.c.o
+#22 34.56 [ 85%] Building C object CMakeFiles/cjpeg-static.dir/rdswitch.c.o
+#22 34.56 [ 87%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdgif.c.o
+#22 34.56 [ 87%] Building C object CMakeFiles/jpegtran-static.dir/transupp.c.o
+#22 34.56 [ 87%] Building C object CMakeFiles/cjpeg-static.dir/rdtarga.c.o
+#22 34.56 [ 83%] Building C object CMakeFiles/djpeg-static.dir/rdswitch.c.o
+#22 34.56 [ 87%] Building C object CMakeFiles/djpeg-static.dir/wrbmp.c.o
+#22 34.56 [ 87%] Building C object CMakeFiles/djpeg-static.dir/wrtarga.c.o
+#22 34.56 [ 87%] Building C object CMakeFiles/cjpeg-static.dir/rdbmp.c.o
+#22 34.56 [ 87%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdppm.c.o
+#22 34.56 [ 83%] Building C object CMakeFiles/djpeg-static.dir/wrgif.c.o
+#22 34.56 [ 88%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdtarga.c.o
+#22 34.56 [ 88%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdswitch.c.o
+#22 34.71 [ 88%] Linking C static library libturbojpeg.a
+#22 34.74 [ 88%] Built target turbojpeg-static
+#22 34.74 [ 88%] Building C object CMakeFiles/tjunittest-static.dir/tjunittest.c.o
+#22 34.74 [ 89%] Building C object CMakeFiles/tjunittest-static.dir/tjutil.c.o
+#22 34.74 [ 89%] Building C object CMakeFiles/tjunittest-static.dir/md5/md5.c.o
+#22 34.74 [ 89%] Building CXX object fuzz/CMakeFiles/compress_yuv_fuzzer_3_0_x.dir/compress_yuv.cc.o
+#22 34.75 [ 89%] Building CXX object fuzz/CMakeFiles/libjpeg_turbo_fuzzer_3_0_x.dir/decompress.cc.o
+#22 34.75 [ 89%] Building CXX object fuzz/CMakeFiles/compress_fuzzer_3_0_x.dir/compress.cc.o
+#22 34.75 [ 91%] Building C object CMakeFiles/tjunittest-static.dir/md5/md5hl.c.o
+#22 34.75 [ 91%] Building C object CMakeFiles/tjbench-static.dir/tjbench.c.o
+#22 34.75 [ 91%] Building C object CMakeFiles/tjbench-static.dir/tjutil.c.o
+#22 34.75 [ 91%] Building CXX object fuzz/CMakeFiles/decompress_yuv_fuzzer_3_0_x.dir/decompress_yuv.cc.o
+#22 34.75 [ 92%] Building CXX object fuzz/CMakeFiles/transform_fuzzer_3_0_x.dir/transform.cc.o
+#22 34.77 [ 92%] Linking C executable djpeg-static
+#22 34.82 [ 93%] Linking CXX executable compress_fuzzer_3_0_x
+#22 34.82 [ 94%] Linking CXX executable compress_yuv_fuzzer_3_0_x
+#22 34.83 [ 95%] Linking CXX executable libjpeg_turbo_fuzzer_3_0_x
+#22 34.83 [ 96%] Linking CXX executable decompress_yuv_fuzzer_3_0_x
+#22 34.83 [ 96%] Linking CXX executable transform_fuzzer_3_0_x
+#22 34.84 [ 96%] Built target djpeg-static
+#22 34.86 [ 97%] Linking C executable cjpeg-static
+#22 34.86 [ 98%] Linking CXX executable cjpeg_fuzzer_3_0_x
+#22 34.90 [ 98%] Built target compress_fuzzer_3_0_x
+#22 34.90 [ 98%] Built target compress_yuv_fuzzer_3_0_x
+#22 34.91 [ 98%] Built target libjpeg_turbo_fuzzer_3_0_x
+#22 34.92 [ 98%] Built target decompress_yuv_fuzzer_3_0_x
+#22 34.92 [ 98%] Built target transform_fuzzer_3_0_x
+#22 34.92 [ 98%] Built target cjpeg-static
+#22 34.93 [ 98%] Built target cjpeg_fuzzer_3_0_x
+#22 35.49 [ 98%] Linking C executable tjunittest-static
+#22 35.57 [ 98%] Built target tjunittest-static
+#22 35.67 [ 99%] Linking C executable tjbench-static
+#22 35.75 [ 99%] Built target tjbench-static
+#22 36.39 [100%] Linking C executable jpegtran-static
+#22 36.45 [100%] Built target jpegtran-static
+#22 36.47 Consolidate compiler generated dependencies of target simd
+#22 36.48 [ 14%] Built target simd
+#22 36.50 Consolidate compiler generated dependencies of target jpeg-static
+#22 36.51 [ 40%] Built target jpeg-static
+#22 36.53 Consolidate compiler generated dependencies of target turbojpeg-static
+#22 36.54 [ 70%] Built target turbojpeg-static
+#22 36.54 Consolidate compiler generated dependencies of target tjunittest-static
+#22 36.55 [ 72%] Built target tjunittest-static
+#22 36.55 Consolidate compiler generated dependencies of target tjbench-static
+#22 36.56 [ 74%] Built target tjbench-static
+#22 36.57 Consolidate compiler generated dependencies of target cjpeg-static
+#22 36.57 [ 78%] Built target cjpeg-static
+#22 36.58 Consolidate compiler generated dependencies of target djpeg-static
+#22 36.58 [ 82%] Built target djpeg-static
+#22 36.59 Consolidate compiler generated dependencies of target jpegtran-static
+#22 36.59 [ 85%] Built target jpegtran-static
+#22 36.60 Consolidate compiler generated dependencies of target rdjpgcom
+#22 36.60 [ 86%] Built target rdjpgcom
+#22 36.61 Consolidate compiler generated dependencies of target wrjpgcom
+#22 36.61 [ 88%] Built target wrjpgcom
+#22 36.62 Consolidate compiler generated dependencies of target strtest
+#22 36.62 [ 89%] Built target strtest
+#22 36.63 Consolidate compiler generated dependencies of target cjpeg_fuzzer_3_0_x
+#22 36.63 [ 93%] Built target cjpeg_fuzzer_3_0_x
+#22 36.64 Consolidate compiler generated dependencies of target compress_fuzzer_3_0_x
+#22 36.64 [ 94%] Built target compress_fuzzer_3_0_x
+#22 36.65 Consolidate compiler generated dependencies of target compress_yuv_fuzzer_3_0_x
+#22 36.65 [ 95%] Built target compress_yuv_fuzzer_3_0_x
+#22 36.66 Consolidate compiler generated dependencies of target libjpeg_turbo_fuzzer_3_0_x
+#22 36.66 [ 96%] Built target libjpeg_turbo_fuzzer_3_0_x
+#22 36.66 Consolidate compiler generated dependencies of target decompress_yuv_fuzzer_3_0_x
+#22 36.67 [ 97%] Built target decompress_yuv_fuzzer_3_0_x
+#22 36.67 Consolidate compiler generated dependencies of target transform_fuzzer_3_0_x
+#22 36.68 [ 98%] Built target transform_fuzzer_3_0_x
+#22 36.68 Consolidate compiler generated dependencies of target md5cmp
+#22 36.69 [100%] Built target md5cmp
+#22 36.69 Install the project...
+#22 36.70 -- Install configuration: "RelWithDebInfo"
+#22 36.70 -- Installing: /work/lib/libturbojpeg.a
+#22 36.71 -- Installing: /work/bin/tjbench
+#22 36.71 -- Installing: /work/include/turbojpeg.h
+#22 36.71 -- Installing: /work/lib/libjpeg.a
+#22 36.72 -- Installing: /work/bin/cjpeg
+#22 36.72 -- Installing: /work/bin/djpeg
+#22 36.72 -- Installing: /work/bin/jpegtran
+#22 36.73 -- Installing: /work/bin/rdjpgcom
+#22 36.73 -- Installing: /work/bin/wrjpgcom
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/README.ijg
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/README.md
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/example.txt
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/tjexample.c
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/libjpeg.txt
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/structure.txt
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/usage.txt
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/wizard.txt
+#22 36.73 -- Installing: /work/share/doc/libjpeg-turbo/LICENSE.md
+#22 36.73 -- Installing: /work/share/man/man1/cjpeg.1
+#22 36.73 -- Installing: /work/share/man/man1/djpeg.1
+#22 36.73 -- Installing: /work/share/man/man1/jpegtran.1
+#22 36.73 -- Installing: /work/share/man/man1/rdjpgcom.1
+#22 36.73 -- Installing: /work/share/man/man1/wrjpgcom.1
+#22 36.73 -- Installing: /work/lib/pkgconfig/libjpeg.pc
+#22 36.73 -- Installing: /work/lib/pkgconfig/libturbojpeg.pc
+#22 36.73 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboConfig.cmake
+#22 36.73 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboConfigVersion.cmake
+#22 36.73 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake
+#22 36.73 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboTargets-relwithdebinfo.cmake
+#22 36.73 -- Installing: /work/include/jconfig.h
+#22 36.73 -- Installing: /work/include/jerror.h
+#22 36.73 -- Installing: /work/include/jmorecfg.h
+#22 36.73 -- Installing: /work/include/jpeglib.h
+#22 36.73 -- Installing: /out/cjpeg_fuzzer_3_0_x
+#22 36.74 -- Installing: /out/compress_fuzzer_3_0_x
+#22 36.74 -- Installing: /out/compress_yuv_fuzzer_3_0_x
+#22 36.74 -- Installing: /out/libjpeg_turbo_fuzzer_3_0_x
+#22 36.75 -- Installing: /out/decompress_yuv_fuzzer_3_0_x
+#22 36.75 -- Installing: /out/transform_fuzzer_3_0_x
+#22 36.78 /src
+#22 36.78 + popd
+#22 36.78 + read branch
+#22 37.11 Re-building benchmark for CmpLog fuzzing target
+#22 37.11 Building benchmark libjpeg-turbo_libjpeg_turbo_fuzzer with fuzzer aflmmbb_no_selection
+#22 37.11 + set -e
+#22 37.11 + set -u
+#22 37.11 + cat fuzz/branches.txt
+#22 37.11 + read branch
+#22 37.11 + pushd libjpeg-turbo.main
+#22 37.11 + '[' main = main ']'
+#22 37.11 + sh fuzz/build.sh
+#22 37.11 /src/libjpeg-turbo.main /src
+#22 37.18 -- The C compiler identification is Clang 15.0.0
+#22 37.20 -- Detecting C compiler ABI info
+#22 37.27 -- Detecting C compiler ABI info - done
+#22 37.29 -- Check for working C compiler: /afl/afl-clang-fast - skipped
+#22 37.29 -- Detecting C compile features
+#22 37.29 -- Detecting C compile features - done
+#22 37.29 -- CMAKE_BUILD_TYPE = RelWithDebInfo
+#22 37.29 -- VERSION = 3.1.1, BUILD = 20250301
+#22 37.29 -- 64-bit build (x86_64)
+#22 37.29 -- CMAKE_INSTALL_PREFIX = /work
+#22 37.29 -- CMAKE_INSTALL_BINDIR = bin (/work/bin)
+#22 37.29 -- CMAKE_INSTALL_DATAROOTDIR = share (/work/share)
+#22 37.29 -- CMAKE_INSTALL_DOCDIR = share/doc/libjpeg-turbo (/work/share/doc/libjpeg-turbo)
+#22 37.29 -- CMAKE_INSTALL_INCLUDEDIR = include (/work/include)
+#22 37.29 -- CMAKE_INSTALL_LIBDIR = lib (/work/lib)
+#22 37.29 -- CMAKE_INSTALL_MANDIR = share/man (/work/share/man)
+#22 37.29 -- Shared libraries disabled (ENABLE_SHARED = 0)
+#22 37.29 -- Static libraries enabled (ENABLE_STATIC = 1)
+#22 37.29 -- Arithmetic decoding support enabled (WITH_ARITH_DEC = 1)
+#22 37.29 -- Arithmetic encoding support enabled (WITH_ARITH_ENC = 1)
+#22 37.29 -- TurboJPEG API library enabled (WITH_TURBOJPEG = 1)
+#22 37.29 -- TurboJPEG Java wrapper disabled (WITH_JAVA = 0)
+#22 37.29 -- Emulating libjpeg API/ABI v6.2 (WITH_JPEG7 = 0, WITH_JPEG8 = 0)
+#22 37.29 -- libjpeg API shared library version = 62.4.0
+#22 37.29 -- Compiler flags = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -g -DNDEBUG
+#22 37.29 -- Linker flags =  
+#22 37.29 -- Looking for sys/types.h
+#22 37.37 -- Looking for sys/types.h - found
+#22 37.37 -- Looking for stdint.h
+#22 37.44 -- Looking for stdint.h - found
+#22 37.44 -- Looking for stddef.h
+#22 37.52 -- Looking for stddef.h - found
+#22 37.52 -- Check size of size_t
+#22 37.60 -- Check size of size_t - done
+#22 37.60 -- Check size of unsigned long
+#22 37.68 -- Check size of unsigned long - done
+#22 37.68 -- Performing Test HAVE_BUILTIN_CTZL
+#22 37.75 -- Performing Test HAVE_BUILTIN_CTZL - Success
+#22 37.75 -- Performing Test RIGHT_SHIFT_IS_UNSIGNED
+#22 37.83 -- Performing Test RIGHT_SHIFT_IS_UNSIGNED - Failed
+#22 37.83 -- Performing Test HIDDEN_WORKS
+#22 37.91 -- Performing Test HIDDEN_WORKS - Success
+#22 37.91 -- HIDDEN = __attribute__((visibility("hidden")))
+#22 37.91 -- Performing Test INLINE_WORKS
+#22 37.98 -- Performing Test INLINE_WORKS - Success
+#22 37.98 -- INLINE = __inline__ __attribute__((always_inline)) (FORCE_INLINE = 1)
+#22 37.98 -- Performing Test HAVE_THREAD_LOCAL
+#22 38.05 -- Performing Test HAVE_THREAD_LOCAL - Success
+#22 38.05 -- THREAD_LOCAL = __thread
+#22 38.05 -- Performing Test HAVE_VERSION_SCRIPT
+#22 38.13 -- Performing Test HAVE_VERSION_SCRIPT - Success
+#22 38.13 -- Linker supports GNU-style version scripts
+#22 38.13 -- CMAKE_EXECUTABLE_SUFFIX = 
+#22 38.13 -- Looking for a ASM_NASM compiler
+#22 38.17 -- Looking for a ASM_NASM compiler - /usr/bin/yasm
+#22 38.19 -- The ASM_NASM compiler identification is YASM
+#22 38.19 -- Found assembler: /usr/bin/yasm
+#22 38.19 -- CMAKE_ASM_NASM_COMPILER = /usr/bin/yasm
+#22 38.19 -- CMAKE_ASM_NASM_OBJECT_FORMAT = elf64
+#22 38.19 -- Performing Test HAVE_CET
+#22 38.22 -- Performing Test HAVE_CET - Failed
+#22 38.22 -- CMAKE_ASM_NASM_FLAGS =  -DELF -D__x86_64__ -g dwarf2
+#22 38.23 -- SIMD extensions: x86_64 (WITH_SIMD = 1)
+#22 38.23 -- FUZZ_BINDIR = /out/cmplog
+#22 38.23 -- FUZZ_LIBRARY = /libAFLDriver.a
+#22 38.29 -- The CXX compiler identification is Clang 15.0.0
+#22 38.29 -- Detecting CXX compiler ABI info
+#22 38.37 -- Detecting CXX compiler ABI info - done
+#22 38.38 -- Check for working CXX compiler: /afl/afl-clang-fast++ - skipped
+#22 38.38 -- Detecting CXX compile features
+#22 38.39 -- Detecting CXX compile features - done
+#22 38.39 -- C++ Compiler flags = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -g -DNDEBUG
+#22 38.39 -- FLOATTEST8 = sse
+#22 38.39 -- FLOATTEST12 = no-fp-contract
+#22 38.40 -- RPM architecture = x86_64, DEB architecture = amd64
+#22 38.40 -- Configuring done
+#22 38.50 -- Generating done
+#22 38.51 -- Build files have been written to: /src/libjpeg-turbo.main
+#22 38.53 Scanning dependencies of target simd
+#22 38.53 [  1%] Building C object CMakeFiles/turbojpeg12-static.dir/src/wrppm.c.o
+#22 38.53 [  1%] Building C object CMakeFiles/jpeg16-static.dir/src/jcapistd.c.o
+#22 38.53 [  3%] Building C object CMakeFiles/jpeg16-static.dir/src/jccolor.c.o
+#22 38.53 [  6%] Building C object CMakeFiles/jpeg12-static.dir/src/jccolor.c.o
+#22 38.53 [  6%] Building C object CMakeFiles/djpeg12-static.dir/src/wrgif.c.o
+#22 38.53 [  6%] Building C object CMakeFiles/turbojpeg16-static.dir/src/wrppm.c.o
+#22 38.53 [  6%] Building C object CMakeFiles/turbojpeg16-static.dir/src/rdppm.c.o
+#22 38.53 [  6%] Building C object CMakeFiles/jpeg16-static.dir/src/jclossls.c.o
+#22 38.53 [  6%] Building C object CMakeFiles/jpeg16-static.dir/src/jcdiffct.c.o
+#22 38.53 [  3%] Building C object CMakeFiles/djpeg12-static.dir/src/rdcolmap.c.o
+#22 38.53 [  6%] Building C object CMakeFiles/turbojpeg12-static.dir/src/rdppm.c.o
+#22 38.53 [  7%] Building C object CMakeFiles/jpeg12-static.dir/src/jcapistd.c.o
+#22 38.53 [  7%] Building C object CMakeFiles/cjpeg16-static.dir/src/rdppm.c.o
+#22 38.53 [  7%] Building C object CMakeFiles/cjpeg12-static.dir/src/rdppm.c.o
+#22 38.53 [  9%] Building C object CMakeFiles/djpeg16-static.dir/src/wrppm.c.o
+#22 38.53 [  7%] Building C object CMakeFiles/jpeg16-static.dir/src/jcmainct.c.o
+#22 38.53 [  9%] Building C object CMakeFiles/jpeg12-static.dir/src/jcdiffct.c.o
+#22 38.53 [ 10%] Building C object CMakeFiles/jpeg16-static.dir/src/jcsample.c.o
+#22 38.53 [ 10%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctflt-sse.asm.o
+#22 38.53 [ 10%] Building C object CMakeFiles/rdjpgcom.dir/src/rdjpgcom.c.o
+#22 38.53 [ 11%] Building C object CMakeFiles/strtest.dir/src/strtest.c.o
+#22 38.53 [  9%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jsimdcpu.asm.o
+#22 38.53 [ 10%] Building C object CMakeFiles/jpeg12-static.dir/src/jclossls.c.o
+#22 38.53 [ 11%] Building C object CMakeFiles/jpeg16-static.dir/src/jcprepct.c.o
+#22 38.53 [ 11%] Building C object CMakeFiles/jpeg12-static.dir/src/jcmainct.c.o
+#22 38.53 [ 11%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jccolor-sse2.asm.o
+#22 38.53 [ 11%] Building C object CMakeFiles/jpeg16-static.dir/src/jdapistd.c.o
+#22 38.53 [ 12%] Building C object CMakeFiles/jpeg12-static.dir/src/jcprepct.c.o
+#22 38.53 [ 12%] Building C object CMakeFiles/wrjpgcom.dir/src/wrjpgcom.c.o
+#22 38.53 [ 12%] Building C object CMakeFiles/jpeg12-static.dir/src/jcsample.c.o
+#22 38.53 [ 12%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcgray-sse2.asm.o
+#22 38.53 [ 13%] Building C object CMakeFiles/djpeg12-static.dir/src/wrppm.c.o
+#22 38.53 [ 13%] Building C object CMakeFiles/jpeg16-static.dir/src/jdcolor.c.o
+#22 38.54 [ 14%] Building C object src/md5/CMakeFiles/md5cmp.dir/md5cmp.c.o
+#22 38.54 [ 15%] Building C object CMakeFiles/jpeg16-static.dir/src/jddiffct.c.o
+#22 38.54 [ 15%] Building C object CMakeFiles/jpeg12-static.dir/src/jdapistd.c.o
+#22 38.54 [ 15%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jchuff-sse2.asm.o
+#22 38.54 [ 16%] Building C object src/md5/CMakeFiles/md5cmp.dir/md5.c.o
+#22 38.54 [ 16%] Building C object CMakeFiles/jpeg16-static.dir/src/jdlossls.c.o
+#22 38.54 [ 16%] Building C object CMakeFiles/jpeg12-static.dir/src/jdcolor.c.o
+#22 38.54 [ 18%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdcolor-sse2.asm.o
+#22 38.54 [ 16%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcphuff-sse2.asm.o
+#22 38.54 [ 18%] Building C object CMakeFiles/jpeg16-static.dir/src/jdmainct.c.o
+#22 38.54 [ 18%] Building C object src/md5/CMakeFiles/md5sum.dir/md5sum.c.o
+#22 38.54 [ 18%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcsample-sse2.asm.o
+#22 38.54 [ 18%] Building C object CMakeFiles/jpeg12-static.dir/src/jddiffct.c.o
+#22 38.54 [ 18%] Building C object CMakeFiles/jpeg16-static.dir/src/jdpostct.c.o
+#22 38.54 [ 18%] Building C object CMakeFiles/jpeg12-static.dir/src/jdlossls.c.o
+#22 38.54 [ 19%] Building C object src/md5/CMakeFiles/md5cmp.dir/md5hl.c.o
+#22 38.54 [ 19%] Building C object CMakeFiles/jpeg16-static.dir/src/jdsample.c.o
+#22 38.54 [ 20%] Building C object src/md5/CMakeFiles/md5sum.dir/md5hl.c.o
+#22 38.54 [ 20%] Building C object CMakeFiles/jpeg12-static.dir/src/jdmainct.c.o
+#22 38.54 [ 21%] Building C object src/md5/CMakeFiles/md5sum.dir/md5.c.o
+#22 38.54 [ 21%] Building C object CMakeFiles/jpeg12-static.dir/src/jdpostct.c.o
+#22 38.54 [ 21%] Building C object CMakeFiles/jpeg16-static.dir/src/jutils.c.o
+#22 38.54 [ 23%] Building C object CMakeFiles/jpeg12-static.dir/src/jdsample.c.o
+#22 38.54 [ 23%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdsample-sse2.asm.o
+#22 38.54 [ 23%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdmerge-sse2.asm.o
+#22 38.54 [ 23%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctfst-sse2.asm.o
+#22 38.54 [ 23%] Building C object CMakeFiles/jpeg12-static.dir/src/jutils.c.o
+#22 38.54 [ 23%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctint-sse2.asm.o
+#22 38.54 [ 23%] Building C object CMakeFiles/jpeg12-static.dir/src/jccoefct.c.o
+#22 38.54 [ 24%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctfst-sse2.asm.o
+#22 38.54 [ 24%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctflt-sse2.asm.o
+#22 38.54 [ 24%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctint-sse2.asm.o
+#22 38.54 [ 26%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctred-sse2.asm.o
+#22 38.54 [ 26%] Building C object CMakeFiles/jpeg12-static.dir/src/jcdctmgr.c.o
+#22 38.54 [ 26%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquantf-sse2.asm.o
+#22 38.54 [ 26%] Building C object CMakeFiles/jpeg12-static.dir/src/jdcoefct.c.o
+#22 38.54 [ 26%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquanti-sse2.asm.o
+#22 38.54 [ 27%] Building C object CMakeFiles/jpeg12-static.dir/src/jddctmgr.c.o
+#22 38.54 [ 27%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jccolor-avx2.asm.o
+#22 38.54 [ 27%] Building C object CMakeFiles/jpeg12-static.dir/src/jfdctfst.c.o
+#22 38.54 [ 28%] Building C object CMakeFiles/jpeg12-static.dir/src/jdmerge.c.o
+#22 38.54 [ 29%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcgray-avx2.asm.o
+#22 38.54 [ 29%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcsample-avx2.asm.o
+#22 38.54 [ 29%] Building C object CMakeFiles/jpeg12-static.dir/src/jfdctint.c.o
+#22 38.54 [ 29%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdcolor-avx2.asm.o
+#22 38.54 [ 30%] Building C object CMakeFiles/jpeg12-static.dir/src/jidctflt.c.o
+#22 38.54 [ 30%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdmerge-avx2.asm.o
+#22 38.54 [ 30%] Building C object CMakeFiles/jpeg12-static.dir/src/jidctfst.c.o
+#22 38.54 [ 30%] Building C object CMakeFiles/jpeg12-static.dir/src/jidctint.c.o
+#22 38.55 [ 32%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdsample-avx2.asm.o
+#22 38.55 [ 32%] Building C object CMakeFiles/jpeg12-static.dir/src/jquant1.c.o
+#22 38.55 [ 32%] Building C object CMakeFiles/jpeg12-static.dir/src/jidctred.c.o
+#22 38.55 [ 32%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctint-avx2.asm.o
+#22 38.55 [ 32%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctint-avx2.asm.o
+#22 38.55 [ 33%] Building C object CMakeFiles/jpeg12-static.dir/src/jquant2.c.o
+#22 38.55 /src/libjpeg-turbo.main/simd/x86_64/jchuff-sse2.asm:27: warning: section flags ignored on section redeclaration
+#22 38.55 /src/libjpeg-turbo.main/simd/x86_64/jchuff-sse2.asm:33: warning: section flags ignored on section redeclaration
+#22 38.55 [ 34%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquanti-avx2.asm.o
+#22 38.55 [ 34%] Building C object simd/CMakeFiles/simd.dir/x86_64/jsimd.c.o
+#22 38.60 [ 35%] Linking C executable strtest
+#22 38.63 [ 35%] Linking C executable ../../test/md5sum
+#22 38.64 [ 35%] Built target strtest
+#22 38.66 [ 36%] Linking C executable ../../test/md5cmp
+#22 38.68 [ 36%] Built target md5sum
+#22 38.70 [ 36%] Built target djpeg12-static
+#22 38.70 [ 36%] Built target md5cmp
+#22 38.71 [ 36%] Linking C executable rdjpgcom
+#22 38.72 [ 36%] Built target djpeg16-static
+#22 38.72 [ 37%] Linking C executable wrjpgcom
+#22 38.75 [ 37%] Built target rdjpgcom
+#22 38.76 [ 37%] Built target wrjpgcom
+#22 38.77 [ 37%] Built target simd
+#22 39.01 [ 37%] Built target turbojpeg12-static
+#22 39.01 [ 37%] Built target cjpeg12-static
+#22 39.03 [ 37%] Built target turbojpeg16-static
+#22 39.07 [ 37%] Built target cjpeg16-static
+#22 39.20 [ 37%] Built target jpeg16-static
+#22 39.39 [ 37%] Built target jpeg12-static
+#22 39.41 [ 38%] Building C object CMakeFiles/jpeg-static.dir/src/jcapistd.c.o
+#22 39.41 [ 38%] Building C object CMakeFiles/jpeg-static.dir/src/jccolor.c.o
+#22 39.41 [ 39%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcapistd.c.o
+#22 39.41 [ 39%] Building C object CMakeFiles/jpeg-static.dir/src/jcdiffct.c.o
+#22 39.41 [ 40%] Building C object CMakeFiles/jpeg-static.dir/src/jclossls.c.o
+#22 39.41 [ 40%] Building C object CMakeFiles/turbojpeg-static.dir/src/jccolor.c.o
+#22 39.41 [ 40%] Building C object CMakeFiles/jpeg-static.dir/src/jcmainct.c.o
+#22 39.41 [ 40%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcdiffct.c.o
+#22 39.41 [ 40%] Building C object CMakeFiles/jpeg-static.dir/src/jcprepct.c.o
+#22 39.41 [ 42%] Building C object CMakeFiles/jpeg-static.dir/src/jdapistd.c.o
+#22 39.41 [ 41%] Building C object CMakeFiles/jpeg-static.dir/src/jcsample.c.o
+#22 39.41 [ 42%] Building C object CMakeFiles/turbojpeg-static.dir/src/jclossls.c.o
+#22 39.41 [ 42%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcmainct.c.o
+#22 39.41 [ 42%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcprepct.c.o
+#22 39.41 [ 43%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcsample.c.o
+#22 39.41 [ 44%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdapistd.c.o
+#22 39.41 [ 44%] Building C object CMakeFiles/jpeg-static.dir/src/jddiffct.c.o
+#22 39.41 [ 44%] Building C object CMakeFiles/jpeg-static.dir/src/jdcolor.c.o
+#22 39.41 [ 44%] Building C object CMakeFiles/jpeg-static.dir/src/jdlossls.c.o
+#22 39.41 [ 46%] Building C object CMakeFiles/jpeg-static.dir/src/jdmainct.c.o
+#22 39.41 [ 46%] Building C object CMakeFiles/turbojpeg-static.dir/src/jddiffct.c.o
+#22 39.41 [ 46%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdcolor.c.o
+#22 39.41 [ 46%] Building C object CMakeFiles/jpeg-static.dir/src/jdpostct.c.o
+#22 39.41 [ 46%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdlossls.c.o
+#22 39.41 [ 47%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdpostct.c.o
+#22 39.41 [ 47%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdmainct.c.o
+#22 39.41 [ 47%] Building C object CMakeFiles/jpeg-static.dir/src/jdsample.c.o
+#22 39.41 [ 48%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdsample.c.o
+#22 39.41 [ 48%] Building C object CMakeFiles/jpeg-static.dir/src/jutils.c.o
+#22 39.41 [ 48%] Building C object CMakeFiles/jpeg-static.dir/src/jccoefct.c.o
+#22 39.41 [ 49%] Building C object CMakeFiles/turbojpeg-static.dir/src/jutils.c.o
+#22 39.41 [ 49%] Building C object CMakeFiles/jpeg-static.dir/src/jcdctmgr.c.o
+#22 39.41 [ 50%] Building C object CMakeFiles/jpeg-static.dir/src/jdcoefct.c.o
+#22 39.41 [ 50%] Building C object CMakeFiles/jpeg-static.dir/src/jddctmgr.c.o
+#22 39.41 [ 51%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcdctmgr.c.o
+#22 39.41 [ 51%] Building C object CMakeFiles/jpeg-static.dir/src/jdmerge.c.o
+#22 39.41 [ 52%] Building C object CMakeFiles/turbojpeg-static.dir/src/jccoefct.c.o
+#22 39.41 [ 52%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdcoefct.c.o
+#22 39.41 [ 52%] Building C object CMakeFiles/jpeg-static.dir/src/jfdctfst.c.o
+#22 39.41 [ 52%] Building C object CMakeFiles/turbojpeg-static.dir/src/jddctmgr.c.o
+#22 39.41 [ 53%] Building C object CMakeFiles/jpeg-static.dir/src/jfdctint.c.o
+#22 39.41 [ 53%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdmerge.c.o
+#22 39.41 [ 53%] Building C object CMakeFiles/turbojpeg-static.dir/src/jfdctfst.c.o
+#22 39.41 [ 53%] Building C object CMakeFiles/turbojpeg-static.dir/src/jfdctint.c.o
+#22 39.42 [ 54%] Building C object CMakeFiles/jpeg-static.dir/src/jidctflt.c.o
+#22 39.42 [ 54%] Building C object CMakeFiles/jpeg-static.dir/src/jidctfst.c.o
+#22 39.42 [ 54%] Building C object CMakeFiles/jpeg-static.dir/src/jidctint.c.o
+#22 39.42 [ 55%] Building C object CMakeFiles/turbojpeg-static.dir/src/jidctflt.c.o
+#22 39.42 [ 56%] Building C object CMakeFiles/jpeg-static.dir/src/jidctred.c.o
+#22 39.42 [ 56%] Building C object CMakeFiles/turbojpeg-static.dir/src/jidctfst.c.o
+#22 39.42 [ 56%] Building C object CMakeFiles/jpeg-static.dir/src/jquant1.c.o
+#22 39.42 [ 56%] Building C object CMakeFiles/turbojpeg-static.dir/src/jidctint.c.o
+#22 39.42 [ 56%] Building C object CMakeFiles/jpeg-static.dir/src/jquant2.c.o
+#22 39.42 [ 57%] Building C object CMakeFiles/turbojpeg-static.dir/src/jidctred.c.o
+#22 39.42 [ 57%] Building C object CMakeFiles/turbojpeg-static.dir/src/jquant1.c.o
+#22 39.42 [ 58%] Building C object CMakeFiles/jpeg-static.dir/src/jcapimin.c.o
+#22 39.42 [ 58%] Building C object CMakeFiles/jpeg-static.dir/src/jchuff.c.o
+#22 39.42 [ 58%] Building C object CMakeFiles/jpeg-static.dir/src/jcicc.c.o
+#22 39.42 [ 59%] Building C object CMakeFiles/jpeg-static.dir/src/jcinit.c.o
+#22 39.42 [ 59%] Building C object CMakeFiles/jpeg-static.dir/src/jclhuff.c.o
+#22 39.42 [ 59%] Building C object CMakeFiles/turbojpeg-static.dir/src/jquant2.c.o
+#22 39.42 [ 60%] Building C object CMakeFiles/jpeg-static.dir/src/jcmarker.c.o
+#22 39.42 [ 60%] Building C object CMakeFiles/jpeg-static.dir/src/jcmaster.c.o
+#22 39.42 [ 60%] Building C object CMakeFiles/turbojpeg-static.dir/src/jchuff.c.o
+#22 39.42 [ 61%] Building C object CMakeFiles/turbojpeg-static.dir/src/jclhuff.c.o
+#22 39.42 [ 61%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcicc.c.o
+#22 39.42 [ 63%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcapimin.c.o
+#22 39.42 [ 63%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcinit.c.o
+#22 39.42 [ 61%] Building C object CMakeFiles/jpeg-static.dir/src/jcomapi.c.o
+#22 39.42 [ 63%] Building C object CMakeFiles/jpeg-static.dir/src/jcparam.c.o
+#22 39.42 [ 63%] Building C object CMakeFiles/jpeg-static.dir/src/jcphuff.c.o
+#22 39.42 [ 64%] Building C object CMakeFiles/jpeg-static.dir/src/jctrans.c.o
+#22 39.42 [ 64%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcmaster.c.o
+#22 39.42 [ 64%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcmarker.c.o
+#22 39.42 [ 65%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcomapi.c.o
+#22 39.42 [ 65%] Building C object CMakeFiles/jpeg-static.dir/src/jdapimin.c.o
+#22 39.42 [ 65%] Building C object CMakeFiles/jpeg-static.dir/src/jdatadst.c.o
+#22 39.42 [ 66%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcparam.c.o
+#22 39.42 [ 66%] Building C object CMakeFiles/jpeg-static.dir/src/jdatasrc.c.o
+#22 39.42 [ 66%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcphuff.c.o
+#22 39.43 [ 67%] Building C object CMakeFiles/turbojpeg-static.dir/src/jctrans.c.o
+#22 39.43 [ 67%] Building C object CMakeFiles/jpeg-static.dir/src/jdhuff.c.o
+#22 39.43 [ 67%] Building C object CMakeFiles/jpeg-static.dir/src/jdicc.c.o
+#22 39.43 [ 68%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdapimin.c.o
+#22 39.43 [ 68%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdatadst.c.o
+#22 39.43 [ 68%] Building C object CMakeFiles/jpeg-static.dir/src/jdinput.c.o
+#22 39.43 [ 68%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdatasrc.c.o
+#22 39.43 [ 69%] Building C object CMakeFiles/jpeg-static.dir/src/jdlhuff.c.o
+#22 39.43 [ 69%] Building C object CMakeFiles/jpeg-static.dir/src/jdmarker.c.o
+#22 39.43 [ 69%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdicc.c.o
+#22 39.43 [ 70%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdhuff.c.o
+#22 39.43 [ 71%] Building C object CMakeFiles/jpeg-static.dir/src/jdmaster.c.o
+#22 39.43 [ 71%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdinput.c.o
+#22 39.43 [ 72%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdlhuff.c.o
+#22 39.43 [ 73%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdmaster.c.o
+#22 39.43 [ 73%] Building C object CMakeFiles/jpeg-static.dir/src/jdtrans.c.o
+#22 39.43 [ 73%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdmarker.c.o
+#22 39.43 [ 73%] Building C object CMakeFiles/jpeg-static.dir/src/jdphuff.c.o
+#22 39.43 [ 74%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdphuff.c.o
+#22 39.43 [ 74%] Building C object CMakeFiles/jpeg-static.dir/src/jerror.c.o
+#22 39.43 [ 74%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdtrans.c.o
+#22 39.43 [ 74%] Building C object CMakeFiles/jpeg-static.dir/src/jfdctflt.c.o
+#22 39.44 [ 74%] Building C object CMakeFiles/jpeg-static.dir/src/jmemmgr.c.o
+#22 39.44 [ 76%] Building C object CMakeFiles/jpeg-static.dir/src/jmemnobs.c.o
+#22 39.44 [ 76%] Building C object CMakeFiles/turbojpeg-static.dir/src/jerror.c.o
+#22 39.44 [ 76%] Building C object CMakeFiles/turbojpeg-static.dir/src/jmemmgr.c.o
+#22 39.44 [ 76%] Building C object CMakeFiles/turbojpeg-static.dir/src/jfdctflt.c.o
+#22 39.44 [ 76%] Building C object CMakeFiles/jpeg-static.dir/src/jpeg_nbits.c.o
+#22 39.44 [ 76%] Building C object CMakeFiles/jpeg-static.dir/src/jaricom.c.o
+#22 39.44 [ 77%] Building C object CMakeFiles/jpeg-static.dir/src/jcarith.c.o
+#22 39.44 [ 78%] Building C object CMakeFiles/turbojpeg-static.dir/src/jmemnobs.c.o
+#22 39.44 [ 78%] Building C object CMakeFiles/jpeg-static.dir/src/jdarith.c.o
+#22 39.44 [ 78%] Building C object CMakeFiles/turbojpeg-static.dir/src/jpeg_nbits.c.o
+#22 39.44 [ 78%] Building C object CMakeFiles/turbojpeg-static.dir/src/jaricom.c.o
+#22 39.44 [ 79%] Building C object CMakeFiles/turbojpeg-static.dir/src/jcarith.c.o
+#22 39.44 [ 79%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdarith.c.o
+#22 39.44 [ 79%] Building C object CMakeFiles/turbojpeg-static.dir/src/turbojpeg.c.o
+#22 39.44 [ 80%] Building C object CMakeFiles/turbojpeg-static.dir/src/transupp.c.o
+#22 39.45 [ 80%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdatadst-tj.c.o
+#22 39.45 [ 81%] Building C object CMakeFiles/turbojpeg-static.dir/src/jdatasrc-tj.c.o
+#22 39.46 [ 81%] Building C object CMakeFiles/turbojpeg-static.dir/src/rdbmp.c.o
+#22 39.46 [ 81%] Building C object CMakeFiles/turbojpeg-static.dir/src/rdppm.c.o
+#22 39.46 [ 82%] Building C object CMakeFiles/turbojpeg-static.dir/src/wrbmp.c.o
+#22 39.46 [ 82%] Building C object CMakeFiles/turbojpeg-static.dir/src/wrppm.c.o
+#22 43.50 [ 82%] Linking C static library libturbojpeg.a
+#22 43.53 [ 82%] Built target turbojpeg-static
+#22 43.54 [ 82%] Building C object CMakeFiles/tjunittest-static.dir/src/tjunittest.c.o
+#22 43.54 [ 82%] Building CXX object fuzz/CMakeFiles/compress_yuv_fuzzer.dir/compress_yuv.cc.o
+#22 43.54 [ 82%] Building C object CMakeFiles/tjbench-static.dir/src/tjutil.c.o
+#22 43.54 [ 83%] Building C object CMakeFiles/tjunittest-static.dir/src/tjutil.c.o
+#22 43.54 [ 83%] Building CXX object fuzz/CMakeFiles/compress_fuzzer.dir/compress.cc.o
+#22 43.54 [ 83%] Building C object CMakeFiles/tjbench-static.dir/src/tjbench.c.o
+#22 43.54 [ 83%] Building CXX object fuzz/CMakeFiles/compress12_lossless_fuzzer.dir/compress12.cc.o
+#22 43.54 [ 83%] Building C object CMakeFiles/tjunittest-static.dir/src/md5/md5hl.c.o
+#22 43.54 [ 83%] Building CXX object fuzz/CMakeFiles/compress12_fuzzer.dir/compress12.cc.o
+#22 43.54 [ 83%] Building C object CMakeFiles/tjunittest-static.dir/src/md5/md5.c.o
+#22 43.54 [ 83%] Building CXX object fuzz/CMakeFiles/compress_lossless_fuzzer.dir/compress_lossless.cc.o
+#22 43.54 [ 83%] Building CXX object fuzz/CMakeFiles/libjpeg_turbo_fuzzer.dir/decompress.cc.o
+#22 43.54 [ 84%] Building CXX object fuzz/CMakeFiles/compress16_lossless_fuzzer.dir/compress16_lossless.cc.o
+#22 43.54 [ 85%] Building CXX object fuzz/CMakeFiles/decompress_yuv_fuzzer.dir/decompress_yuv.cc.o
+#22 43.54 [ 85%] Building CXX object fuzz/CMakeFiles/transform_fuzzer.dir/transform.cc.o
+#22 43.62 [ 86%] Linking CXX executable compress12_lossless_fuzzer
+#22 43.62 [ 86%] Linking CXX executable compress_lossless_fuzzer
+#22 43.62 [ 86%] Linking CXX executable compress16_lossless_fuzzer
+#22 43.62 [ 87%] Linking CXX executable compress12_fuzzer
+#22 43.62 [ 87%] Linking CXX executable compress_yuv_fuzzer
+#22 43.62 [ 88%] Linking CXX executable compress_fuzzer
+#22 43.64 [ 88%] Linking CXX executable decompress_yuv_fuzzer
+#22 43.64 [ 88%] Linking CXX executable transform_fuzzer
+#22 43.65 [ 88%] Linking CXX executable libjpeg_turbo_fuzzer
+#22 43.75 [ 88%] Built target compress_lossless_fuzzer
+#22 43.76 [ 88%] Built target compress16_lossless_fuzzer
+#22 43.76 [ 88%] Built target compress_yuv_fuzzer
+#22 43.76 [ 88%] Built target compress12_fuzzer
+#22 43.76 [ 88%] Built target compress12_lossless_fuzzer
+#22 43.76 [ 88%] Built target compress_fuzzer
+#22 43.77 [ 88%] Built target transform_fuzzer
+#22 43.77 [ 88%] Built target decompress_yuv_fuzzer
+#22 43.78 [ 88%] Built target libjpeg_turbo_fuzzer
+#22 43.84 [ 88%] Linking C static library libjpeg.a
+#22 43.86 [ 88%] Built target jpeg-static
+#22 43.87 [ 88%] Building C object CMakeFiles/cjpeg-static.dir/src/cjpeg.c.o
+#22 43.87 [ 88%] Building C object CMakeFiles/cjpeg-static.dir/src/cdjpeg.c.o
+#22 43.87 [ 88%] Building C object CMakeFiles/jpegtran-static.dir/src/jpegtran.c.o
+#22 43.87 [ 88%] Building C object CMakeFiles/example-static.dir/src/example.c.o
+#22 43.87 [ 89%] Building C object CMakeFiles/cjpeg-static.dir/src/rdgif.c.o
+#22 43.87 [ 90%] Building C object CMakeFiles/cjpeg-static.dir/src/rdbmp.c.o
+#22 43.87 [ 90%] Building CXX object fuzz/CMakeFiles/cjpeg_fuzzer.dir/cjpeg.cc.o
+#22 43.87 [ 90%] Building C object CMakeFiles/jpegtran-static.dir/src/cdjpeg.c.o
+#22 43.87 [ 90%] Building C object CMakeFiles/cjpeg-static.dir/src/rdppm.c.o
+#22 43.87 [ 90%] Building C object CMakeFiles/jpegtran-static.dir/src/rdswitch.c.o
+#22 43.87 [ 90%] Building C object CMakeFiles/djpeg-static.dir/src/djpeg.c.o
+#22 43.87 [ 90%] Building C object CMakeFiles/jpegtran-static.dir/src/transupp.c.o
+#22 43.87 [ 90%] Building C object CMakeFiles/cjpeg-static.dir/src/rdtarga.c.o
+#22 43.87 [ 90%] Building C object CMakeFiles/djpeg-static.dir/src/rdcolmap.c.o
+#22 43.88 [ 93%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdbmp.c.o
+#22 43.88 [ 93%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/cdjpeg.c.o
+#22 43.88 [ 93%] Building C object CMakeFiles/cjpeg-static.dir/src/rdswitch.c.o
+#22 43.88 [ 93%] Building C object CMakeFiles/djpeg-static.dir/src/cdjpeg.c.o
+#22 43.88 [ 95%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdppm.c.o
+#22 43.88 [ 93%] Building C object CMakeFiles/djpeg-static.dir/src/rdswitch.c.o
+#22 43.88 [ 95%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdgif.c.o
+#22 43.88 [ 95%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdswitch.c.o
+#22 43.88 [ 95%] Building C object CMakeFiles/djpeg-static.dir/src/wrbmp.c.o
+#22 43.88 [ 96%] Building C object CMakeFiles/djpeg-static.dir/src/wrgif.c.o
+#22 43.88 [ 96%] Building C object CMakeFiles/djpeg-static.dir/src/wrppm.c.o
+#22 43.88 [ 97%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer.dir/__/src/rdtarga.c.o
+#22 43.88 [ 97%] Building C object CMakeFiles/djpeg-static.dir/src/wrtarga.c.o
+#22 43.99 [ 97%] Linking C executable example-static
+#22 44.10 [ 97%] Linking CXX executable cjpeg_fuzzer
+#22 44.10 [ 97%] Built target example-static
+#22 44.14 [ 97%] Built target cjpeg_fuzzer
+#22 44.19 [ 97%] Linking C executable djpeg-static
+#22 44.29 [ 97%] Built target djpeg-static
+#22 44.32 [ 98%] Linking C executable tjunittest-static
+#22 44.33 [ 98%] Linking C executable cjpeg-static
+#22 44.41 [ 98%] Built target cjpeg-static
+#22 44.45 [ 98%] Built target tjunittest-static
+#22 45.00 [ 99%] Linking C executable tjbench-static
+#22 45.12 [ 99%] Built target tjbench-static
+#22 45.21 [100%] Linking C executable jpegtran-static
+#22 45.28 [100%] Built target jpegtran-static
+#22 45.31 Consolidate compiler generated dependencies of target jpeg12-static
+#22 45.32 [ 11%] Built target jpeg12-static
+#22 45.33 Consolidate compiler generated dependencies of target jpeg16-static
+#22 45.34 [ 16%] Built target jpeg16-static
+#22 45.34 Consolidate compiler generated dependencies of target simd
+#22 45.35 [ 26%] Built target simd
+#22 45.37 Consolidate compiler generated dependencies of target jpeg-static
+#22 45.38 [ 47%] Built target jpeg-static
+#22 45.39 Consolidate compiler generated dependencies of target turbojpeg12-static
+#22 45.39 [ 48%] Built target turbojpeg12-static
+#22 45.40 Consolidate compiler generated dependencies of target turbojpeg16-static
+#22 45.40 [ 49%] Built target turbojpeg16-static
+#22 45.42 Consolidate compiler generated dependencies of target turbojpeg-static
+#22 45.44 [ 73%] Built target turbojpeg-static
+#22 45.44 Consolidate compiler generated dependencies of target tjunittest-static
+#22 45.45 [ 75%] Built target tjunittest-static
+#22 45.45 Consolidate compiler generated dependencies of target tjbench-static
+#22 45.45 [ 76%] Built target tjbench-static
+#22 45.46 Consolidate compiler generated dependencies of target cjpeg12-static
+#22 45.46 [ 77%] Built target cjpeg12-static
+#22 45.47 Consolidate compiler generated dependencies of target cjpeg16-static
+#22 45.47 [ 77%] Built target cjpeg16-static
+#22 45.48 Consolidate compiler generated dependencies of target cjpeg-static
+#22 45.48 [ 79%] Built target cjpeg-static
+#22 45.49 Consolidate compiler generated dependencies of target djpeg12-static
+#22 45.49 [ 80%] Built target djpeg12-static
+#22 45.50 Consolidate compiler generated dependencies of target djpeg16-static
+#22 45.50 [ 81%] Built target djpeg16-static
+#22 45.51 Consolidate compiler generated dependencies of target djpeg-static
+#22 45.51 [ 84%] Built target djpeg-static
+#22 45.52 Consolidate compiler generated dependencies of target jpegtran-static
+#22 45.52 [ 86%] Built target jpegtran-static
+#22 45.53 Consolidate compiler generated dependencies of target example-static
+#22 45.53 [ 86%] Built target example-static
+#22 45.54 Consolidate compiler generated dependencies of target rdjpgcom
+#22 45.54 [ 87%] Built target rdjpgcom
+#22 45.55 Consolidate compiler generated dependencies of target wrjpgcom
+#22 45.55 [ 88%] Built target wrjpgcom
+#22 45.56 Consolidate compiler generated dependencies of target strtest
+#22 45.56 [ 89%] Built target strtest
+#22 45.57 Consolidate compiler generated dependencies of target cjpeg_fuzzer
+#22 45.57 [ 92%] Built target cjpeg_fuzzer
+#22 45.58 Consolidate compiler generated dependencies of target compress_fuzzer
+#22 45.58 [ 93%] Built target compress_fuzzer
+#22 45.59 Consolidate compiler generated dependencies of target compress_yuv_fuzzer
+#22 45.59 [ 93%] Built target compress_yuv_fuzzer
+#22 45.59 Consolidate compiler generated dependencies of target compress_lossless_fuzzer
+#22 45.60 [ 94%] Built target compress_lossless_fuzzer
+#22 45.60 Consolidate compiler generated dependencies of target compress12_fuzzer
+#22 45.61 [ 95%] Built target compress12_fuzzer
+#22 45.61 Consolidate compiler generated dependencies of target compress12_lossless_fuzzer
+#22 45.62 [ 95%] Built target compress12_lossless_fuzzer
+#22 45.62 Consolidate compiler generated dependencies of target compress16_lossless_fuzzer
+#22 45.63 [ 96%] Built target compress16_lossless_fuzzer
+#22 45.63 Consolidate compiler generated dependencies of target libjpeg_turbo_fuzzer
+#22 45.64 [ 96%] Built target libjpeg_turbo_fuzzer
+#22 45.64 Consolidate compiler generated dependencies of target decompress_yuv_fuzzer
+#22 45.64 [ 97%] Built target decompress_yuv_fuzzer
+#22 45.65 Consolidate compiler generated dependencies of target transform_fuzzer
+#22 45.65 [ 97%] Built target transform_fuzzer
+#22 45.66 Consolidate compiler generated dependencies of target md5cmp
+#22 45.66 [ 99%] Built target md5cmp
+#22 45.67 Consolidate compiler generated dependencies of target md5sum
+#22 45.67 [100%] Built target md5sum
+#22 45.68 Install the project...
+#22 45.68 -- Install configuration: "RelWithDebInfo"
+#22 45.68 -- Installing: /out/cmplog/cjpeg_fuzzer
+#22 45.68 -- Installing: /out/cmplog/compress_fuzzer
+#22 45.69 -- Installing: /out/cmplog/compress_yuv_fuzzer
+#22 45.70 -- Installing: /out/cmplog/compress_lossless_fuzzer
+#22 45.71 -- Installing: /out/cmplog/compress12_fuzzer
+#22 45.71 -- Installing: /out/cmplog/compress12_lossless_fuzzer
+#22 45.72 -- Installing: /out/cmplog/compress16_lossless_fuzzer
+#22 45.73 -- Installing: /out/cmplog/libjpeg_turbo_fuzzer
+#22 45.74 -- Installing: /out/cmplog/decompress_yuv_fuzzer
+#22 45.74 -- Installing: /out/cmplog/transform_fuzzer
+#22 45.75 -- Installing: /work/lib/libturbojpeg.a
+#22 45.76 -- Installing: /work/bin/tjbench
+#22 45.77 -- Installing: /work/include/turbojpeg.h
+#22 45.77 -- Installing: /work/lib/libjpeg.a
+#22 45.78 -- Installing: /work/bin/cjpeg
+#22 45.79 -- Installing: /work/bin/djpeg
+#22 45.79 -- Installing: /work/bin/jpegtran
+#22 45.79 -- Installing: /work/bin/rdjpgcom
+#22 45.79 -- Installing: /work/bin/wrjpgcom
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/README.ijg
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/README.md
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/example.c
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/tjcomp.c
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/tjdecomp.c
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/tjtran.c
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/libjpeg.txt
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/structure.txt
+#22 45.79 -- Installing: /work/share/doc/libjpeg-turbo/usage.txt
+#22 45.80 -- Installing: /work/share/doc/libjpeg-turbo/wizard.txt
+#22 45.80 -- Installing: /work/share/doc/libjpeg-turbo/LICENSE.md
+#22 45.80 -- Installing: /work/share/man/man1/cjpeg.1
+#22 45.80 -- Installing: /work/share/man/man1/djpeg.1
+#22 45.80 -- Installing: /work/share/man/man1/jpegtran.1
+#22 45.80 -- Installing: /work/share/man/man1/rdjpgcom.1
+#22 45.80 -- Installing: /work/share/man/man1/wrjpgcom.1
+#22 45.80 -- Installing: /work/lib/pkgconfig/libjpeg.pc
+#22 45.80 -- Installing: /work/lib/pkgconfig/libturbojpeg.pc
+#22 45.80 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboConfig.cmake
+#22 45.80 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboConfigVersion.cmake
+#22 45.80 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake
+#22 45.80 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboTargets-relwithdebinfo.cmake
+#22 45.80 -- Installing: /work/include/jconfig.h
+#22 45.80 -- Installing: /work/include/jerror.h
+#22 45.80 -- Installing: /work/include/jmorecfg.h
+#22 45.80 -- Installing: /work/include/jpeglib.h
+#22 45.83 + popd
+#22 45.83 + read branch
+#22 45.83 /src
+#22 45.83 + pushd libjpeg-turbo.3.0.x
+#22 45.83 /src/libjpeg-turbo.3.0.x /src
+#22 45.83 + '[' 3.0.x = main ']'
+#22 45.83 + sh fuzz/build.sh _3.0.x
+#22 45.91 -- The C compiler identification is Clang 15.0.0
+#22 45.92 -- Detecting C compiler ABI info
+#22 46.00 -- Detecting C compiler ABI info - done
+#22 46.01 -- Check for working C compiler: /afl/afl-clang-fast - skipped
+#22 46.01 -- Detecting C compile features
+#22 46.01 -- Detecting C compile features - done
+#22 46.01 -- CMAKE_BUILD_TYPE = RelWithDebInfo
+#22 46.01 -- VERSION = 2.1.5, BUILD = 20250301
+#22 46.01 -- 64-bit build (x86_64)
+#22 46.01 -- CMAKE_INSTALL_PREFIX = /work
+#22 46.02 -- CMAKE_INSTALL_BINDIR = bin (/work/bin)
+#22 46.02 -- CMAKE_INSTALL_DATAROOTDIR = share (/work/share)
+#22 46.02 -- CMAKE_INSTALL_DOCDIR = share/doc/libjpeg-turbo (/work/share/doc/libjpeg-turbo)
+#22 46.02 -- CMAKE_INSTALL_INCLUDEDIR = include (/work/include)
+#22 46.02 -- CMAKE_INSTALL_LIBDIR = lib (/work/lib)
+#22 46.02 -- CMAKE_INSTALL_MANDIR = share/man (/work/share/man)
+#22 46.02 -- Shared libraries disabled (ENABLE_SHARED = 0)
+#22 46.02 -- Static libraries enabled (ENABLE_STATIC = 1)
+#22 46.02 -- 12-bit JPEG support disabled (WITH_12BIT = 0)
+#22 46.02 -- Arithmetic decoding support enabled (WITH_ARITH_DEC = 1)
+#22 46.02 -- Arithmetic encoding support enabled (WITH_ARITH_ENC = 1)
+#22 46.02 -- TurboJPEG API library enabled (WITH_TURBOJPEG = 1)
+#22 46.02 -- TurboJPEG Java wrapper disabled (WITH_JAVA = 0)
+#22 46.02 -- In-memory source/destination managers enabled (WITH_MEM_SRCDST = 1)
+#22 46.02 -- Emulating libjpeg API/ABI v6.2 (WITH_JPEG7 = 0, WITH_JPEG8 = 0)
+#22 46.02 -- libjpeg API shared library version = 62.3.0
+#22 46.02 -- Compiler flags = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -g -DNDEBUG
+#22 46.02 -- Linker flags =  
+#22 46.02 -- Looking for sys/types.h
+#22 46.10 -- Looking for sys/types.h - found
+#22 46.10 -- Looking for stdint.h
+#22 46.17 -- Looking for stdint.h - found
+#22 46.17 -- Looking for stddef.h
+#22 46.24 -- Looking for stddef.h - found
+#22 46.24 -- Check size of size_t
+#22 46.32 -- Check size of size_t - done
+#22 46.33 -- Check size of unsigned long
+#22 46.41 -- Check size of unsigned long - done
+#22 46.41 -- Performing Test HAVE_BUILTIN_CTZL
+#22 46.48 -- Performing Test HAVE_BUILTIN_CTZL - Success
+#22 46.48 -- Performing Test RIGHT_SHIFT_IS_UNSIGNED
+#22 46.57 -- Performing Test RIGHT_SHIFT_IS_UNSIGNED - Failed
+#22 46.57 -- Performing Test INLINE_WORKS
+#22 46.64 -- Performing Test INLINE_WORKS - Success
+#22 46.64 -- INLINE = __inline__ __attribute__((always_inline)) (FORCE_INLINE = 1)
+#22 46.64 -- Performing Test HAVE_THREAD_LOCAL
+#22 46.71 -- Performing Test HAVE_THREAD_LOCAL - Success
+#22 46.71 -- THREAD_LOCAL = __thread
+#22 46.71 -- Performing Test HAVE_VERSION_SCRIPT
+#22 46.79 -- Performing Test HAVE_VERSION_SCRIPT - Success
+#22 46.79 -- Linker supports GNU-style version scripts
+#22 46.79 -- CMAKE_EXECUTABLE_SUFFIX = 
+#22 46.79 -- Looking for a ASM_NASM compiler
+#22 46.82 -- Looking for a ASM_NASM compiler - /usr/bin/yasm
+#22 46.85 -- The ASM_NASM compiler identification is YASM
+#22 46.85 -- Found assembler: /usr/bin/yasm
+#22 46.85 -- CMAKE_ASM_NASM_COMPILER = /usr/bin/yasm
+#22 46.85 -- CMAKE_ASM_NASM_OBJECT_FORMAT = elf64
+#22 46.85 -- CMAKE_ASM_NASM_FLAGS =  -DELF -D__x86_64__ -g dwarf2
+#22 46.85 -- SIMD extensions: x86_64 (WITH_SIMD = 1)
+#22 46.85 -- FUZZ_BINDIR = /out/cmplog
+#22 46.85 -- FUZZ_LIBRARY = /libAFLDriver.a
+#22 46.92 -- The CXX compiler identification is Clang 15.0.0
+#22 46.93 -- Detecting CXX compiler ABI info
+#22 47.01 -- Detecting CXX compiler ABI info - done
+#22 47.03 -- Check for working CXX compiler: /afl/afl-clang-fast++ - skipped
+#22 47.03 -- Detecting CXX compile features
+#22 47.03 -- Detecting CXX compile features - done
+#22 47.03 -- C++ Compiler flags = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -g -DNDEBUG
+#22 47.03 -- FLOATTEST = sse
+#22 47.04 -- RPM architecture = x86_64, DEB architecture = amd64
+#22 47.04 -- Configuring done
+#22 47.12 -- Generating done
+#22 47.12 -- Build files have been written to: /src/libjpeg-turbo.3.0.x
+#22 47.14 Scanning dependencies of target simd
+#22 47.15 [  0%] Building C object CMakeFiles/rdjpgcom.dir/rdjpgcom.c.o
+#22 47.15 [  1%] Building C object CMakeFiles/wrjpgcom.dir/wrjpgcom.c.o
+#22 47.15 [  1%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jsimdcpu.asm.o
+#22 47.15 [  2%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctflt-sse.asm.o
+#22 47.15 [  2%] Building C object md5/CMakeFiles/md5cmp.dir/md5cmp.c.o
+#22 47.15 [  4%] Building C object CMakeFiles/strtest.dir/strtest.c.o
+#22 47.15 [  4%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jccolor-sse2.asm.o
+#22 47.15 [  4%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcgray-sse2.asm.o
+#22 47.15 [  5%] Building C object md5/CMakeFiles/md5cmp.dir/md5.c.o
+#22 47.15 [  5%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcphuff-sse2.asm.o
+#22 47.15 [  5%] Building C object md5/CMakeFiles/md5cmp.dir/md5hl.c.o
+#22 47.15 [  7%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jchuff-sse2.asm.o
+#22 47.15 [  7%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdcolor-sse2.asm.o
+#22 47.15 [  7%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcsample-sse2.asm.o
+#22 47.15 [  8%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdmerge-sse2.asm.o
+#22 47.15 [  8%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdsample-sse2.asm.o
+#22 47.15 [  9%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctfst-sse2.asm.o
+#22 47.15 [  9%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctint-sse2.asm.o
+#22 47.15 [ 10%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctflt-sse2.asm.o
+#22 47.15 [ 10%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctfst-sse2.asm.o
+#22 47.15 [ 11%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctint-sse2.asm.o
+#22 47.15 [ 11%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctred-sse2.asm.o
+#22 47.15 [ 12%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquantf-sse2.asm.o
+#22 47.15 [ 12%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquanti-sse2.asm.o
+#22 47.15 [ 13%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jccolor-avx2.asm.o
+#22 47.15 /src/libjpeg-turbo.3.0.x/simd/x86_64/jchuff-sse2.asm:30: warning: section flags ignored on section redeclaration
+#22 47.15 /src/libjpeg-turbo.3.0.x/simd/x86_64/jchuff-sse2.asm:36: warning: section flags ignored on section redeclaration
+#22 47.15 [ 13%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcgray-avx2.asm.o
+#22 47.15 [ 14%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jcsample-avx2.asm.o
+#22 47.15 [ 14%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdcolor-avx2.asm.o
+#22 47.16 [ 15%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdmerge-avx2.asm.o
+#22 47.16 [ 15%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jdsample-avx2.asm.o
+#22 47.16 [ 16%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jfdctint-avx2.asm.o
+#22 47.16 [ 16%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jidctint-avx2.asm.o
+#22 47.16 [ 17%] Building ASM_NASM object simd/CMakeFiles/simd.dir/x86_64/jquanti-avx2.asm.o
+#22 47.16 [ 17%] Building C object simd/CMakeFiles/simd.dir/x86_64/jsimd.c.o
+#22 47.20 [ 17%] Linking C executable strtest
+#22 47.23 [ 18%] Linking C executable md5cmp
+#22 47.24 [ 18%] Built target strtest
+#22 47.27 [ 18%] Built target md5cmp
+#22 47.30 [ 19%] Linking C executable rdjpgcom
+#22 47.31 [ 20%] Linking C executable wrjpgcom
+#22 47.33 [ 20%] Built target rdjpgcom
+#22 47.34 [ 20%] Built target simd
+#22 47.35 [ 20%] Built target wrjpgcom
+#22 47.35 [ 21%] Building C object CMakeFiles/jpeg-static.dir/jcapistd.c.o
+#22 47.35 [ 21%] Building C object CMakeFiles/jpeg-static.dir/jcapimin.c.o
+#22 47.35 [ 21%] Building C object CMakeFiles/turbojpeg-static.dir/jcapistd.c.o
+#22 47.35 [ 25%] Building C object CMakeFiles/turbojpeg-static.dir/jcapimin.c.o
+#22 47.35 [ 25%] Building C object CMakeFiles/jpeg-static.dir/jchuff.c.o
+#22 47.35 [ 25%] Building C object CMakeFiles/jpeg-static.dir/jccoefct.c.o
+#22 47.35 [ 25%] Building C object CMakeFiles/turbojpeg-static.dir/jccolor.c.o
+#22 47.35 [ 25%] Building C object CMakeFiles/turbojpeg-static.dir/jccoefct.c.o
+#22 47.35 [ 25%] Building C object CMakeFiles/jpeg-static.dir/jccolor.c.o
+#22 47.35 [ 25%] Building C object CMakeFiles/jpeg-static.dir/jcdctmgr.c.o
+#22 47.35 [ 26%] Building C object CMakeFiles/jpeg-static.dir/jcicc.c.o
+#22 47.35 [ 27%] Building C object CMakeFiles/turbojpeg-static.dir/jchuff.c.o
+#22 47.35 [ 27%] Building C object CMakeFiles/turbojpeg-static.dir/jcdctmgr.c.o
+#22 47.35 [ 27%] Building C object CMakeFiles/jpeg-static.dir/jcinit.c.o
+#22 47.35 [ 29%] Building C object CMakeFiles/jpeg-static.dir/jcmainct.c.o
+#22 47.35 [ 29%] Building C object CMakeFiles/turbojpeg-static.dir/jcicc.c.o
+#22 47.35 [ 29%] Building C object CMakeFiles/jpeg-static.dir/jcmarker.c.o
+#22 47.35 [ 29%] Building C object CMakeFiles/turbojpeg-static.dir/jcinit.c.o
+#22 47.35 [ 30%] Building C object CMakeFiles/turbojpeg-static.dir/jcmarker.c.o
+#22 47.35 [ 30%] Building C object CMakeFiles/jpeg-static.dir/jcmaster.c.o
+#22 47.35 [ 31%] Building C object CMakeFiles/turbojpeg-static.dir/jcmainct.c.o
+#22 47.35 [ 30%] Building C object CMakeFiles/jpeg-static.dir/jcomapi.c.o
+#22 47.35 [ 33%] Building C object CMakeFiles/jpeg-static.dir/jcparam.c.o
+#22 47.35 [ 33%] Building C object CMakeFiles/turbojpeg-static.dir/jcmaster.c.o
+#22 47.35 [ 33%] Building C object CMakeFiles/turbojpeg-static.dir/jcomapi.c.o
+#22 47.35 [ 33%] Building C object CMakeFiles/jpeg-static.dir/jcphuff.c.o
+#22 47.35 [ 35%] Building C object CMakeFiles/turbojpeg-static.dir/jcparam.c.o
+#22 47.35 [ 35%] Building C object CMakeFiles/jpeg-static.dir/jcprepct.c.o
+#22 47.35 [ 35%] Building C object CMakeFiles/turbojpeg-static.dir/jcphuff.c.o
+#22 47.35 [ 35%] Building C object CMakeFiles/jpeg-static.dir/jcsample.c.o
+#22 47.35 [ 36%] Building C object CMakeFiles/turbojpeg-static.dir/jcprepct.c.o
+#22 47.35 [ 36%] Building C object CMakeFiles/turbojpeg-static.dir/jcsample.c.o
+#22 47.36 [ 37%] Building C object CMakeFiles/jpeg-static.dir/jctrans.c.o
+#22 47.36 [ 38%] Building C object CMakeFiles/turbojpeg-static.dir/jctrans.c.o
+#22 47.36 [ 38%] Building C object CMakeFiles/jpeg-static.dir/jdapimin.c.o
+#22 47.36 [ 38%] Building C object CMakeFiles/turbojpeg-static.dir/jdapimin.c.o
+#22 47.36 [ 40%] Building C object CMakeFiles/jpeg-static.dir/jdapistd.c.o
+#22 47.36 [ 40%] Building C object CMakeFiles/jpeg-static.dir/jdatadst.c.o
+#22 47.36 [ 40%] Building C object CMakeFiles/turbojpeg-static.dir/jdapistd.c.o
+#22 47.36 [ 41%] Building C object CMakeFiles/turbojpeg-static.dir/jdatadst.c.o
+#22 47.36 [ 41%] Building C object CMakeFiles/jpeg-static.dir/jdatasrc.c.o
+#22 47.36 [ 42%] Building C object CMakeFiles/turbojpeg-static.dir/jdatasrc.c.o
+#22 47.36 [ 42%] Building C object CMakeFiles/jpeg-static.dir/jdcoefct.c.o
+#22 47.36 [ 44%] Building C object CMakeFiles/jpeg-static.dir/jddctmgr.c.o
+#22 47.36 [ 44%] Building C object CMakeFiles/jpeg-static.dir/jdcolor.c.o
+#22 47.36 [ 44%] Building C object CMakeFiles/turbojpeg-static.dir/jdcoefct.c.o
+#22 47.36 [ 44%] Building C object CMakeFiles/turbojpeg-static.dir/jddctmgr.c.o
+#22 47.36 [ 44%] Building C object CMakeFiles/turbojpeg-static.dir/jdcolor.c.o
+#22 47.36 [ 45%] Building C object CMakeFiles/jpeg-static.dir/jdicc.c.o
+#22 47.36 [ 45%] Building C object CMakeFiles/jpeg-static.dir/jdhuff.c.o
+#22 47.36 [ 46%] Building C object CMakeFiles/turbojpeg-static.dir/jdhuff.c.o
+#22 47.36 [ 47%] Building C object CMakeFiles/jpeg-static.dir/jdinput.c.o
+#22 47.36 [ 47%] Building C object CMakeFiles/turbojpeg-static.dir/jdicc.c.o
+#22 47.36 [ 47%] Building C object CMakeFiles/jpeg-static.dir/jdmainct.c.o
+#22 47.36 [ 48%] Building C object CMakeFiles/jpeg-static.dir/jdmarker.c.o
+#22 47.36 [ 49%] Building C object CMakeFiles/turbojpeg-static.dir/jdmainct.c.o
+#22 47.36 [ 49%] Building C object CMakeFiles/turbojpeg-static.dir/jdinput.c.o
+#22 47.36 [ 49%] Building C object CMakeFiles/jpeg-static.dir/jdmaster.c.o
+#22 47.36 [ 50%] Building C object CMakeFiles/turbojpeg-static.dir/jdmarker.c.o
+#22 47.36 [ 51%] Building C object CMakeFiles/jpeg-static.dir/jdmerge.c.o
+#22 47.36 [ 51%] Building C object CMakeFiles/jpeg-static.dir/jdphuff.c.o
+#22 47.36 [ 51%] Building C object CMakeFiles/turbojpeg-static.dir/jdmaster.c.o
+#22 47.36 [ 52%] Building C object CMakeFiles/turbojpeg-static.dir/jdmerge.c.o
+#22 47.36 [ 53%] Building C object CMakeFiles/jpeg-static.dir/jdpostct.c.o
+#22 47.36 [ 53%] Building C object CMakeFiles/jpeg-static.dir/jdsample.c.o
+#22 47.36 [ 53%] Building C object CMakeFiles/turbojpeg-static.dir/jdphuff.c.o
+#22 47.36 [ 54%] Building C object CMakeFiles/turbojpeg-static.dir/jdpostct.c.o
+#22 47.36 [ 54%] Building C object CMakeFiles/turbojpeg-static.dir/jdsample.c.o
+#22 47.37 [ 55%] Building C object CMakeFiles/jpeg-static.dir/jerror.c.o
+#22 47.37 [ 55%] Building C object CMakeFiles/jpeg-static.dir/jdtrans.c.o
+#22 47.37 [ 58%] Building C object CMakeFiles/jpeg-static.dir/jfdctflt.c.o
+#22 47.37 [ 55%] Building C object CMakeFiles/jpeg-static.dir/jfdctfst.c.o
+#22 47.37 [ 58%] Building C object CMakeFiles/turbojpeg-static.dir/jdtrans.c.o
+#22 47.37 [ 58%] Building C object CMakeFiles/turbojpeg-static.dir/jfdctflt.c.o
+#22 47.37 [ 59%] Building C object CMakeFiles/jpeg-static.dir/jfdctint.c.o
+#22 47.37 [ 59%] Building C object CMakeFiles/turbojpeg-static.dir/jerror.c.o
+#22 47.37 [ 59%] Building C object CMakeFiles/jpeg-static.dir/jidctflt.c.o
+#22 47.37 [ 61%] Building C object CMakeFiles/turbojpeg-static.dir/jfdctint.c.o
+#22 47.37 [ 61%] Building C object CMakeFiles/jpeg-static.dir/jidctfst.c.o
+#22 47.37 [ 61%] Building C object CMakeFiles/turbojpeg-static.dir/jfdctfst.c.o
+#22 47.37 [ 61%] Building C object CMakeFiles/jpeg-static.dir/jidctint.c.o
+#22 47.37 [ 62%] Building C object CMakeFiles/turbojpeg-static.dir/jidctflt.c.o
+#22 47.37 [ 62%] Building C object CMakeFiles/jpeg-static.dir/jidctred.c.o
+#22 47.37 [ 63%] Building C object CMakeFiles/turbojpeg-static.dir/jidctint.c.o
+#22 47.37 [ 63%] Building C object CMakeFiles/turbojpeg-static.dir/jidctfst.c.o
+#22 47.37 [ 64%] Building C object CMakeFiles/turbojpeg-static.dir/jidctred.c.o
+#22 47.37 [ 64%] Building C object CMakeFiles/turbojpeg-static.dir/jquant1.c.o
+#22 47.37 [ 65%] Building C object CMakeFiles/turbojpeg-static.dir/jquant2.c.o
+#22 47.37 [ 65%] Building C object CMakeFiles/turbojpeg-static.dir/jutils.c.o
+#22 47.37 [ 66%] Building C object CMakeFiles/jpeg-static.dir/jquant1.c.o
+#22 47.37 [ 66%] Building C object CMakeFiles/turbojpeg-static.dir/jmemmgr.c.o
+#22 47.38 [ 67%] Building C object CMakeFiles/jpeg-static.dir/jquant2.c.o
+#22 47.38 [ 67%] Building C object CMakeFiles/jpeg-static.dir/jutils.c.o
+#22 47.38 [ 67%] Building C object CMakeFiles/turbojpeg-static.dir/jmemnobs.c.o
+#22 47.38 [ 68%] Building C object CMakeFiles/jpeg-static.dir/jmemmgr.c.o
+#22 47.38 [ 68%] Building C object CMakeFiles/jpeg-static.dir/jmemnobs.c.o
+#22 47.38 [ 70%] Building C object CMakeFiles/turbojpeg-static.dir/jaricom.c.o
+#22 47.38 [ 70%] Building C object CMakeFiles/jpeg-static.dir/jaricom.c.o
+#22 47.38 [ 70%] Building C object CMakeFiles/turbojpeg-static.dir/jcarith.c.o
+#22 47.38 [ 70%] Building C object CMakeFiles/jpeg-static.dir/jcarith.c.o
+#22 47.38 [ 72%] Building C object CMakeFiles/turbojpeg-static.dir/jdarith.c.o
+#22 47.38 [ 72%] Building C object CMakeFiles/jpeg-static.dir/jdarith.c.o
+#22 47.38 [ 72%] Building C object CMakeFiles/turbojpeg-static.dir/turbojpeg.c.o
+#22 47.38 [ 73%] Building C object CMakeFiles/turbojpeg-static.dir/jdatadst-tj.c.o
+#22 47.38 [ 73%] Building C object CMakeFiles/turbojpeg-static.dir/transupp.c.o
+#22 47.39 [ 73%] Building C object CMakeFiles/turbojpeg-static.dir/rdbmp.c.o
+#22 47.39 [ 74%] Building C object CMakeFiles/turbojpeg-static.dir/jdatasrc-tj.c.o
+#22 47.39 [ 75%] Building C object CMakeFiles/turbojpeg-static.dir/wrbmp.c.o
+#22 47.39 [ 75%] Building C object CMakeFiles/turbojpeg-static.dir/rdppm.c.o
+#22 47.39 [ 76%] Building C object CMakeFiles/turbojpeg-static.dir/wrppm.c.o
+#22 51.26 [ 76%] Linking C static library libturbojpeg.a
+#22 51.28 [ 76%] Built target turbojpeg-static
+#22 51.29 [ 76%] Building C object CMakeFiles/tjunittest-static.dir/tjunittest.c.o
+#22 51.29 [ 77%] Building C object CMakeFiles/tjbench-static.dir/tjbench.c.o
+#22 51.29 [ 77%] Building CXX object fuzz/CMakeFiles/compress_fuzzer_3_0_x.dir/compress.cc.o
+#22 51.29 [ 77%] Building CXX object fuzz/CMakeFiles/libjpeg_turbo_fuzzer_3_0_x.dir/decompress.cc.o
+#22 51.29 [ 77%] Building C object CMakeFiles/tjbench-static.dir/tjutil.c.o
+#22 51.29 [ 79%] Building CXX object fuzz/CMakeFiles/compress_yuv_fuzzer_3_0_x.dir/compress_yuv.cc.o
+#22 51.29 [ 79%] Building C object CMakeFiles/tjunittest-static.dir/md5/md5.c.o
+#22 51.29 [ 79%] Building CXX object fuzz/CMakeFiles/transform_fuzzer_3_0_x.dir/transform.cc.o
+#22 51.29 [ 79%] Building C object CMakeFiles/tjunittest-static.dir/tjutil.c.o
+#22 51.29 [ 79%] Building CXX object fuzz/CMakeFiles/decompress_yuv_fuzzer_3_0_x.dir/decompress_yuv.cc.o
+#22 51.29 [ 80%] Building C object CMakeFiles/tjunittest-static.dir/md5/md5hl.c.o
+#22 51.37 [ 81%] Linking CXX executable compress_fuzzer_3_0_x
+#22 51.37 [ 82%] Linking CXX executable compress_yuv_fuzzer_3_0_x
+#22 51.38 [ 83%] Linking CXX executable decompress_yuv_fuzzer_3_0_x
+#22 51.38 [ 84%] Linking CXX executable libjpeg_turbo_fuzzer_3_0_x
+#22 51.38 [ 84%] Linking CXX executable transform_fuzzer_3_0_x
+#22 51.46 [ 84%] Built target compress_fuzzer_3_0_x
+#22 51.46 [ 84%] Built target compress_yuv_fuzzer_3_0_x
+#22 51.47 [ 84%] Built target decompress_yuv_fuzzer_3_0_x
+#22 51.47 [ 84%] Built target libjpeg_turbo_fuzzer_3_0_x
+#22 51.47 [ 84%] Built target transform_fuzzer_3_0_x
+#22 51.49 [ 84%] Linking C static library libjpeg.a
+#22 51.51 [ 84%] Built target jpeg-static
+#22 51.52 [ 85%] Building C object CMakeFiles/cjpeg-static.dir/cjpeg.c.o
+#22 51.52 [ 85%] Building C object CMakeFiles/djpeg-static.dir/djpeg.c.o
+#22 51.52 [ 85%] Building C object CMakeFiles/jpegtran-static.dir/jpegtran.c.o
+#22 51.52 [ 85%] Building CXX object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/cjpeg.cc.o
+#22 51.52 [ 86%] Building C object CMakeFiles/djpeg-static.dir/cdjpeg.c.o
+#22 51.52 [ 86%] Building C object CMakeFiles/cjpeg-static.dir/rdgif.c.o
+#22 51.52 [ 89%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdbmp.c.o
+#22 51.52 [ 88%] Building C object CMakeFiles/cjpeg-static.dir/cdjpeg.c.o
+#22 51.52 [ 92%] Building C object CMakeFiles/djpeg-static.dir/rdcolmap.c.o
+#22 51.52 [ 93%] Building C object CMakeFiles/cjpeg-static.dir/rdppm.c.o
+#22 51.52 [ 92%] Building C object CMakeFiles/jpegtran-static.dir/cdjpeg.c.o
+#22 51.52 [ 89%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/cdjpeg.c.o
+#22 51.52 [ 93%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdgif.c.o
+#22 51.52 [ 95%] Building C object CMakeFiles/cjpeg-static.dir/rdbmp.c.o
+#22 51.52 [ 95%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdswitch.c.o
+#22 51.52 [ 96%] Building C object CMakeFiles/djpeg-static.dir/wrtarga.c.o
+#22 51.52 [ 92%] Building C object CMakeFiles/jpegtran-static.dir/transupp.c.o
+#22 51.52 [ 96%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdppm.c.o
+#22 51.52 [ 96%] Building C object CMakeFiles/djpeg-static.dir/wrppm.c.o
+#22 51.52 [ 93%] Building C object CMakeFiles/djpeg-static.dir/rdswitch.c.o
+#22 51.52 [ 96%] Building C object CMakeFiles/cjpeg-static.dir/rdtarga.c.o
+#22 51.52 [ 96%] Building C object CMakeFiles/djpeg-static.dir/wrbmp.c.o
+#22 51.52 [ 96%] Building C object fuzz/CMakeFiles/cjpeg_fuzzer_3_0_x.dir/__/rdtarga.c.o
+#22 51.52 [ 96%] Building C object CMakeFiles/jpegtran-static.dir/rdswitch.c.o
+#22 51.52 [ 95%] Building C object CMakeFiles/cjpeg-static.dir/rdswitch.c.o
+#22 51.52 [ 96%] Building C object CMakeFiles/djpeg-static.dir/wrgif.c.o
+#22 51.79 [ 96%] Linking C executable djpeg-static
+#22 51.86 [ 96%] Built target djpeg-static
+#22 51.91 [ 97%] Linking CXX executable cjpeg_fuzzer_3_0_x
+#22 51.92 [ 98%] Linking C executable cjpeg-static
+#22 51.96 [ 98%] Linking C executable tjunittest-static
+#22 51.98 [ 98%] Built target cjpeg_fuzzer_3_0_x
+#22 51.98 [ 98%] Built target cjpeg-static
+#22 52.04 [ 98%] Built target tjunittest-static
+#22 52.18 [ 99%] Linking C executable tjbench-static
+#22 52.26 [ 99%] Built target tjbench-static
+#22 52.84 [100%] Linking C executable jpegtran-static
+#22 52.91 [100%] Built target jpegtran-static
+#22 52.93 Consolidate compiler generated dependencies of target simd
+#22 52.94 [ 14%] Built target simd
+#22 52.96 Consolidate compiler generated dependencies of target jpeg-static
+#22 52.97 [ 40%] Built target jpeg-static
+#22 52.99 Consolidate compiler generated dependencies of target turbojpeg-static
+#22 53.00 [ 70%] Built target turbojpeg-static
+#22 53.01 Consolidate compiler generated dependencies of target tjunittest-static
+#22 53.01 [ 72%] Built target tjunittest-static
+#22 53.02 Consolidate compiler generated dependencies of target tjbench-static
+#22 53.02 [ 74%] Built target tjbench-static
+#22 53.03 Consolidate compiler generated dependencies of target cjpeg-static
+#22 53.04 [ 78%] Built target cjpeg-static
+#22 53.04 Consolidate compiler generated dependencies of target djpeg-static
+#22 53.05 [ 82%] Built target djpeg-static
+#22 53.05 Consolidate compiler generated dependencies of target jpegtran-static
+#22 53.06 [ 85%] Built target jpegtran-static
+#22 53.06 Consolidate compiler generated dependencies of target rdjpgcom
+#22 53.07 [ 86%] Built target rdjpgcom
+#22 53.07 Consolidate compiler generated dependencies of target wrjpgcom
+#22 53.08 [ 88%] Built target wrjpgcom
+#22 53.08 Consolidate compiler generated dependencies of target strtest
+#22 53.09 [ 89%] Built target strtest
+#22 53.10 Consolidate compiler generated dependencies of target cjpeg_fuzzer_3_0_x
+#22 53.10 [ 93%] Built target cjpeg_fuzzer_3_0_x
+#22 53.11 Consolidate compiler generated dependencies of target compress_fuzzer_3_0_x
+#22 53.11 [ 94%] Built target compress_fuzzer_3_0_x
+#22 53.12 Consolidate compiler generated dependencies of target compress_yuv_fuzzer_3_0_x
+#22 53.12 [ 95%] Built target compress_yuv_fuzzer_3_0_x
+#22 53.13 Consolidate compiler generated dependencies of target libjpeg_turbo_fuzzer_3_0_x
+#22 53.13 [ 96%] Built target libjpeg_turbo_fuzzer_3_0_x
+#22 53.14 Consolidate compiler generated dependencies of target decompress_yuv_fuzzer_3_0_x
+#22 53.14 [ 97%] Built target decompress_yuv_fuzzer_3_0_x
+#22 53.14 Consolidate compiler generated dependencies of target transform_fuzzer_3_0_x
+#22 53.15 [ 98%] Built target transform_fuzzer_3_0_x
+#22 53.16 Consolidate compiler generated dependencies of target md5cmp
+#22 53.16 [100%] Built target md5cmp
+#22 53.17 Install the project...
+#22 53.17 -- Install configuration: "RelWithDebInfo"
+#22 53.17 -- Installing: /work/lib/libturbojpeg.a
+#22 53.18 -- Installing: /work/bin/tjbench
+#22 53.19 -- Installing: /work/include/turbojpeg.h
+#22 53.19 -- Installing: /work/lib/libjpeg.a
+#22 53.20 -- Installing: /work/bin/cjpeg
+#22 53.20 -- Installing: /work/bin/djpeg
+#22 53.20 -- Installing: /work/bin/jpegtran
+#22 53.21 -- Installing: /work/bin/rdjpgcom
+#22 53.21 -- Installing: /work/bin/wrjpgcom
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/README.ijg
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/README.md
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/example.txt
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/tjexample.c
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/libjpeg.txt
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/structure.txt
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/usage.txt
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/wizard.txt
+#22 53.21 -- Installing: /work/share/doc/libjpeg-turbo/LICENSE.md
+#22 53.21 -- Installing: /work/share/man/man1/cjpeg.1
+#22 53.21 -- Installing: /work/share/man/man1/djpeg.1
+#22 53.21 -- Installing: /work/share/man/man1/jpegtran.1
+#22 53.21 -- Installing: /work/share/man/man1/rdjpgcom.1
+#22 53.21 -- Installing: /work/share/man/man1/wrjpgcom.1
+#22 53.21 -- Installing: /work/lib/pkgconfig/libjpeg.pc
+#22 53.21 -- Installing: /work/lib/pkgconfig/libturbojpeg.pc
+#22 53.21 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboConfig.cmake
+#22 53.21 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboConfigVersion.cmake
+#22 53.21 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboTargets.cmake
+#22 53.21 -- Installing: /work/lib/cmake/libjpeg-turbo/libjpeg-turboTargets-relwithdebinfo.cmake
+#22 53.21 -- Installing: /work/include/jconfig.h
+#22 53.21 -- Installing: /work/include/jerror.h
+#22 53.21 -- Installing: /work/include/jmorecfg.h
+#22 53.21 -- Installing: /work/include/jpeglib.h
+#22 53.21 -- Installing: /out/cmplog/cjpeg_fuzzer_3_0_x
+#22 53.22 -- Installing: /out/cmplog/compress_fuzzer_3_0_x
+#22 53.22 -- Installing: /out/cmplog/compress_yuv_fuzzer_3_0_x
+#22 53.23 -- Installing: /out/cmplog/libjpeg_turbo_fuzzer_3_0_x
+#22 53.23 -- Installing: /out/cmplog/decompress_yuv_fuzzer_3_0_x
+#22 53.23 -- Installing: /out/cmplog/transform_fuzzer_3_0_x
+#22 53.26 + popd
+#22 53.26 + read branch
+#22 53.26 /src
+#22 DONE 53.6s
+
+#23 exporting to image
+#23 exporting layers
+#23 exporting layers 4.9s done
+#23 preparing layers for inline cache 0.1s done
+#23 writing image sha256:b65cd778243dee49af5630a5e09a53a52c8d93e4e78f5b1c20dbbc78b88327ec done
+#23 naming to gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer done
+#23 DONE 5.0s
+
+ [33m4 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate \
+--file fuzzers/aflmmbb_no_selection/runner.Dockerfile \
+fuzzers/aflmmbb_no_selection
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from runner.Dockerfile
+#1 transferring dockerfile: 1.13kB done
+#1 WARN: UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate
+#4 DONE 0.0s
+
+#5 [1/1] FROM gcr.io/fuzzbench/base-image:latest
+#5 CACHED
+
+#6 exporting to image
+#6 exporting layers done
+#6 preparing layers for inline cache done
+#6 writing image sha256:0dcae0633340983dc0f0325a60e3ded9110cef498f835801c6f3e1c84d756bd0 done
+#6 naming to gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate done
+#6 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer \
+--build-arg benchmark=libjpeg-turbo_libjpeg_turbo_fuzzer \
+--build-arg fuzzer=aflmmbb_no_selection \
+--file docker/benchmark-runner/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 3.23kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+#1 WARN: JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer
+#5 DONE 0.0s
+
+#6 [stage-1  1/12] FROM gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate:latest
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 ...
+
+#8 [builder 1/1] FROM gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer:latest
+#8 DONE 0.2s
+
+#7 [internal] load build context
+#7 transferring context: 7.26MB 0.2s done
+#7 DONE 0.2s
+
+#9 [stage-1  2/12] RUN apt-get update -y &&     DEBIAN_FRONTEND="noninteractive" apt-get install -y     libglib2.0-0     libxml2     libarchive13     libgss3
+#9 CACHED
+
+#10 [stage-1  3/12] RUN mkdir -p /out
+#10 CACHED
+
+#11 [stage-1  4/12] WORKDIR /out
+#11 CACHED
+
+#12 [stage-1  5/12] COPY --from=builder /out/ ./
+#12 DONE 0.3s
+
+#13 [stage-1  6/12] COPY benchmarks /src/benchmarks
+#13 DONE 0.1s
+
+#14 [stage-1  7/12] COPY fuzzers /src/fuzzers
+#14 DONE 0.1s
+
+#15 [stage-1  8/12] RUN mkdir -p /out/seeds /out/corpus
+#15 DONE 0.2s
+
+#16 [stage-1  9/12] COPY common /src/common
+#16 DONE 0.1s
+
+#17 [stage-1 10/12] COPY experiment/runner.py /src/experiment/runner.py
+#17 DONE 0.0s
+
+#18 [stage-1 11/12] COPY docker/benchmark-runner /src/docker/benchmark-runner
+#18 DONE 0.1s
+
+#19 [stage-1 12/12] RUN chmod +x /src/docker/benchmark-runner/startup-runner.sh
+#19 DONE 0.2s
+
+#20 exporting to image
+#20 exporting layers
+#20 exporting layers 0.3s done
+#20 preparing layers for inline cache done
+#20 writing image sha256:592e0c1f0aeb065c725910f2ce475f3dbb1ede47c9bbd8101a153425afe385b2 done
+#20 naming to gcr.io/fuzzbench/runners/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer done
+#20 DONE 0.3s
+
+ [33m5 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+ - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+ - JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)

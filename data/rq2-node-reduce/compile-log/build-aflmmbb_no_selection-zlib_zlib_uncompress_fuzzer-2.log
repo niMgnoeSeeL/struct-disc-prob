@@ -1,0 +1,1302 @@
+docker build \
+--tag gcr.io/fuzzbench/builders/benchmark/zlib_zlib_uncompress_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/benchmark/zlib_zlib_uncompress_fuzzer \
+--file benchmarks/zlib_zlib_uncompress_fuzzer/Dockerfile \
+benchmarks/zlib_zlib_uncompress_fuzzer
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.11kB done
+#1 WARN: WorkdirRelativePath: Relative workdir "zlib" can have unexpected results if the base image changes (line 20)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [1/5] FROM gcr.io/oss-fuzz-base/base-builder@sha256:87ca1e9e19235e731fac8de8d1892ebe8d55caf18e7aa131346fc582a2034fdd
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/benchmark/zlib_zlib_uncompress_fuzzer
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 1.90kB 0.0s done
+#6 DONE 0.0s
+
+#7 [4/5] WORKDIR zlib
+#7 CACHED
+
+#8 [3/5] RUN git clone --depth 1 -b develop https://github.com/madler/zlib.git
+#8 CACHED
+
+#9 [2/5] RUN apt-get update && apt-get install -y make autoconf automake libtool
+#9 CACHED
+
+#10 [5/5] COPY build.sh zlib_uncompress_fuzzer.cc /src/
+#10 CACHED
+
+#11 exporting to image
+#11 exporting layers done
+#11 preparing layers for inline cache done
+#11 writing image sha256:3852d7bf93fe71fa60d174c82f15b730b659dce1d299cf450d418dabec7b3ad4 done
+#11 naming to gcr.io/fuzzbench/builders/benchmark/zlib_zlib_uncompress_fuzzer done
+#11 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - WorkdirRelativePath: Relative workdir "zlib" can have unexpected results if the base image changes (line 20)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate \
+--build-arg parent_image=gcr.io/fuzzbench/builders/benchmark/zlib_zlib_uncompress_fuzzer \
+--file fuzzers/aflmmbb_no_selection/builder.Dockerfile \
+fuzzers/aflmmbb_no_selection
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from builder.Dockerfile
+#1 transferring dockerfile: 2.91kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/builders/benchmark/zlib_zlib_uncompress_fuzzer:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate
+#4 DONE 0.0s
+
+#5 [ 1/13] FROM gcr.io/fuzzbench/builders/benchmark/zlib_zlib_uncompress_fuzzer:latest
+#5 DONE 0.0s
+
+#6 [ 6/13] RUN apt-get install -y cpio libcapstone-dev # for Nyx mode
+#6 CACHED
+
+#7 [ 2/13] RUN apt-get update &&     apt-get install -y     build-essential python3-dev automake cmake git flex bison     libglib2.0-dev libpixman-1-dev python3-setuptools cargo libgtk-3-dev
+#7 CACHED
+
+#8 [ 7/13] RUN apt-get install -y wget curl # for Frida mode
+#8 CACHED
+
+#9 [ 4/13] RUN apt-get install -y gcc-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-plugin-dev     libstdc++-$(gcc --version|head -n1|sed 's/\..*//'|sed 's/.* //')-dev
+#9 CACHED
+
+#10 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#10 CACHED
+
+#11 [ 9/13] RUN echo "dont cache2"
+#11 CACHED
+
+#12 [ 8/13] RUN apt-get install -y python3-pip # for Unicorn mode
+#12 CACHED
+
+#13 [ 3/13] RUN apt-get install -y lld-14 llvm-14 llvm-14-dev clang-14 ||     apt-get install -y lld llvm llvm-dev clang
+#13 CACHED
+
+#14 [11/13] RUN cd /afl &&     unset CFLAGS CXXFLAGS &&     export CC=clang AFL_NO_X86=1 &&     PYTHON_INCLUDE=/ make &&     cp utils/aflpp_driver/libAFLDriver.a /
+#14 CACHED
+
+#15 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install
+#15 CACHED
+
+#16 [ 5/13] RUN apt-get install -y ninja-build # for QEMU mode
+#16 CACHED
+
+#17 [13/13] RUN cd /afl/custom_mutators/examples &&     cc -O3 -fPIC -shared -g -o custom_post_run.so -I../../include set.c custom_post_run.c
+#17 CACHED
+
+#18 exporting to image
+#18 exporting layers done
+#18 preparing layers for inline cache 0.0s done
+#18 writing image sha256:e47f1b5101a2fd5498262c93cfdfcf9e32c66a1ca8c048ed37e4428a178a4aa8 done
+#18 naming to gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate done
+#18 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 16)
+docker pull ubuntu:focal
+focal: Pulling from library/ubuntu
+Digest: sha256:8e5c4f0285ecbb4ead070431d29b576a530d3166df73ec44affc1cd27555141b
+Status: Image is up to date for ubuntu:focal
+docker.io/library/ubuntu:focal
+docker build \
+--tag gcr.io/fuzzbench/base-image \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/base-image \
+--file docker/base-image/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.34kB done
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:focal
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 220B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/base-image
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/ubuntu:focal
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 711B done
+#6 DONE 0.0s
+
+#7 [2/7] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     build-essential     zlib1g-dev     libssl-dev     libffi-dev     libsqlite3-dev     libbz2-dev     liblzma-dev
+#7 CACHED
+
+#8 [4/7] COPY ./requirements.txt /tmp
+#8 CACHED
+
+#9 [3/7] RUN cd /tmp/ &&     curl -O https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tar.xz &&     tar -xvf Python-3.10.8.tar.xz > /dev/null &&     cd Python-3.10.8 &&     ./configure         --enable-loadable-sqlite-extensions         --enable-optimizations         > /dev/null &&     make -j install > /dev/null &&     rm -r /tmp/Python-3.10.8.tar.xz /tmp/Python-3.10.8 &&     ln -s /usr/local/bin/python3 /usr/local/bin/python &&     ln -s /usr/local/bin/pip3 /usr/local/bin/pip
+#9 CACHED
+
+#10 [5/7] RUN pip install -r /tmp/requirements.txt
+#10 CACHED
+
+#11 [6/7] RUN apt-get update &&     apt-get install -y     apt-transport-https     ca-certificates     rsync     gnupg
+#11 CACHED
+
+#12 [7/7] RUN echo "deb https://packages.cloud.google.com/apt cloud-sdk main"     | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list &&     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg     | apt-key add - &&     apt-get update &&     apt-get install -y google-cloud-cli
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 preparing layers for inline cache 0.0s done
+#13 writing image sha256:248ee53bfdf489c613ff11a32ff9d70484f6ea031136941d8c764caa64effe94 done
+#13 naming to gcr.io/fuzzbench/base-image done
+#13 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 20)
+docker build \
+--tag gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer \
+--build-arg benchmark=zlib_zlib_uncompress_fuzzer \
+--build-arg fuzzer=aflmmbb_no_selection \
+--build-arg parent_image=gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate \
+--no-cache \
+--file docker/benchmark-builder/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 2.50kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer
+#5 DONE 0.0s
+
+#6 [stage-1  1/15] FROM gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate:latest
+#6 CACHED
+
+#7 [base-image 1/1] FROM gcr.io/fuzzbench/base-image:latest
+#7 CACHED
+
+#8 [internal] load build context
+#8 transferring context: 979.23kB 0.1s done
+#8 DONE 0.1s
+
+#9 [stage-1  2/15] RUN apt-get update &&     apt-get upgrade -y &&     apt-get install -y     curl     xz-utils     zlib1g-dev     libssl-dev     libffi-dev
+#9 0.280 Get:1 http://security.ubuntu.com/ubuntu focal-security InRelease [128 kB]
+#9 0.293 Hit:2 http://archive.ubuntu.com/ubuntu focal InRelease
+#9 0.303 Get:3 http://archive.ubuntu.com/ubuntu focal-updates InRelease [128 kB]
+#9 0.392 Get:4 http://archive.ubuntu.com/ubuntu focal-backports InRelease [128 kB]
+#9 0.541 Get:5 http://security.ubuntu.com/ubuntu focal-security/universe i386 Packages [861 kB]
+#9 0.627 Get:6 http://security.ubuntu.com/ubuntu focal-security/restricted amd64 Packages [4389 kB]
+#9 0.655 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 Packages [4730 kB]
+#9 0.712 Get:8 http://security.ubuntu.com/ubuntu focal-security/main amd64 Packages [4252 kB]
+#9 0.793 Get:9 http://security.ubuntu.com/ubuntu focal-security/universe amd64 Packages [1301 kB]
+#9 0.817 Get:10 http://security.ubuntu.com/ubuntu focal-security/main i386 Packages [1053 kB]
+#9 1.067 Get:11 http://archive.ubuntu.com/ubuntu focal-updates/universe i386 Packages [1021 kB]
+#9 1.101 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/restricted amd64 Packages [4577 kB]
+#9 1.204 Get:13 http://archive.ubuntu.com/ubuntu focal-updates/universe amd64 Packages [1593 kB]
+#9 1.230 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/main i386 Packages [1332 kB]
+#9 1.851 Fetched 25.5 MB in 2s (15.9 MB/s)
+#9 1.851 Reading package lists...
+#9 3.012 Reading package lists...
+#9 4.111 Building dependency tree...
+#9 4.282 Reading state information...
+#9 4.302 Calculating upgrade...
+#9 4.822 The following packages will be upgraded:
+#9 4.822   apt base-files binutils binutils-common binutils-dev
+#9 4.822   binutils-x86-64-linux-gnu bsdutils ca-certificates e2fsprogs fdisk
+#9 4.822   gir1.2-harfbuzz-0.0 git git-man krb5-locales less libapr1 libaprutil1
+#9 4.822   libapt-pkg6.0 libasn1-8-heimdal libbinutils libc-bin libc-dev-bin libc6
+#9 4.822   libc6-dev libc6-dev-i386 libc6-dev-x32 libc6-i386 libc6-x32 libcap2
+#9 4.822   libcom-err2 libctf-nobfd0 libctf0 libcurl3-gnutls libext2fs2 libfdisk1
+#9 4.822   libgnutls30 libgssapi-krb5-2 libgssapi3-heimdal libharfbuzz-dev
+#9 4.822   libharfbuzz-gobject0 libharfbuzz-icu0 libharfbuzz0b libhcrypto4-heimdal
+#9 4.822   libheimbase1-heimdal libheimntlm0-heimdal libhx509-5-heimdal libk5crypto3
+#9 4.822   libkrb5-26-heimdal libkrb5-3 libkrb5support0 libldap-2.4-2 libldap-common
+#9 4.823   libnghttp2-14 libpam-modules libpam-modules-bin libpam-runtime libpam0g
+#9 4.823   libperl5.30 libprocps8 libpython3.8 libpython3.8-dev libpython3.8-minimal
+#9 4.823   libpython3.8-stdlib libroken18-heimdal libsmartcols1 libsqlite3-0 libss2
+#9 4.823   libssh-4 libssl-dev libssl1.1 libtasn1-6 libudev1 libwind0-heimdal
+#9 4.823   libx11-data libxml2 linux-libc-dev login logsave mount ncurses-base
+#9 4.823   ncurses-bin openssh-client openssl passwd perl perl-base perl-modules-5.30
+#9 4.823   procps python3.8 python3.8-dev python3.8-minimal rsync tar tzdata unzip
+#9 4.823   util-linux
+#9 5.045 96 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 5.045 Need to get 64.5 MB of archives.
+#9 5.045 After this operation, 477 kB of additional disk space will be used.
+#9 5.045 Get:1 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-x32 amd64 2.31-0ubuntu9.17 [1975 kB]
+#9 5.868 Get:2 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev-i386 amd64 2.31-0ubuntu9.17 [1902 kB]
+#9 5.943 Get:3 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-dev amd64 2.31-0ubuntu9.17 [2521 kB]
+#9 6.055 Get:4 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-dev-bin amd64 2.31-0ubuntu9.17 [71.8 kB]
+#9 6.057 Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-i386 amd64 2.31-0ubuntu9.17 [2726 kB]
+#9 6.110 Get:6 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6-x32 amd64 2.31-0ubuntu9.17 [2779 kB]
+#9 6.187 Get:7 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 linux-libc-dev amd64 5.4.0-208.228 [1118 kB]
+#9 6.206 Get:8 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc6 amd64 2.31-0ubuntu9.17 [2721 kB]
+#9 6.286 Get:9 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 base-files amd64 11ubuntu5.8 [60.3 kB]
+#9 6.286 Get:10 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 bsdutils amd64 1:2.34-0.1ubuntu9.6 [63.3 kB]
+#9 6.287 Get:11 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 login amd64 1:4.8.1-1ubuntu5.20.04.5 [220 kB]
+#9 6.291 Get:12 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ncurses-bin amd64 6.2-0ubuntu2.1 [172 kB]
+#9 6.293 Get:13 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libperl5.30 amd64 5.30.0-9ubuntu0.5 [3941 kB]
+#9 6.396 Get:14 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl amd64 5.30.0-9ubuntu0.5 [224 kB]
+#9 6.399 Get:15 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl-base amd64 5.30.0-9ubuntu0.5 [1514 kB]
+#9 6.445 Get:16 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 perl-modules-5.30 all 5.30.0-9ubuntu0.5 [2739 kB]
+#9 6.505 Get:17 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tar amd64 1.30+dfsg-7ubuntu0.20.04.4 [240 kB]
+#9 6.508 Get:18 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libfdisk1 amd64 2.34-0.1ubuntu9.6 [175 kB]
+#9 6.510 Get:19 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libsmartcols1 amd64 2.34-0.1ubuntu9.6 [100 kB]
+#9 6.519 Get:20 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 fdisk amd64 2.34-0.1ubuntu9.6 [120 kB]
+#9 6.524 Get:21 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 util-linux amd64 2.34-0.1ubuntu9.6 [1022 kB]
+#9 6.559 Get:22 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libc-bin amd64 2.31-0ubuntu9.17 [634 kB]
+#9 6.575 Get:23 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ncurses-base all 6.2-0ubuntu2.1 [18.9 kB]
+#9 6.575 Get:24 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libudev1 amd64 245.4-4ubuntu3.24 [75.2 kB]
+#9 6.577 Get:25 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libapt-pkg6.0 amd64 2.0.10 [843 kB]
+#9 6.650 Get:26 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libtasn1-6 amd64 4.16.0-2ubuntu0.1 [38.6 kB]
+#9 6.650 Get:27 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgnutls30 amd64 3.6.13-2ubuntu1.12 [829 kB]
+#9 6.666 Get:28 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 apt amd64 2.0.10 [1280 kB]
+#9 6.692 Get:29 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam0g amd64 1.3.1-5ubuntu4.7 [55.4 kB]
+#9 6.693 Get:30 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-modules-bin amd64 1.3.1-5ubuntu4.7 [41.2 kB]
+#9 6.748 Get:31 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-modules amd64 1.3.1-5ubuntu4.7 [261 kB]
+#9 6.754 Get:32 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 logsave amd64 1.45.5-2ubuntu1.2 [10.2 kB]
+#9 6.754 Get:33 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libext2fs2 amd64 1.45.5-2ubuntu1.2 [183 kB]
+#9 6.757 Get:34 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 e2fsprogs amd64 1.45.5-2ubuntu1.2 [527 kB]
+#9 6.767 Get:35 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 mount amd64 2.34-0.1ubuntu9.6 [115 kB]
+#9 6.846 Get:36 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [514 kB]
+#9 6.857 Get:37 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-dev amd64 3.8.10-0ubuntu1~20.04.15 [3950 kB]
+#9 6.957 Get:38 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8 amd64 3.8.10-0ubuntu1~20.04.15 [1626 kB]
+#9 6.994 Get:39 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl-dev amd64 1.1.1f-1ubuntu2.24 [1586 kB]
+#9 7.024 Get:40 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssl1.1 amd64 1.1.1f-1ubuntu2.24 [1323 kB]
+#9 7.078 Get:41 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8 amd64 3.8.10-0ubuntu1~20.04.15 [387 kB]
+#9 7.085 Get:42 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-stdlib amd64 3.8.10-0ubuntu1~20.04.15 [1675 kB]
+#9 7.119 Get:43 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 python3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [1901 kB]
+#9 7.178 Get:44 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpython3.8-minimal amd64 3.8.10-0ubuntu1~20.04.15 [720 kB]
+#9 7.191 Get:45 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libsqlite3-0 amd64 3.31.1-4ubuntu0.6 [549 kB]
+#9 7.201 Get:46 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 rsync amd64 3.1.3-8ubuntu0.9 [323 kB]
+#9 7.208 Get:47 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpam-runtime all 1.3.1-5ubuntu4.7 [37.3 kB]
+#9 7.209 Get:48 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 passwd amd64 1:4.8.1-1ubuntu5.20.04.5 [797 kB]
+#9 7.224 Get:49 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcom-err2 amd64 1.45.5-2ubuntu1.2 [9580 B]
+#9 7.236 Get:50 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libprocps8 amd64 2:3.3.16-1ubuntu2.4 [33.1 kB]
+#9 7.239 Get:51 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libss2 amd64 1.45.5-2ubuntu1.2 [11.3 kB]
+#9 7.239 Get:52 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 procps amd64 2:3.3.16-1ubuntu2.4 [232 kB]
+#9 7.335 Get:53 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssl amd64 1.1.1f-1ubuntu2.24 [621 kB]
+#9 7.348 Get:54 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 ca-certificates all 20240203~20.04.1 [159 kB]
+#9 7.351 Get:55 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 less amd64 551-1ubuntu0.3 [123 kB]
+#9 7.354 Get:56 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcap2 amd64 1:2.32-1ubuntu0.2 [15.7 kB]
+#9 7.354 Get:57 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libxml2 amd64 2.9.10+dfsg-5ubuntu0.20.04.9 [641 kB]
+#9 7.367 Get:58 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 tzdata all 2024b-0ubuntu0.20.04.1 [299 kB]
+#9 7.372 Get:59 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 krb5-locales all 1.17-6ubuntu4.8 [11.6 kB]
+#9 7.433 Get:60 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi-krb5-2 amd64 1.17-6ubuntu4.8 [121 kB]
+#9 7.436 Get:61 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-3 amd64 1.17-6ubuntu4.8 [329 kB]
+#9 7.442 Get:62 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5support0 amd64 1.17-6ubuntu4.8 [31.1 kB]
+#9 7.531 Get:63 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libk5crypto3 amd64 1.17-6ubuntu4.8 [80.4 kB]
+#9 7.533 Get:64 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libx11-data all 2:1.6.9-2ubuntu1.6 [114 kB]
+#9 7.535 Get:65 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git-man all 1:2.25.1-1ubuntu3.14 [887 kB]
+#9 7.554 Get:66 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libroken18-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [42.5 kB]
+#9 7.554 Get:67 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libasn1-8-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [181 kB]
+#9 7.557 Get:68 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libheimbase1-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [30.4 kB]
+#9 7.557 Get:69 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhcrypto4-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [88.1 kB]
+#9 7.628 Get:70 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libwind0-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [47.7 kB]
+#9 7.631 Get:71 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libhx509-5-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [107 kB]
+#9 7.632 Get:72 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libkrb5-26-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [207 kB]
+#9 7.727 Get:73 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libheimntlm0-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [15.1 kB]
+#9 7.728 Get:74 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libgssapi3-heimdal amd64 7.7.0+dfsg-1ubuntu1.4 [96.5 kB]
+#9 7.730 Get:75 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libldap-common all 2.4.49+dfsg-2ubuntu1.10 [16.5 kB]
+#9 7.730 Get:76 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libldap-2.4-2 amd64 2.4.49+dfsg-2ubuntu1.10 [155 kB]
+#9 7.733 Get:77 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libnghttp2-14 amd64 1.40.0-1ubuntu0.3 [79.9 kB]
+#9 7.734 Get:78 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libssh-4 amd64 0.9.3-2ubuntu2.5 [171 kB]
+#9 7.737 Get:79 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libcurl3-gnutls amd64 7.68.0-1ubuntu2.25 [233 kB]
+#9 7.826 Get:80 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 git amd64 1:2.25.1-1ubuntu3.14 [4613 kB]
+#9 7.940 Get:81 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 openssh-client amd64 1:8.2p1-4ubuntu0.12 [671 kB]
+#9 7.952 Get:82 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-dev amd64 2.34-6ubuntu1.10 [3636 kB]
+#9 8.050 Get:83 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf0 amd64 2.34-6ubuntu1.10 [46.7 kB]
+#9 8.051 Get:84 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-x86-64-linux-gnu amd64 2.34-6ubuntu1.10 [1613 kB]
+#9 8.094 Get:85 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libbinutils amd64 2.34-6ubuntu1.10 [474 kB]
+#9 8.103 Get:86 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils amd64 2.34-6ubuntu1.10 [3380 B]
+#9 8.103 Get:87 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 binutils-common amd64 2.34-6ubuntu1.10 [208 kB]
+#9 8.107 Get:88 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libctf-nobfd0 amd64 2.34-6ubuntu1.10 [48.1 kB]
+#9 8.107 Get:89 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-dev amd64 2.6.4-1ubuntu4.3 [526 kB]
+#9 8.125 Get:90 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz0b amd64 2.6.4-1ubuntu4.3 [391 kB]
+#9 8.137 Get:91 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-icu0 amd64 2.6.4-1ubuntu4.3 [5592 B]
+#9 8.234 Get:92 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libharfbuzz-gobject0 amd64 2.6.4-1ubuntu4.3 [20.3 kB]
+#9 8.235 Get:93 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 gir1.2-harfbuzz-0.0 amd64 2.6.4-1ubuntu4.3 [26.3 kB]
+#9 8.235 Get:94 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libaprutil1 amd64 1.6.1-4ubuntu2.2 [85.1 kB]
+#9 8.237 Get:95 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libapr1 amd64 1.6.5-1ubuntu1.1 [91.5 kB]
+#9 8.240 Get:96 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 unzip amd64 6.0-25ubuntu1.2 [169 kB]
+#9 8.407 debconf: delaying package configuration, since apt-utils is not installed
+#9 8.448 Fetched 64.5 MB in 3s (18.9 MB/s)
+#9 8.471 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46278 files and directories currently installed.)
+#9 8.501 Preparing to unpack .../0-libc6-dev-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 8.502 Unpacking libc6-dev-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 8.724 Preparing to unpack .../1-libc6-dev-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 8.726 Unpacking libc6-dev-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 8.951 Preparing to unpack .../2-libc6-dev_2.31-0ubuntu9.17_amd64.deb ...
+#9 8.953 Unpacking libc6-dev:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.500 Preparing to unpack .../3-libc-dev-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.501 Unpacking libc-dev-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.533 Preparing to unpack .../4-libc6-i386_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.535 Unpacking libc6-i386 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 9.927 Preparing to unpack .../5-libc6-x32_2.31-0ubuntu9.17_amd64.deb ...
+#9 9.929 Unpacking libc6-x32 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 10.33 Preparing to unpack .../6-linux-libc-dev_5.4.0-208.228_amd64.deb ...
+#9 10.33 Unpacking linux-libc-dev:amd64 (5.4.0-208.228) over (5.4.0-137.154) ...
+#9 10.94 Preparing to unpack .../7-libc6_2.31-0ubuntu9.17_amd64.deb ...
+#9 11.10 Unpacking libc6:amd64 (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 11.49 Setting up libc6:amd64 (2.31-0ubuntu9.17) ...
+#9 12.64 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 12.66 Preparing to unpack .../base-files_11ubuntu5.8_amd64.deb ...
+#9 12.67 Unpacking base-files (11ubuntu5.8) over (11ubuntu5.6) ...
+#9 12.74 Setting up base-files (11ubuntu5.8) ...
+#9 12.74 Installing new version of config file /etc/issue ...
+#9 12.74 Installing new version of config file /etc/issue.net ...
+#9 12.74 Installing new version of config file /etc/lsb-release ...
+#9 12.74 Installing new version of config file /etc/update-motd.d/10-help-text ...
+#9 12.90 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 12.92 Preparing to unpack .../bsdutils_1%3a2.34-0.1ubuntu9.6_amd64.deb ...
+#9 12.92 Unpacking bsdutils (1:2.34-0.1ubuntu9.6) over (1:2.34-0.1ubuntu9.3) ...
+#9 12.97 Setting up bsdutils (1:2.34-0.1ubuntu9.6) ...
+#9 12.99 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 13.02 Preparing to unpack .../login_1%3a4.8.1-1ubuntu5.20.04.5_amd64.deb ...
+#9 13.03 Unpacking login (1:4.8.1-1ubuntu5.20.04.5) over (1:4.8.1-1ubuntu5.20.04.4) ...
+#9 13.09 Setting up login (1:4.8.1-1ubuntu5.20.04.5) ...
+#9 13.13 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 13.15 Preparing to unpack .../ncurses-bin_6.2-0ubuntu2.1_amd64.deb ...
+#9 13.15 Unpacking ncurses-bin (6.2-0ubuntu2.1) over (6.2-0ubuntu2) ...
+#9 13.20 Setting up ncurses-bin (6.2-0ubuntu2.1) ...
+#9 13.22 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 13.25 Preparing to unpack .../libperl5.30_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 13.25 Unpacking libperl5.30:amd64 (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 13.82 Preparing to unpack .../perl_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 13.83 Unpacking perl (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 13.89 Preparing to unpack .../perl-base_5.30.0-9ubuntu0.5_amd64.deb ...
+#9 13.91 Unpacking perl-base (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 14.42 Setting up perl-base (5.30.0-9ubuntu0.5) ...
+#9 14.48 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 14.50 Preparing to unpack .../perl-modules-5.30_5.30.0-9ubuntu0.5_all.deb ...
+#9 14.50 Unpacking perl-modules-5.30 (5.30.0-9ubuntu0.5) over (5.30.0-9ubuntu0.3) ...
+#9 15.38 Preparing to unpack .../tar_1.30+dfsg-7ubuntu0.20.04.4_amd64.deb ...
+#9 15.39 Unpacking tar (1.30+dfsg-7ubuntu0.20.04.4) over (1.30+dfsg-7ubuntu0.20.04.2) ...
+#9 15.44 Setting up tar (1.30+dfsg-7ubuntu0.20.04.4) ...
+#9 15.47 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 15.49 Preparing to unpack .../libfdisk1_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 15.50 Unpacking libfdisk1:amd64 (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 15.53 Preparing to unpack .../libsmartcols1_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 15.54 Unpacking libsmartcols1:amd64 (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 15.58 Setting up libsmartcols1:amd64 (2.34-0.1ubuntu9.6) ...
+#9 15.60 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 15.63 Preparing to unpack .../fdisk_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 15.63 Unpacking fdisk (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 15.66 Preparing to unpack .../util-linux_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 15.68 Unpacking util-linux (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 15.89 Setting up util-linux (2.34-0.1ubuntu9.6) ...
+#9 16.22 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.24 Preparing to unpack .../libc-bin_2.31-0ubuntu9.17_amd64.deb ...
+#9 16.24 Unpacking libc-bin (2.31-0ubuntu9.17) over (2.31-0ubuntu9.9) ...
+#9 16.35 Setting up libc-bin (2.31-0ubuntu9.17) ...
+#9 16.42 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.45 Preparing to unpack .../ncurses-base_6.2-0ubuntu2.1_all.deb ...
+#9 16.45 Unpacking ncurses-base (6.2-0ubuntu2.1) over (6.2-0ubuntu2) ...
+#9 16.51 Setting up ncurses-base (6.2-0ubuntu2.1) ...
+#9 16.54 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.57 Preparing to unpack .../libudev1_245.4-4ubuntu3.24_amd64.deb ...
+#9 16.57 Unpacking libudev1:amd64 (245.4-4ubuntu3.24) over (245.4-4ubuntu3.19) ...
+#9 16.61 Setting up libudev1:amd64 (245.4-4ubuntu3.24) ...
+#9 16.63 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.66 Preparing to unpack .../libapt-pkg6.0_2.0.10_amd64.deb ...
+#9 16.66 Unpacking libapt-pkg6.0:amd64 (2.0.10) over (2.0.9) ...
+#9 16.75 Setting up libapt-pkg6.0:amd64 (2.0.10) ...
+#9 16.78 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.80 Preparing to unpack .../libtasn1-6_4.16.0-2ubuntu0.1_amd64.deb ...
+#9 16.80 Unpacking libtasn1-6:amd64 (4.16.0-2ubuntu0.1) over (4.16.0-2) ...
+#9 16.84 Setting up libtasn1-6:amd64 (4.16.0-2ubuntu0.1) ...
+#9 16.87 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 16.89 Preparing to unpack .../libgnutls30_3.6.13-2ubuntu1.12_amd64.deb ...
+#9 16.89 Unpacking libgnutls30:amd64 (3.6.13-2ubuntu1.12) over (3.6.13-2ubuntu1.7) ...
+#9 16.98 Setting up libgnutls30:amd64 (3.6.13-2ubuntu1.12) ...
+#9 17.00 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46277 files and directories currently installed.)
+#9 17.03 Preparing to unpack .../archives/apt_2.0.10_amd64.deb ...
+#9 17.07 Unpacking apt (2.0.10) over (2.0.9) ...
+#9 17.22 Setting up apt (2.0.10) ...
+#9 17.53 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 17.56 Preparing to unpack .../libpam0g_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 17.56 Unpacking libpam0g:amd64 (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 17.60 Setting up libpam0g:amd64 (1.3.1-5ubuntu4.7) ...
+#9 17.70 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 17.72 Preparing to unpack .../libpam-modules-bin_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 17.72 Unpacking libpam-modules-bin (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 17.76 Setting up libpam-modules-bin (1.3.1-5ubuntu4.7) ...
+#9 17.79 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 17.81 Preparing to unpack .../libpam-modules_1.3.1-5ubuntu4.7_amd64.deb ...
+#9 17.89 Unpacking libpam-modules:amd64 (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 17.96 Setting up libpam-modules:amd64 (1.3.1-5ubuntu4.7) ...
+#9 18.00 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 18.03 Preparing to unpack .../logsave_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.03 Unpacking logsave (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.05 Preparing to unpack .../libext2fs2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.06 Unpacking libext2fs2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.10 Setting up libext2fs2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 18.13 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 18.15 Preparing to unpack .../00-e2fsprogs_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 18.16 Unpacking e2fsprogs (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 18.23 Preparing to unpack .../01-mount_2.34-0.1ubuntu9.6_amd64.deb ...
+#9 18.23 Unpacking mount (2.34-0.1ubuntu9.6) over (2.34-0.1ubuntu9.3) ...
+#9 18.27 Preparing to unpack .../02-python3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 18.27 Unpacking python3.8-dev (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 18.30 Preparing to unpack .../03-libpython3.8-dev_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 18.30 Unpacking libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 18.74 Preparing to unpack .../04-libpython3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 18.74 Unpacking libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 18.89 Preparing to unpack .../05-libssl-dev_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 18.89 Unpacking libssl-dev:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 19.10 Preparing to unpack .../06-libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 19.10 Unpacking libssl1.1:amd64 (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 19.22 Preparing to unpack .../07-python3.8_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.28 Unpacking python3.8 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.32 Preparing to unpack .../08-libpython3.8-stdlib_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.37 Unpacking libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.64 Preparing to unpack .../09-python3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.65 Unpacking python3.8-minimal (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 19.82 Preparing to unpack .../10-libpython3.8-minimal_3.8.10-0ubuntu1~20.04.15_amd64.deb ...
+#9 19.89 Unpacking libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) over (3.8.10-0ubuntu1~20.04.14) ...
+#9 20.10 Preparing to unpack .../11-libsqlite3-0_3.31.1-4ubuntu0.6_amd64.deb ...
+#9 20.11 Unpacking libsqlite3-0:amd64 (3.31.1-4ubuntu0.6) over (3.31.1-4ubuntu0.5) ...
+#9 20.16 Preparing to unpack .../12-rsync_3.1.3-8ubuntu0.9_amd64.deb ...
+#9 20.17 Unpacking rsync (3.1.3-8ubuntu0.9) over (3.1.3-8ubuntu0.4) ...
+#9 20.22 Preparing to unpack .../13-libpam-runtime_1.3.1-5ubuntu4.7_all.deb ...
+#9 20.22 Unpacking libpam-runtime (1.3.1-5ubuntu4.7) over (1.3.1-5ubuntu4.4) ...
+#9 20.26 Setting up libpam-runtime (1.3.1-5ubuntu4.7) ...
+#9 20.40 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 20.42 Preparing to unpack .../passwd_1%3a4.8.1-1ubuntu5.20.04.5_amd64.deb ...
+#9 20.45 Unpacking passwd (1:4.8.1-1ubuntu5.20.04.5) over (1:4.8.1-1ubuntu5.20.04.4) ...
+#9 20.56 Setting up passwd (1:4.8.1-1ubuntu5.20.04.5) ...
+#9 20.61 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 46275 files and directories currently installed.)
+#9 20.63 Preparing to unpack .../00-libcom-err2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 20.64 Unpacking libcom-err2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 20.66 Preparing to unpack .../01-libprocps8_2%3a3.3.16-1ubuntu2.4_amd64.deb ...
+#9 20.66 Unpacking libprocps8:amd64 (2:3.3.16-1ubuntu2.4) over (2:3.3.16-1ubuntu2.3) ...
+#9 20.69 Preparing to unpack .../02-libss2_1.45.5-2ubuntu1.2_amd64.deb ...
+#9 20.69 Unpacking libss2:amd64 (1.45.5-2ubuntu1.2) over (1.45.5-2ubuntu1.1) ...
+#9 20.71 Preparing to unpack .../03-procps_2%3a3.3.16-1ubuntu2.4_amd64.deb ...
+#9 20.74 Unpacking procps (2:3.3.16-1ubuntu2.4) over (2:3.3.16-1ubuntu2.3) ...
+#9 20.79 Preparing to unpack .../04-openssl_1.1.1f-1ubuntu2.24_amd64.deb ...
+#9 20.79 Unpacking openssl (1.1.1f-1ubuntu2.24) over (1.1.1f-1ubuntu2.16) ...
+#9 20.86 Preparing to unpack .../05-ca-certificates_20240203~20.04.1_all.deb ...
+#9 20.86 Unpacking ca-certificates (20240203~20.04.1) over (20211016ubuntu0.20.04.1) ...
+#9 20.96 Preparing to unpack .../06-less_551-1ubuntu0.3_amd64.deb ...
+#9 20.97 Unpacking less (551-1ubuntu0.3) over (551-1ubuntu0.1) ...
+#9 21.00 Preparing to unpack .../07-libcap2_1%3a2.32-1ubuntu0.2_amd64.deb ...
+#9 21.00 Unpacking libcap2:amd64 (1:2.32-1ubuntu0.2) over (1:2.32-1ubuntu0.1) ...
+#9 21.03 Preparing to unpack .../08-libxml2_2.9.10+dfsg-5ubuntu0.20.04.9_amd64.deb ...
+#9 21.03 Unpacking libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) over (2.9.10+dfsg-5ubuntu0.20.04.8) ...
+#9 21.10 Preparing to unpack .../09-tzdata_2024b-0ubuntu0.20.04.1_all.deb ...
+#9 21.10 Unpacking tzdata (2024b-0ubuntu0.20.04.1) over (2022g-0ubuntu0.20.04.1) ...
+#9 21.91 Preparing to unpack .../10-krb5-locales_1.17-6ubuntu4.8_all.deb ...
+#9 21.91 Unpacking krb5-locales (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 21.93 Preparing to unpack .../11-libgssapi-krb5-2_1.17-6ubuntu4.8_amd64.deb ...
+#9 21.93 Unpacking libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 21.97 Preparing to unpack .../12-libkrb5-3_1.17-6ubuntu4.8_amd64.deb ...
+#9 21.97 Unpacking libkrb5-3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.02 Preparing to unpack .../13-libkrb5support0_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.02 Unpacking libkrb5support0:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.05 Preparing to unpack .../14-libk5crypto3_1.17-6ubuntu4.8_amd64.deb ...
+#9 22.05 Unpacking libk5crypto3:amd64 (1.17-6ubuntu4.8) over (1.17-6ubuntu4.2) ...
+#9 22.08 Preparing to unpack .../15-libx11-data_2%3a1.6.9-2ubuntu1.6_all.deb ...
+#9 22.08 Unpacking libx11-data (2:1.6.9-2ubuntu1.6) over (2:1.6.9-2ubuntu1.2) ...
+#9 22.22 Preparing to unpack .../16-git-man_1%3a2.25.1-1ubuntu3.14_all.deb ...
+#9 22.23 Unpacking git-man (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.8) ...
+#9 22.30 Preparing to unpack .../17-libroken18-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.30 Unpacking libroken18-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.33 Preparing to unpack .../18-libasn1-8-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.33 Unpacking libasn1-8-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.37 Preparing to unpack .../19-libheimbase1-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.37 Unpacking libheimbase1-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.40 Preparing to unpack .../20-libhcrypto4-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.40 Unpacking libhcrypto4-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.43 Preparing to unpack .../21-libwind0-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.43 Unpacking libwind0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.46 Preparing to unpack .../22-libhx509-5-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.46 Unpacking libhx509-5-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.49 Preparing to unpack .../23-libkrb5-26-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.49 Unpacking libkrb5-26-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.53 Preparing to unpack .../24-libheimntlm0-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.53 Unpacking libheimntlm0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.56 Preparing to unpack .../25-libgssapi3-heimdal_7.7.0+dfsg-1ubuntu1.4_amd64.deb ...
+#9 22.56 Unpacking libgssapi3-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) over (7.7.0+dfsg-1ubuntu1.3) ...
+#9 22.59 Preparing to unpack .../26-libldap-common_2.4.49+dfsg-2ubuntu1.10_all.deb ...
+#9 22.59 Unpacking libldap-common (2.4.49+dfsg-2ubuntu1.10) over (2.4.49+dfsg-2ubuntu1.9) ...
+#9 22.62 Preparing to unpack .../27-libldap-2.4-2_2.4.49+dfsg-2ubuntu1.10_amd64.deb ...
+#9 22.62 Unpacking libldap-2.4-2:amd64 (2.4.49+dfsg-2ubuntu1.10) over (2.4.49+dfsg-2ubuntu1.9) ...
+#9 22.65 Preparing to unpack .../28-libnghttp2-14_1.40.0-1ubuntu0.3_amd64.deb ...
+#9 22.65 Unpacking libnghttp2-14:amd64 (1.40.0-1ubuntu0.3) over (1.40.0-1build1) ...
+#9 22.68 Preparing to unpack .../29-libssh-4_0.9.3-2ubuntu2.5_amd64.deb ...
+#9 22.68 Unpacking libssh-4:amd64 (0.9.3-2ubuntu2.5) over (0.9.3-2ubuntu2.2) ...
+#9 22.72 Preparing to unpack .../30-libcurl3-gnutls_7.68.0-1ubuntu2.25_amd64.deb ...
+#9 22.72 Unpacking libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) over (7.68.0-1ubuntu2.15) ...
+#9 22.76 Preparing to unpack .../31-git_1%3a2.25.1-1ubuntu3.14_amd64.deb ...
+#9 22.81 Unpacking git (1:2.25.1-1ubuntu3.14) over (1:2.25.1-1ubuntu3.13) ...
+#9 23.35 Preparing to unpack .../32-openssh-client_1%3a8.2p1-4ubuntu0.12_amd64.deb ...
+#9 23.37 Unpacking openssh-client (1:8.2p1-4ubuntu0.12) over (1:8.2p1-4ubuntu0.5) ...
+#9 23.47 Preparing to unpack .../33-binutils-dev_2.34-6ubuntu1.10_amd64.deb ...
+#9 23.47 Unpacking binutils-dev (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 23.86 Preparing to unpack .../34-libctf0_2.34-6ubuntu1.10_amd64.deb ...
+#9 23.86 Unpacking libctf0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 23.89 Preparing to unpack .../35-binutils-x86-64-linux-gnu_2.34-6ubuntu1.10_amd64.deb ...
+#9 23.89 Unpacking binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.15 Preparing to unpack .../36-libbinutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.15 Unpacking libbinutils:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.21 Preparing to unpack .../37-binutils_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.22 Unpacking binutils (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.24 Preparing to unpack .../38-binutils-common_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.25 Unpacking binutils-common:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.28 Preparing to unpack .../39-libctf-nobfd0_2.34-6ubuntu1.10_amd64.deb ...
+#9 24.28 Unpacking libctf-nobfd0:amd64 (2.34-6ubuntu1.10) over (2.34-6ubuntu1.4) ...
+#9 24.31 Preparing to unpack .../40-libharfbuzz-dev_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.31 Unpacking libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.40 Preparing to unpack .../41-libharfbuzz0b_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.40 Unpacking libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.46 Preparing to unpack .../42-libharfbuzz-icu0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.47 Unpacking libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.49 Preparing to unpack .../43-libharfbuzz-gobject0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.49 Unpacking libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.52 Preparing to unpack .../44-gir1.2-harfbuzz-0.0_2.6.4-1ubuntu4.3_amd64.deb ...
+#9 24.52 Unpacking gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) over (2.6.4-1ubuntu4.2) ...
+#9 24.54 Preparing to unpack .../45-libaprutil1_1.6.1-4ubuntu2.2_amd64.deb ...
+#9 24.55 Unpacking libaprutil1:amd64 (1.6.1-4ubuntu2.2) over (1.6.1-4ubuntu2) ...
+#9 24.58 Preparing to unpack .../46-libapr1_1.6.5-1ubuntu1.1_amd64.deb ...
+#9 24.58 Unpacking libapr1:amd64 (1.6.5-1ubuntu1.1) over (1.6.5-1ubuntu1) ...
+#9 24.61 Preparing to unpack .../47-unzip_6.0-25ubuntu1.2_amd64.deb ...
+#9 24.61 Unpacking unzip (6.0-25ubuntu1.2) over (6.0-25ubuntu1.1) ...
+#9 24.66 Setting up perl-modules-5.30 (5.30.0-9ubuntu0.5) ...
+#9 24.67 Setting up libssl1.1:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 24.74 Setting up unzip (6.0-25ubuntu1.2) ...
+#9 24.75 Setting up libsqlite3-0:amd64 (3.31.1-4ubuntu0.6) ...
+#9 24.75 Setting up binutils-common:amd64 (2.34-6ubuntu1.10) ...
+#9 24.75 Setting up libnghttp2-14:amd64 (1.40.0-1ubuntu0.3) ...
+#9 24.76 Setting up libapr1:amd64 (1.6.5-1ubuntu1.1) ...
+#9 24.76 Setting up less (551-1ubuntu0.3) ...
+#9 24.76 Setting up linux-libc-dev:amd64 (5.4.0-208.228) ...
+#9 24.76 Setting up libctf-nobfd0:amd64 (2.34-6ubuntu1.10) ...
+#9 24.77 Setting up krb5-locales (1.17-6ubuntu4.8) ...
+#9 24.77 Setting up libcom-err2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 24.77 Setting up libldap-common (2.4.49+dfsg-2ubuntu1.10) ...
+#9 24.77 Setting up libcap2:amd64 (1:2.32-1ubuntu0.2) ...
+#9 24.77 Setting up libkrb5support0:amd64 (1.17-6ubuntu4.8) ...
+#9 24.77 Setting up libc6-x32 (2.31-0ubuntu9.17) ...
+#9 24.78 Setting up tzdata (2024b-0ubuntu0.20.04.1) ...
+#9 24.86 
+#9 24.86 Current default time zone: 'Etc/UTC'
+#9 24.86 Local time is now:      Sat Mar  1 17:56:14 UTC 2025.
+#9 24.86 Universal Time is now:  Sat Mar  1 17:56:14 UTC 2025.
+#9 24.86 Run 'dpkg-reconfigure tzdata' if you wish to change it.
+#9 24.86 
+#9 24.87 Setting up libx11-data (2:1.6.9-2ubuntu1.6) ...
+#9 24.87 Setting up libssl-dev:amd64 (1.1.1f-1ubuntu2.24) ...
+#9 24.88 Setting up libss2:amd64 (1.45.5-2ubuntu1.2) ...
+#9 24.88 Setting up libk5crypto3:amd64 (1.17-6ubuntu4.8) ...
+#9 24.88 Setting up logsave (1.45.5-2ubuntu1.2) ...
+#9 24.88 Setting up libroken18-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 24.88 Setting up libfdisk1:amd64 (2.34-0.1ubuntu9.6) ...
+#9 24.88 Setting up mount (2.34-0.1ubuntu9.6) ...
+#9 24.88 Setting up libc6-i386 (2.31-0ubuntu9.17) ...
+#9 24.89 Setting up libperl5.30:amd64 (5.30.0-9ubuntu0.5) ...
+#9 24.89 Setting up git-man (1:2.25.1-1ubuntu3.14) ...
+#9 24.89 Setting up libharfbuzz0b:amd64 (2.6.4-1ubuntu4.3) ...
+#9 24.89 Setting up libkrb5-3:amd64 (1.17-6ubuntu4.8) ...
+#9 24.89 Setting up libbinutils:amd64 (2.34-6ubuntu1.10) ...
+#9 24.89 Setting up libc-dev-bin (2.31-0ubuntu9.17) ...
+#9 24.89 Setting up openssl (1.1.1f-1ubuntu2.24) ...
+#9 24.90 Setting up libxml2:amd64 (2.9.10+dfsg-5ubuntu0.20.04.9) ...
+#9 24.90 Setting up libprocps8:amd64 (2:3.3.16-1ubuntu2.4) ...
+#9 24.90 Setting up rsync (3.1.3-8ubuntu0.9) ...
+#9 24.92 invoke-rc.d: could not determine current runlevel
+#9 24.92 invoke-rc.d: policy-rc.d denied execution of restart.
+#9 25.03 Setting up libheimbase1-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.03 Setting up libaprutil1:amd64 (1.6.1-4ubuntu2.2) ...
+#9 25.03 Setting up libctf0:amd64 (2.34-6ubuntu1.10) ...
+#9 25.03 Setting up libpython3.8-minimal:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 25.03 Setting up libharfbuzz-icu0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.04 Setting up libasn1-8-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.04 Setting up e2fsprogs (1.45.5-2ubuntu1.2) ...
+#9 25.26 Setting up libharfbuzz-gobject0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.26 Setting up gir1.2-harfbuzz-0.0:amd64 (2.6.4-1ubuntu4.3) ...
+#9 25.26 Setting up libhcrypto4-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 25.26 Setting up fdisk (2.34-0.1ubuntu9.6) ...
+#9 25.26 Setting up ca-certificates (20240203~20.04.1) ...
+#9 26.86 Updating certificates in /etc/ssl/certs...
+#9 27.74 rehash: warning: skipping ca-certificates.crt,it does not contain exactly one certificate or CRL
+#9 27.74 30 added, 8 removed; done.
+#9 27.76 Setting up perl (5.30.0-9ubuntu0.5) ...
+#9 27.77 Setting up libwind0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 27.78 Setting up libgssapi-krb5-2:amd64 (1.17-6ubuntu4.8) ...
+#9 27.78 Setting up libssh-4:amd64 (0.9.3-2ubuntu2.5) ...
+#9 27.78 Setting up python3.8-minimal (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.24 Setting up procps (2:3.3.16-1ubuntu2.4) ...
+#9 28.28 Setting up libc6-dev:amd64 (2.31-0ubuntu9.17) ...
+#9 28.28 Setting up libpython3.8-stdlib:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.28 Setting up python3.8 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.80 Setting up binutils-x86-64-linux-gnu (2.34-6ubuntu1.10) ...
+#9 28.80 Setting up libharfbuzz-dev:amd64 (2.6.4-1ubuntu4.3) ...
+#9 28.80 Setting up libc6-dev-i386 (2.31-0ubuntu9.17) ...
+#9 28.81 Setting up openssh-client (1:8.2p1-4ubuntu0.12) ...
+#9 28.83 Setting up libhx509-5-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.83 Setting up binutils (2.34-6ubuntu1.10) ...
+#9 28.83 Setting up libc6-dev-x32 (2.31-0ubuntu9.17) ...
+#9 28.83 Setting up libpython3.8:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.83 Setting up libkrb5-26-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.84 Setting up binutils-dev (2.34-6ubuntu1.10) ...
+#9 28.84 Setting up libheimntlm0-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.84 Setting up libgssapi3-heimdal:amd64 (7.7.0+dfsg-1ubuntu1.4) ...
+#9 28.84 Setting up libpython3.8-dev:amd64 (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.84 Setting up python3.8-dev (3.8.10-0ubuntu1~20.04.15) ...
+#9 28.84 Setting up libldap-2.4-2:amd64 (2.4.49+dfsg-2ubuntu1.10) ...
+#9 28.84 Setting up libcurl3-gnutls:amd64 (7.68.0-1ubuntu2.25) ...
+#9 28.85 Setting up git (1:2.25.1-1ubuntu3.14) ...
+#9 28.87 Processing triggers for libc-bin (2.31-0ubuntu9.17) ...
+#9 28.89 Processing triggers for systemd (245.4-4ubuntu3.24) ...
+#9 28.91 Processing triggers for mime-support (3.64ubuntu1) ...
+#9 28.92 Processing triggers for ca-certificates (20240203~20.04.1) ...
+#9 28.92 Updating certificates in /etc/ssl/certs...
+#9 29.51 0 added, 0 removed; done.
+#9 29.51 Running hooks in /etc/ca-certificates/update.d...
+#9 29.51 done.
+#9 29.60 Reading package lists...
+#9 30.69 Building dependency tree...
+#9 30.86 Reading state information...
+#9 31.03 libffi-dev is already the newest version (3.3-4).
+#9 31.03 libffi-dev set to manually installed.
+#9 31.03 curl is already the newest version (7.68.0-1ubuntu2.25).
+#9 31.03 libssl-dev is already the newest version (1.1.1f-1ubuntu2.24).
+#9 31.03 xz-utils is already the newest version (5.2.4-1ubuntu1.1).
+#9 31.03 xz-utils set to manually installed.
+#9 31.03 zlib1g-dev is already the newest version (1:1.2.11.dfsg-2ubuntu1.5).
+#9 31.03 zlib1g-dev set to manually installed.
+#9 31.03 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+#9 DONE 31.1s
+
+#10 [stage-1  3/15] RUN rm -rf /usr/local/bin/python3.8* /usr/local/bin/pip3 /usr/local/lib/python3.8     /usr/local/include/python3.8 /usr/local/lib/python3.8/site-packages
+#10 DONE 0.5s
+
+#11 [stage-1  4/15] COPY --from=base-image /usr/local/bin/python3* /usr/local/bin/
+#11 DONE 0.1s
+
+#12 [stage-1  5/15] COPY --from=base-image /usr/local/bin/pip3* /usr/local/bin/
+#12 DONE 0.0s
+
+#13 [stage-1  6/15] COPY --from=base-image /usr/local/lib/python3.10 /usr/local/lib/python3.10
+#13 DONE 9.2s
+
+#14 [stage-1  7/15] COPY --from=base-image /usr/local/include/python3.10 /usr/local/include/python3.10
+#14 DONE 0.1s
+
+#15 [stage-1  8/15] COPY --from=base-image /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
+#15 DONE 10.2s
+
+#16 [stage-1  9/15] COPY fuzzers /src/fuzzers
+#16 DONE 0.1s
+
+#17 [stage-1 10/15] COPY benchmarks/zlib_zlib_uncompress_fuzzer/benchmark.yaml /
+#17 DONE 0.0s
+
+#18 [stage-1 11/15] RUN mkdir /opt/fuzzbench/
+#18 DONE 0.2s
+
+#19 [stage-1 12/15] COPY docker/benchmark-builder/checkout_commit.py /opt/fuzzbench/
+#19 DONE 0.0s
+
+#20 [stage-1 13/15] RUN export CHECKOUT_COMMIT=$(cat /benchmark.yaml | tr -d ' ' | grep 'commit:' | cut -d ':' -f2) &&     python3 -u /opt/fuzzbench/checkout_commit.py $CHECKOUT_COMMIT /src
+#20 0.269 Checking out commit d71dc66fa8a153fb6e7c626847095d9697a6cf42
+#20 1.178 From https://github.com/madler/zlib
+#20 1.178    ab0266a..5a82f71  develop    -> origin/develop
+#20 1.321  * [new tag]         v0.71       -> v0.71
+#20 1.321  * [new tag]         v0.79       -> v0.79
+#20 1.321  * [new tag]         v0.8        -> v0.8
+#20 1.321  * [new tag]         v0.9        -> v0.9
+#20 1.321  * [new tag]         v0.91       -> v0.91
+#20 1.321  * [new tag]         v0.92       -> v0.92
+#20 1.322  * [new tag]         v0.93       -> v0.93
+#20 1.322  * [new tag]         v0.94       -> v0.94
+#20 1.322  * [new tag]         v0.95       -> v0.95
+#20 1.322  * [new tag]         v0.99       -> v0.99
+#20 1.322  * [new tag]         v1.0-pre    -> v1.0-pre
+#20 1.322  * [new tag]         v1.0.1      -> v1.0.1
+#20 1.322  * [new tag]         v1.0.2      -> v1.0.2
+#20 1.322  * [new tag]         v1.0.4      -> v1.0.4
+#20 1.323  * [new tag]         v1.0.5      -> v1.0.5
+#20 1.323  * [new tag]         v1.0.7      -> v1.0.7
+#20 1.323  * [new tag]         v1.0.8      -> v1.0.8
+#20 1.323  * [new tag]         v1.0.9      -> v1.0.9
+#20 1.323  * [new tag]         v1.1.0      -> v1.1.0
+#20 1.323  * [new tag]         v1.1.1      -> v1.1.1
+#20 1.323  * [new tag]         v1.1.2      -> v1.1.2
+#20 1.324  * [new tag]         v1.1.3      -> v1.1.3
+#20 1.324  * [new tag]         v1.1.4      -> v1.1.4
+#20 1.324  * [new tag]         v1.2.0      -> v1.2.0
+#20 1.324  * [new tag]         v1.2.0.1    -> v1.2.0.1
+#20 1.324  * [new tag]         v1.2.0.2    -> v1.2.0.2
+#20 1.324  * [new tag]         v1.2.0.3    -> v1.2.0.3
+#20 1.324  * [new tag]         v1.2.0.4    -> v1.2.0.4
+#20 1.324  * [new tag]         v1.2.0.5    -> v1.2.0.5
+#20 1.325  * [new tag]         v1.2.0.6    -> v1.2.0.6
+#20 1.325  * [new tag]         v1.2.0.7    -> v1.2.0.7
+#20 1.325  * [new tag]         v1.2.0.8    -> v1.2.0.8
+#20 1.325  * [new tag]         v1.2.1      -> v1.2.1
+#20 1.325  * [new tag]         v1.2.1.1    -> v1.2.1.1
+#20 1.325  * [new tag]         v1.2.1.2    -> v1.2.1.2
+#20 1.325  * [new tag]         v1.2.10     -> v1.2.10
+#20 1.326  * [new tag]         v1.2.11     -> v1.2.11
+#20 1.326  * [new tag]         v1.2.12     -> v1.2.12
+#20 1.326  * [new tag]         v1.2.13     -> v1.2.13
+#20 1.326  * [new tag]         v1.2.2      -> v1.2.2
+#20 1.326  * [new tag]         v1.2.2.1    -> v1.2.2.1
+#20 1.326  * [new tag]         v1.2.2.2    -> v1.2.2.2
+#20 1.326  * [new tag]         v1.2.2.3    -> v1.2.2.3
+#20 1.327  * [new tag]         v1.2.2.4    -> v1.2.2.4
+#20 1.327  * [new tag]         v1.2.3      -> v1.2.3
+#20 1.327  * [new tag]         v1.2.3.1    -> v1.2.3.1
+#20 1.327  * [new tag]         v1.2.3.2    -> v1.2.3.2
+#20 1.327  * [new tag]         v1.2.3.3    -> v1.2.3.3
+#20 1.327  * [new tag]         v1.2.3.4    -> v1.2.3.4
+#20 1.327  * [new tag]         v1.2.3.5    -> v1.2.3.5
+#20 1.327  * [new tag]         v1.2.3.6    -> v1.2.3.6
+#20 1.328  * [new tag]         v1.2.3.7    -> v1.2.3.7
+#20 1.328  * [new tag]         v1.2.3.8    -> v1.2.3.8
+#20 1.328  * [new tag]         v1.2.3.9    -> v1.2.3.9
+#20 1.328  * [new tag]         v1.2.4      -> v1.2.4
+#20 1.328  * [new tag]         v1.2.4-pre1 -> v1.2.4-pre1
+#20 1.328  * [new tag]         v1.2.4-pre2 -> v1.2.4-pre2
+#20 1.328  * [new tag]         v1.2.4.1    -> v1.2.4.1
+#20 1.329  * [new tag]         v1.2.4.2    -> v1.2.4.2
+#20 1.329  * [new tag]         v1.2.4.3    -> v1.2.4.3
+#20 1.329  * [new tag]         v1.2.4.4    -> v1.2.4.4
+#20 1.329  * [new tag]         v1.2.4.5    -> v1.2.4.5
+#20 1.329  * [new tag]         v1.2.5      -> v1.2.5
+#20 1.329  * [new tag]         v1.2.5.1    -> v1.2.5.1
+#20 1.329  * [new tag]         v1.2.5.2    -> v1.2.5.2
+#20 1.330  * [new tag]         v1.2.5.3    -> v1.2.5.3
+#20 1.330  * [new tag]         v1.2.6      -> v1.2.6
+#20 1.330  * [new tag]         v1.2.6.1    -> v1.2.6.1
+#20 1.330  * [new tag]         v1.2.7      -> v1.2.7
+#20 1.330  * [new tag]         v1.2.7.1    -> v1.2.7.1
+#20 1.330  * [new tag]         v1.2.7.2    -> v1.2.7.2
+#20 1.330  * [new tag]         v1.2.7.3    -> v1.2.7.3
+#20 1.331  * [new tag]         v1.2.8      -> v1.2.8
+#20 1.331  * [new tag]         v1.2.9      -> v1.2.9
+#20 1.331  * [new tag]         v1.3        -> v1.3
+#20 1.331  * [new tag]         v1.3.1      -> v1.3.1
+#20 1.390 Note: switching to 'd71dc66fa8a153fb6e7c626847095d9697a6cf42'.
+#20 1.390 
+#20 1.390 You are in 'detached HEAD' state. You can look around, make experimental
+#20 1.390 changes and commit them, and you can discard any commits you make in this
+#20 1.390 state without impacting any branches by switching back to a branch.
+#20 1.390 
+#20 1.390 If you want to create a new branch to retain commits you create, you may
+#20 1.390 do so (now or later) by using -c with the switch command. Example:
+#20 1.390 
+#20 1.390   git switch -c <new-branch-name>
+#20 1.390 
+#20 1.390 Or undo this operation with:
+#20 1.390 
+#20 1.390   git switch -
+#20 1.390 
+#20 1.390 Turn off this advice by setting config variable advice.detachedHead to false
+#20 1.390 
+#20 1.390 HEAD is now at d71dc66 Fix error in comment on the polynomial representation of a byte.
+#20 DONE 1.4s
+
+#21 [stage-1 14/15] COPY docker/benchmark-builder/fuzzer_build /usr/bin/fuzzer_build
+#21 DONE 0.1s
+
+#22 [stage-1 15/15] RUN echo "Run fuzzer_build to build the target" && if [ -z "$debug_builder" ] ; then fuzzer_build; fi
+#22 0.193 Run fuzzer_build to build the target
+#22 0.258 FUZZ_TARGET = zlib_uncompress_fuzzer
+#22 0.258 CFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3
+#22 0.258 CXXFLAGS = -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3
+#22 0.264 AFL++ build: 
+#22 0.264 ['tracepc', 'cmplog', 'dict2file']
+#22 0.620 Building benchmark zlib_zlib_uncompress_fuzzer with fuzzer aflmmbb_no_selection
+#22 0.622 + ./configure
+#22 0.698 Checking for shared library support...
+#22 0.746 Building shared library libz.so.1.2.11.1-motley with /afl/afl-clang-fast.
+#22 0.777 Checking for size_t... Yes.
+#22 0.795 Checking for off64_t... Yes.
+#22 0.796 Checking for fseeko... Yes.
+#22 0.848 Checking for strerror... Yes.
+#22 0.877 Checking for unistd.h... Yes.
+#22 0.899 Checking for stdarg.h... Yes.
+#22 0.927 Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf().
+#22 0.982 Checking for vsnprintf() in stdio.h... Yes.
+#22 1.008 Checking for return value of vsnprintf()... Yes.
+#22 1.027 Checking for attribute(visibility) support... Yes.
+#22 1.035 ++ nproc
+#22 1.036 + make -j128 clean
+#22 1.038 rm -f *.o *.lo *~ \
+#22 1.038    example minigzip examplesh minigzipsh \
+#22 1.038    example64 minigzip64 \
+#22 1.038    infcover \
+#22 1.038    libz.* foo.gz so_locations \
+#22 1.038    _match.s maketree contrib/infback9/*.o
+#22 1.041 rm -rf objs
+#22 1.041 rm -f *.gcda *.gcno *.gcov
+#22 1.043 rm -f contrib/infback9/*.gcda contrib/infback9/*.gcno contrib/infback9/*.gcov
+#22 1.045 ++ nproc
+#22 1.046 + make -j128 all
+#22 1.048 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -c -o example.o test/example.c
+#22 1.048 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o adler32.o adler32.c
+#22 1.048 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o crc32.o crc32.c
+#22 1.049 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o deflate.o deflate.c
+#22 1.049 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o infback.o infback.c
+#22 1.049 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inffast.o inffast.c
+#22 1.049 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inflate.o inflate.c
+#22 1.050 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inftrees.o inftrees.c
+#22 1.050 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o trees.o trees.c
+#22 1.050 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o zutil.o zutil.c
+#22 1.050 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o compress.o compress.c
+#22 1.051 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o uncompr.o uncompr.c
+#22 1.051 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzclose.o gzclose.c
+#22 1.051 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzlib.o gzlib.c
+#22 1.052 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzread.o gzread.c
+#22 1.052 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzwrite.o gzwrite.c
+#22 1.052 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -c -o minigzip.o test/minigzip.c
+#22 1.055 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/adler32.o adler32.c
+#22 1.056 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/crc32.o crc32.c
+#22 1.056 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/deflate.o deflate.c
+#22 1.056 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/infback.o infback.c
+#22 1.056 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/inffast.o inffast.c
+#22 1.056 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/inflate.o inflate.c
+#22 1.057 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/inftrees.o inftrees.c
+#22 1.057 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/trees.o trees.c
+#22 1.057 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/zutil.o zutil.c
+#22 1.058 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/compress.o compress.c
+#22 1.058 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/uncompr.o uncompr.c
+#22 1.058 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/gzclose.o gzclose.c
+#22 1.058 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/gzlib.o gzlib.c
+#22 1.058 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -D_FILE_OFFSET_BITS=64 -c -o example64.o test/example.c
+#22 1.058 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -D_FILE_OFFSET_BITS=64 -c -o minigzip64.o test/minigzip.c
+#22 1.059 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/gzread.o gzread.c
+#22 1.060 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/gzwrite.o gzwrite.c
+#22 2.250 ar rc libz.a adler32.o crc32.o deflate.o infback.o inffast.o inflate.o inftrees.o trees.o zutil.o compress.o uncompr.o gzclose.o gzlib.o gzread.o gzwrite.o 
+#22 2.265 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o example example.o -L. libz.a
+#22 2.266 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o minigzip minigzip.o -L. libz.a
+#22 2.266 /afl/afl-clang-fast -shared -Wl,-soname,libz.so.1,--version-script,zlib.map -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o libz.so.1.2.11.1-motley adler32.lo crc32.lo deflate.lo infback.lo inffast.lo inflate.lo inftrees.lo trees.lo zutil.lo compress.lo uncompr.lo gzclose.lo gzlib.lo gzread.lo gzwrite.lo  -lc 
+#22 2.266 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o example64 example64.o -L. libz.a
+#22 2.266 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o minigzip64 minigzip64.o -L. libz.a
+#22 2.309 rm -f libz.so libz.so.1
+#22 2.310 ln -s libz.so.1.2.11.1-motley libz.so
+#22 2.311 ln -s libz.so.1.2.11.1-motley libz.so.1
+#22 2.312 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o examplesh example.o -L. libz.so.1.2.11.1-motley
+#22 2.312 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o minigzipsh minigzip.o -L. libz.so.1.2.11.1-motley
+#22 2.346 ++ basename -s .cc /src/zlib_uncompress_fuzzer.cc
+#22 2.347 + b=zlib_uncompress_fuzzer
+#22 2.347 + /afl/afl-clang-fast++ -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -std=c++11 -I. /src/zlib_uncompress_fuzzer.cc -o /out/zlib_uncompress_fuzzer /libAFLDriver.a ./libz.a
+#22 2.413 + zip /out/seed_corpus.zip CMakeLists.txt Makefile.in adler32.c adler32.lo adler32.o compress.c compress.lo compress.o configure.log crc32.c crc32.h crc32.lo crc32.o deflate.c deflate.h deflate.lo deflate.o example.o example64.o gzclose.c gzclose.lo gzclose.o gzguts.h gzlib.c gzlib.lo gzlib.o gzread.c gzread.lo gzread.o gzwrite.c gzwrite.lo gzwrite.o infback.c infback.lo infback.o inffast.c inffast.h inffast.lo inffast.o inffixed.h inflate.c inflate.h inflate.lo inflate.o inftrees.c inftrees.h inftrees.lo inftrees.o libz.a libz.so libz.so.1 libz.so.1.2.11.1-motley make_vms.com minigzip.o minigzip64.o treebuild.xml trees.c trees.h trees.lo trees.o uncompr.c uncompr.lo uncompr.o zconf.h zconf.h.cmakein zconf.h.in zlib.3 zlib.3.pdf zlib.h zlib.map zlib.pc zlib.pc.cmakein zlib.pc.in zutil.c zutil.h zutil.lo zutil.o
+#22 2.415   adding: CMakeLists.txt (deflated 68%)
+#22 2.416   adding: Makefile.in (deflated 77%)
+#22 2.416   adding: adler32.c (deflated 69%)
+#22 2.416   adding: adler32.lo (deflated 65%)
+#22 2.417   adding: adler32.o (deflated 65%)
+#22 2.417   adding: compress.c (deflated 63%)
+#22 2.417   adding: compress.lo (deflated 68%)
+#22 2.418   adding: compress.o (deflated 68%)
+#22 2.418   adding: configure.log (deflated 78%)
+#22 2.419   adding: crc32.c (deflated 75%)
+#22 2.419   adding: crc32.h (deflated 61%)
+#22 2.447   adding: crc32.lo (deflated 51%)
+#22 2.448   adding: crc32.o (deflated 51%)
+#22 2.449   adding: deflate.c (deflated 76%)
+#22 2.452   adding: deflate.h (deflated 64%)
+#22 2.452   adding: deflate.lo (deflated 70%)
+#22 2.459   adding: deflate.o (deflated 70%)
+#22 2.465   adding: example.o (deflated 71%)
+#22 2.467   adding: example64.o (deflated 71%)
+#22 2.469   adding: gzclose.c (deflated 41%)
+#22 2.469   adding: gzclose.lo (deflated 65%)
+#22 2.469   adding: gzclose.o (deflated 65%)
+#22 2.470   adding: gzguts.h (deflated 63%)
+#22 2.470   adding: gzlib.c (deflated 73%)
+#22 2.470   adding: gzlib.lo (deflated 70%)
+#22 2.472   adding: gzlib.o (deflated 70%)
+#22 2.474   adding: gzread.c (deflated 74%)
+#22 2.474   adding: gzread.lo (deflated 68%)
+#22 2.476   adding: gzread.o (deflated 68%)
+#22 2.478   adding: gzwrite.c (deflated 79%)
+#22 2.479   adding: gzwrite.lo (deflated 68%)
+#22 2.481   adding: gzwrite.o (deflated 68%)
+#22 2.483   adding: infback.c (deflated 76%)
+#22 2.483   adding: infback.lo (deflated 64%)
+#22 2.485   adding: infback.o (deflated 64%)
+#22 2.487   adding: inffast.c (deflated 75%)
+#22 2.488   adding: inffast.h (deflated 32%)
+#22 2.488   adding: inffast.lo (deflated 63%)
+#22 2.489   adding: inffast.o (deflated 63%)
+#22 2.490   adding: inffixed.h (deflated 75%)
+#22 2.490   adding: inflate.c (deflated 77%)
+#22 2.492   adding: inflate.h (deflated 67%)
+#22 2.492   adding: inflate.lo (deflated 65%)
+#22 2.498   adding: inflate.o (deflated 65%)
+#22 2.503   adding: inftrees.c (deflated 67%)
+#22 2.504   adding: inftrees.h (deflated 58%)
+#22 2.504   adding: inftrees.lo (deflated 63%)
+#22 2.505   adding: inftrees.o (deflated 63%)
+#22 2.505   adding: libz.a (deflated 67%)
+#22 2.536   adding: libz.so (deflated 57%)
+#22 2.556   adding: libz.so.1 (deflated 57%)
+#22 2.577   adding: libz.so.1.2.11.1-motley (deflated 57%)
+#22 2.597   adding: make_vms.com (deflated 72%)
+#22 2.598   adding: minigzip.o (deflated 69%)
+#22 2.600   adding: minigzip64.o (deflated 69%)
+#22 2.601   adding: treebuild.xml (deflated 80%)
+#22 2.601   adding: trees.c (deflated 73%)
+#22 2.602   adding: trees.h (deflated 83%)
+#22 2.603   adding: trees.lo (deflated 65%)
+#22 2.606   adding: trees.o (deflated 65%)
+#22 2.608   adding: uncompr.c (deflated 62%)
+#22 2.609   adding: uncompr.lo (deflated 64%)
+#22 2.609   adding: uncompr.o (deflated 64%)
+#22 2.609   adding: zconf.h (deflated 73%)
+#22 2.610   adding: zconf.h.cmakein (deflated 73%)
+#22 2.611   adding: zconf.h.in (deflated 73%)
+#22 2.611   adding: zlib.3 (deflated 54%)
+#22 2.611   adding: zlib.3.pdf (deflated 17%)
+#22 2.612   adding: zlib.h (deflated 73%)
+#22 2.616   adding: zlib.map (deflated 68%)
+#22 2.616   adding: zlib.pc (deflated 38%)
+#22 2.616   adding: zlib.pc.cmakein (deflated 39%)
+#22 2.617   adding: zlib.pc.in (deflated 38%)
+#22 2.617   adding: zutil.c (deflated 65%)
+#22 2.617   adding: zutil.h (deflated 63%)
+#22 2.617   adding: zutil.lo (deflated 71%)
+#22 2.617   adding: zutil.o (deflated 71%)
+#22 2.781 Re-building benchmark for CmpLog fuzzing target
+#22 2.781 Building benchmark zlib_zlib_uncompress_fuzzer with fuzzer aflmmbb_no_selection
+#22 2.783 + ./configure
+#22 2.857 Checking for shared library support...
+#22 2.903 Building shared library libz.so.1.2.11.1-motley with /afl/afl-clang-fast.
+#22 2.927 Checking for size_t... Yes.
+#22 2.945 Checking for off64_t... Yes.
+#22 2.946 Checking for fseeko... Yes.
+#22 2.998 Checking for strerror... Yes.
+#22 3.026 Checking for unistd.h... Yes.
+#22 3.049 Checking for stdarg.h... Yes.
+#22 3.076 Checking whether to use vs[n]printf() or s[n]printf()... using vs[n]printf().
+#22 3.131 Checking for vsnprintf() in stdio.h... Yes.
+#22 3.157 Checking for return value of vsnprintf()... Yes.
+#22 3.177 Checking for attribute(visibility) support... Yes.
+#22 3.186 ++ nproc
+#22 3.186 + make -j128 clean
+#22 3.188 rm -f *.o *.lo *~ \
+#22 3.188    example minigzip examplesh minigzipsh \
+#22 3.188    example64 minigzip64 \
+#22 3.188    infcover \
+#22 3.188    libz.* foo.gz so_locations \
+#22 3.188    _match.s maketree contrib/infback9/*.o
+#22 3.190 rm -rf objs
+#22 3.190 rm -f *.gcda *.gcno *.gcov
+#22 3.192 rm -f contrib/infback9/*.gcda contrib/infback9/*.gcno contrib/infback9/*.gcov
+#22 3.194 ++ nproc
+#22 3.195 + make -j128 all
+#22 3.197 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -c -o example.o test/example.c
+#22 3.197 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o adler32.o adler32.c
+#22 3.198 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o crc32.o crc32.c
+#22 3.198 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o deflate.o deflate.c
+#22 3.198 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o infback.o infback.c
+#22 3.198 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inffast.o inffast.c
+#22 3.199 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inflate.o inflate.c
+#22 3.199 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o inftrees.o inftrees.c
+#22 3.199 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o trees.o trees.c
+#22 3.199 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o zutil.o zutil.c
+#22 3.200 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o compress.o compress.c
+#22 3.200 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o uncompr.o uncompr.c
+#22 3.200 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzclose.o gzclose.c
+#22 3.200 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzlib.o gzlib.c
+#22 3.201 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzread.o gzread.c
+#22 3.201 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -c -o gzwrite.o gzwrite.c
+#22 3.201 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -c -o minigzip.o test/minigzip.c
+#22 3.204 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/adler32.o adler32.c
+#22 3.204 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/crc32.o crc32.c
+#22 3.205 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/deflate.o deflate.c
+#22 3.205 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/infback.o infback.c
+#22 3.205 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/inffast.o inffast.c
+#22 3.205 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/inflate.o inflate.c
+#22 3.205 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/inftrees.o inftrees.c
+#22 3.206 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/trees.o trees.c
+#22 3.206 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/zutil.o zutil.c
+#22 3.206 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/compress.o compress.c
+#22 3.207 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/uncompr.o uncompr.c
+#22 3.207 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/gzclose.o gzclose.c
+#22 3.208 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -D_FILE_OFFSET_BITS=64 -c -o example64.o test/example.c
+#22 3.208 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -I. -D_FILE_OFFSET_BITS=64 -c -o minigzip64.o test/minigzip.c
+#22 3.208 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/gzlib.o gzlib.c
+#22 3.209 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/gzread.o gzread.c
+#22 3.210 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN  -DPIC -c -o objs/gzwrite.o gzwrite.c
+#22 4.161 ar rc libz.a adler32.o crc32.o deflate.o infback.o inffast.o inflate.o inftrees.o trees.o zutil.o compress.o uncompr.o gzclose.o gzlib.o gzread.o gzwrite.o 
+#22 4.178 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o example example.o -L. libz.a
+#22 4.178 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o minigzip minigzip.o -L. libz.a
+#22 4.179 /afl/afl-clang-fast -shared -Wl,-soname,libz.so.1,--version-script,zlib.map -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -fPIC -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o libz.so.1.2.11.1-motley adler32.lo crc32.lo deflate.lo infback.lo inffast.lo inflate.lo inftrees.lo trees.lo zutil.lo compress.lo uncompr.lo gzclose.lo gzlib.lo gzread.lo gzwrite.lo  -lc 
+#22 4.179 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o example64 example64.o -L. libz.a
+#22 4.179 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o minigzip64 minigzip64.o -L. libz.a
+#22 4.223 rm -f libz.so libz.so.1
+#22 4.224 ln -s libz.so.1.2.11.1-motley libz.so
+#22 4.225 ln -s libz.so.1.2.11.1-motley libz.so.1
+#22 4.227 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o examplesh example.o -L. libz.so.1.2.11.1-motley
+#22 4.227 /afl/afl-clang-fast -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -O3 -D_LARGEFILE64_SOURCE=1 -DHAVE_HIDDEN -o minigzipsh minigzip.o -L. libz.so.1.2.11.1-motley
+#22 4.263 ++ basename -s .cc /src/zlib_uncompress_fuzzer.cc
+#22 4.263 + b=zlib_uncompress_fuzzer
+#22 4.263 + /afl/afl-clang-fast++ -DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION -pthread -Wl,--no-as-needed -Wl,-ldl -Wl,-lm -Wno-unused-command-line-argument -stdlib=libc++ -O3 -std=c++11 -I. /src/zlib_uncompress_fuzzer.cc -o /out/cmplog/zlib_uncompress_fuzzer /libAFLDriver.a ./libz.a
+#22 4.333 + zip /out/cmplog/seed_corpus.zip CMakeLists.txt Makefile.in adler32.c adler32.lo adler32.o compress.c compress.lo compress.o configure.log crc32.c crc32.h crc32.lo crc32.o deflate.c deflate.h deflate.lo deflate.o example.o example64.o gzclose.c gzclose.lo gzclose.o gzguts.h gzlib.c gzlib.lo gzlib.o gzread.c gzread.lo gzread.o gzwrite.c gzwrite.lo gzwrite.o infback.c infback.lo infback.o inffast.c inffast.h inffast.lo inffast.o inffixed.h inflate.c inflate.h inflate.lo inflate.o inftrees.c inftrees.h inftrees.lo inftrees.o libz.a libz.so libz.so.1 libz.so.1.2.11.1-motley make_vms.com minigzip.o minigzip64.o treebuild.xml trees.c trees.h trees.lo trees.o uncompr.c uncompr.lo uncompr.o zconf.h zconf.h.cmakein zconf.h.in zlib.3 zlib.3.pdf zlib.h zlib.map zlib.pc zlib.pc.cmakein zlib.pc.in zutil.c zutil.h zutil.lo zutil.o
+#22 4.335   adding: CMakeLists.txt (deflated 68%)
+#22 4.336   adding: Makefile.in (deflated 77%)
+#22 4.336   adding: adler32.c (deflated 69%)
+#22 4.336   adding: adler32.lo (deflated 67%)
+#22 4.337   adding: adler32.o (deflated 67%)
+#22 4.338   adding: compress.c (deflated 63%)
+#22 4.338   adding: compress.lo (deflated 65%)
+#22 4.338   adding: compress.o (deflated 65%)
+#22 4.339   adding: configure.log (deflated 78%)
+#22 4.339   adding: crc32.c (deflated 75%)
+#22 4.339   adding: crc32.h (deflated 61%)
+#22 4.367   adding: crc32.lo (deflated 50%)
+#22 4.368   adding: crc32.o (deflated 50%)
+#22 4.369   adding: deflate.c (deflated 76%)
+#22 4.372   adding: deflate.h (deflated 64%)
+#22 4.372   adding: deflate.lo (deflated 70%)
+#22 4.378   adding: deflate.o (deflated 70%)
+#22 4.384   adding: example.o (deflated 73%)
+#22 4.386   adding: example64.o (deflated 73%)
+#22 4.389   adding: gzclose.c (deflated 41%)
+#22 4.389   adding: gzclose.lo (deflated 65%)
+#22 4.389   adding: gzclose.o (deflated 65%)
+#22 4.389   adding: gzguts.h (deflated 63%)
+#22 4.390   adding: gzlib.c (deflated 73%)
+#22 4.390   adding: gzlib.lo (deflated 73%)
+#22 4.392   adding: gzlib.o (deflated 73%)
+#22 4.394   adding: gzread.c (deflated 74%)
+#22 4.395   adding: gzread.lo (deflated 72%)
+#22 4.397   adding: gzread.o (deflated 72%)
+#22 4.400   adding: gzwrite.c (deflated 79%)
+#22 4.400   adding: gzwrite.lo (deflated 71%)
+#22 4.402   adding: gzwrite.o (deflated 71%)
+#22 4.404   adding: infback.c (deflated 76%)
+#22 4.405   adding: infback.lo (deflated 67%)
+#22 4.408   adding: infback.o (deflated 67%)
+#22 4.411   adding: inffast.c (deflated 75%)
+#22 4.411   adding: inffast.h (deflated 32%)
+#22 4.411   adding: inffast.lo (deflated 66%)
+#22 4.412   adding: inffast.o (deflated 66%)
+#22 4.414   adding: inffixed.h (deflated 75%)
+#22 4.414   adding: inflate.c (deflated 77%)
+#22 4.416   adding: inflate.h (deflated 67%)
+#22 4.416   adding: inflate.lo (deflated 69%)
+#22 4.423   adding: inflate.o (deflated 69%)
+#22 4.429   adding: inftrees.c (deflated 67%)
+#22 4.430   adding: inftrees.h (deflated 58%)
+#22 4.430   adding: inftrees.lo (deflated 67%)
+#22 4.431   adding: inftrees.o (deflated 67%)
+#22 4.432   adding: libz.a (deflated 68%)
+#22 4.466   adding: libz.so (deflated 58%)
+#22 4.489   adding: libz.so.1 (deflated 58%)
+#22 4.513   adding: libz.so.1.2.11.1-motley (deflated 58%)
+#22 4.537   adding: make_vms.com (deflated 72%)
+#22 4.538   adding: minigzip.o (deflated 69%)
+#22 4.539   adding: minigzip64.o (deflated 69%)
+#22 4.540   adding: treebuild.xml (deflated 80%)
+#22 4.541   adding: trees.c (deflated 73%)
+#22 4.542   adding: trees.h (deflated 83%)
+#22 4.542   adding: trees.lo (deflated 69%)
+#22 4.546   adding: trees.o (deflated 69%)
+#22 4.549   adding: uncompr.c (deflated 62%)
+#22 4.549   adding: uncompr.lo (deflated 66%)
+#22 4.550   adding: uncompr.o (deflated 66%)
+#22 4.550   adding: zconf.h (deflated 73%)
+#22 4.551   adding: zconf.h.cmakein (deflated 73%)
+#22 4.551   adding: zconf.h.in (deflated 73%)
+#22 4.552   adding: zlib.3 (deflated 54%)
+#22 4.552   adding: zlib.3.pdf (deflated 17%)
+#22 4.552   adding: zlib.h (deflated 73%)
+#22 4.556   adding: zlib.map (deflated 68%)
+#22 4.556   adding: zlib.pc (deflated 38%)
+#22 4.556   adding: zlib.pc.cmakein (deflated 39%)
+#22 4.557   adding: zlib.pc.in (deflated 38%)
+#22 4.557   adding: zutil.c (deflated 65%)
+#22 4.557   adding: zutil.h (deflated 63%)
+#22 4.557   adding: zutil.lo (deflated 71%)
+#22 4.557   adding: zutil.o (deflated 71%)
+#22 DONE 4.7s
+
+#23 exporting to image
+#23 exporting layers
+#23 exporting layers 5.0s done
+#23 preparing layers for inline cache 0.1s done
+#23 writing image sha256:bf94a72acb938402a85d441613d87cdb78bd82e9916b3f7a2f8536a382b90f00 done
+#23 naming to gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer done
+#23 DONE 5.0s
+
+ [33m4 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG $parent_image results in empty or invalid base image name (line 20)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 26)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 27)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 28)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate \
+--file fuzzers/aflmmbb_no_selection/runner.Dockerfile \
+fuzzers/aflmmbb_no_selection
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from runner.Dockerfile
+#1 transferring dockerfile: 1.13kB done
+#1 WARN: UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/base-image:latest
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate
+#4 DONE 0.0s
+
+#5 [1/1] FROM gcr.io/fuzzbench/base-image:latest
+#5 CACHED
+
+#6 exporting to image
+#6 exporting layers done
+#6 preparing layers for inline cache done
+#6 writing image sha256:0dcae0633340983dc0f0325a60e3ded9110cef498f835801c6f3e1c84d756bd0 done
+#6 naming to gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate done
+#6 DONE 0.0s
+
+ [33m1 warning found (use --debug to expand):
+[0m - UndefinedVar: Usage of undefined variable '$LD_LIBRARY_PATH' (line 18)
+docker build \
+--tag gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer \
+--build-arg BUILDKIT_INLINE_CACHE=1 \
+--cache-from gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer \
+--build-arg benchmark=zlib_zlib_uncompress_fuzzer \
+--build-arg fuzzer=aflmmbb_no_selection \
+--file docker/benchmark-runner/Dockerfile \
+.
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 3.23kB done
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+#1 WARN: InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+#1 WARN: LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+#1 WARN: JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)
+#1 DONE 0.0s
+
+#2 [internal] load metadata for gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate:latest
+#2 DONE 0.0s
+
+#3 [internal] load metadata for gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer:latest
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 220B done
+#4 DONE 0.0s
+
+#5 importing cache manifest from gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer
+#5 DONE 0.0s
+
+#6 [stage-1  1/12] FROM gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer-intermediate:latest
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 7.26MB 0.1s done
+#7 DONE 0.1s
+
+#8 [builder 1/1] FROM gcr.io/fuzzbench/builders/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer:latest
+#8 DONE 0.1s
+
+#9 [stage-1  2/12] RUN apt-get update -y &&     DEBIAN_FRONTEND="noninteractive" apt-get install -y     libglib2.0-0     libxml2     libarchive13     libgss3
+#9 CACHED
+
+#10 [stage-1  3/12] RUN mkdir -p /out
+#10 CACHED
+
+#11 [stage-1  4/12] WORKDIR /out
+#11 CACHED
+
+#12 [stage-1  5/12] COPY --from=builder /out/ ./
+#12 DONE 0.0s
+
+#13 [stage-1  6/12] COPY benchmarks /src/benchmarks
+#13 DONE 0.1s
+
+#14 [stage-1  7/12] COPY fuzzers /src/fuzzers
+#14 DONE 0.1s
+
+#15 [stage-1  8/12] RUN mkdir -p /out/seeds /out/corpus
+#15 DONE 0.2s
+
+#16 [stage-1  9/12] COPY common /src/common
+#16 DONE 0.1s
+
+#17 [stage-1 10/12] COPY experiment/runner.py /src/experiment/runner.py
+#17 DONE 0.0s
+
+#18 [stage-1 11/12] COPY docker/benchmark-runner /src/docker/benchmark-runner
+#18 DONE 0.0s
+
+#19 [stage-1 12/12] RUN chmod +x /src/docker/benchmark-runner/startup-runner.sh
+#19 DONE 0.2s
+
+#20 exporting to image
+#20 exporting layers 0.0s done
+#20 preparing layers for inline cache done
+#20 writing image sha256:e4862387a6217dd363767f9019bafaf797d412f64e3ff4d40875a8d7d7960722 done
+#20 naming to gcr.io/fuzzbench/runners/aflmmbb_no_selection/zlib_zlib_uncompress_fuzzer done
+#20 DONE 0.1s
+
+ [33m5 warnings found (use --debug to expand):
+[0m - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/builders/$fuzzer/$benchmark results in empty or invalid base image name (line 37)
+ - InvalidDefaultArgInFrom: Default value for ARG gcr.io/fuzzbench/runners/$fuzzer/$benchmark-intermediate results in empty or invalid base image name (line 41)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 53)
+ - LegacyKeyValueFormat: "ENV key=value" should be used instead of legacy "ENV key value" format (line 54)
+ - JSONArgsRecommended: JSON arguments recommended for ENTRYPOINT to prevent unintended behavior related to OS signals (line 86)
