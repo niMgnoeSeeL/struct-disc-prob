@@ -78,7 +78,7 @@ fuzzers/aflmmbb_no_selection
 #6 [ 9/13] RUN echo "dont cache2"
 #6 CACHED
 
-#7 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#7 [10/13] RUN git clone -b bb-no-selection <anonymized> /afl
 #7 CACHED
 
 #8 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install

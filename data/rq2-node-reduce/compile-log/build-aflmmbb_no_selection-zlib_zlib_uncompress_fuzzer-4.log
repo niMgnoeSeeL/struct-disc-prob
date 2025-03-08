@@ -99,7 +99,7 @@ fuzzers/aflmmbb_no_selection
 #13 [ 6/13] RUN apt-get install -y cpio libcapstone-dev # for Nyx mode
 #13 CACHED
 
-#14 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#14 [10/13] RUN git clone -b bb-no-selection <anonymized> /afl
 #14 CACHED
 
 #15 [ 9/13] RUN echo "dont cache2"

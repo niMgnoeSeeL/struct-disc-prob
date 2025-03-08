@@ -97,7 +97,7 @@ fuzzers/aflmmbb
 #11 [ 5/13] RUN apt-get install -y ninja-build # for QEMU mode
 #11 CACHED
 
-#12 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#12 [10/13] RUN git clone -b blackbox <anonymized> /afl
 #12 CACHED
 
 #13 [ 8/13] RUN apt-get install -y python3-pip # for Unicorn mode

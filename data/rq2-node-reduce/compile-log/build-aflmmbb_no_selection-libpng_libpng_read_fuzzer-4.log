@@ -99,7 +99,7 @@ fuzzers/aflmmbb_no_selection
 #9 [ 5/13] RUN apt-get install -y ninja-build # for QEMU mode
 #9 CACHED
 
-#10 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#10 [10/13] RUN git clone -b bb-no-selection <anonymized> /afl
 #10 CACHED
 
 #11 [ 8/13] RUN apt-get install -y python3-pip # for Unicorn mode

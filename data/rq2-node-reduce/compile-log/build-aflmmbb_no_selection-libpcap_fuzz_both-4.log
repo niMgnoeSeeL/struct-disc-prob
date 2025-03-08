@@ -93,7 +93,7 @@ fuzzers/aflmmbb_no_selection
 #11 [ 7/13] RUN apt-get install -y wget curl # for Frida mode
 #11 CACHED
 
-#12 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#12 [10/13] RUN git clone -b bb-no-selection <anonymized> /afl
 #12 CACHED
 
 #13 [ 5/13] RUN apt-get install -y ninja-build # for QEMU mode

@@ -91,7 +91,7 @@ fuzzers/aflmmbb
 #9 [11/13] RUN cd /afl &&     unset CFLAGS CXXFLAGS &&     export CC=clang AFL_NO_X86=1 &&     PYTHON_INCLUDE=/ make &&     cp utils/aflpp_driver/libAFLDriver.a /
 #9 CACHED
 
-#10 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#10 [10/13] RUN git clone -b blackbox <anonymized> /afl
 #10 CACHED
 
 #11 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install

@@ -81,7 +81,7 @@ fuzzers/aflmmbb_no_selection
 #7 [ 8/13] RUN apt-get install -y python3-pip # for Unicorn mode
 #7 CACHED
 
-#8 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#8 [10/13] RUN git clone -b bb-no-selection <anonymized> /afl
 #8 CACHED
 
 #9 [ 2/13] RUN apt-get update &&     apt-get install -y     build-essential python3-dev automake cmake git flex bison     libglib2.0-dev libpixman-1-dev python3-setuptools cargo libgtk-3-dev

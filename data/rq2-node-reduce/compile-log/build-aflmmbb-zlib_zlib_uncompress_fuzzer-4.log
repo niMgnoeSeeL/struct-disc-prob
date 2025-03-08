@@ -82,7 +82,7 @@ fuzzers/aflmmbb
 #7 [ 9/13] RUN echo "dont cache3"
 #7 CACHED
 
-#8 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#8 [10/13] RUN git clone -b blackbox <anonymized> /afl
 #8 CACHED
 
 #9 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install

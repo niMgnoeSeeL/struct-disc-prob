@@ -94,7 +94,7 @@ fuzzers/aflmmbb_no_selection
 #10 [11/13] RUN cd /afl &&     unset CFLAGS CXXFLAGS &&     export CC=clang AFL_NO_X86=1 &&     PYTHON_INCLUDE=/ make &&     cp utils/aflpp_driver/libAFLDriver.a /
 #10 CACHED
 
-#11 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#11 [10/13] RUN git clone -b bb-no-selection <anonymized> /afl
 #11 CACHED
 
 #12 [12/13] RUN cd /afl &&     PYTHON_INCLUDE=/ make all && make install

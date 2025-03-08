@@ -93,7 +93,7 @@ fuzzers/aflmmbb
 #10 [ 7/13] RUN apt-get install -y wget curl # for Frida mode
 #10 CACHED
 
-#11 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#11 [10/13] RUN git clone -b blackbox <anonymized> /afl
 #11 CACHED
 
 #12 [ 9/13] RUN echo "dont cache3"

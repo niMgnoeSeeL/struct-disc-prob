@@ -81,7 +81,7 @@ fuzzers/aflmmbb_no_selection
 #5 importing cache manifest from gcr.io/fuzzbench/builders/aflmmbb_no_selection/libjpeg-turbo_libjpeg_turbo_fuzzer-intermediate
 #5 DONE 0.0s
 
-#6 [10/13] RUN git clone -b bb-no-selection https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#6 [10/13] RUN git clone -b bb-no-selection <anonymized> /afl
 #6 CACHED
 
 #7 [11/13] RUN cd /afl &&     unset CFLAGS CXXFLAGS &&     export CC=clang AFL_NO_X86=1 &&     PYTHON_INCLUDE=/ make &&     cp utils/aflpp_driver/libAFLDriver.a /

@@ -81,7 +81,7 @@ fuzzers/aflmmbb
 #5 [ 1/13] FROM gcr.io/fuzzbench/builders/benchmark/libjpeg-turbo_libjpeg_turbo_fuzzer:latest
 #5 DONE 0.0s
 
-#6 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#6 [10/13] RUN git clone -b blackbox <anonymized> /afl
 #6 CACHED
 
 #7 [ 9/13] RUN echo "dont cache3"

@@ -102,7 +102,7 @@ fuzzers/aflmmbb
 #13 [ 9/13] RUN echo "dont cache3"
 #13 CACHED
 
-#14 [10/13] RUN git clone -b blackbox https://gitlab.mpi-sp.org/seongmin.lee/aflpp-covrec.git /afl
+#14 [10/13] RUN git clone -b blackbox <anonymized> /afl
 #14 0.184 Cloning into '/afl'...
 #14 DONE 2.1s
 
