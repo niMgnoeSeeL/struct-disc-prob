@@ -2,7 +2,7 @@
 
 In our paper, we conducted blackbox and greybox fuzzing experiments on the FuzzBench subjects. We built our implementation on top of AFL++ to record the number of discovered basic blocks, the number of singleton basic blocks (i.e., basic blocks that have been executed only once so far), and the number of singleton clusters (see the paper for the definition of singleton clusters). In this document, we provide the instructions to reproduce the experiments.
 
-This instruction is divided into two parts: (1) using modified AFL++ to record the fuzzing information (number of discovered basic blocks, number of singleton basic blocks, and number of singleton clusters) and (2) integrating the modified AFL++ with FuzzBench to conduct the experiments.
+This instruction is divided into two parts: (1) using modified AFL++ to record the fuzzing information (number of discovered basic blocks, number of singleton basic blocks, and number of singleton clusters) and (2) integrating the modified AFL++ with FuzzBench to conduct the experiments. If you want to reproduce the experiments conducted in the paper, you can directly follow the instructions in the second part. If you want to use the modified AFL++ to record the fuzzing information on your own target programs, you can follow the instructions in the first part.
 
 ## Environment Setup
 
@@ -42,6 +42,8 @@ $ export AFL_CUSTOM_MUTATOR_LIBRARY="${repo-root}/custom_mutators/examples/custo
 Follow the instructions in the AFL++ documentation to build and run the target program with AFL++.
 Then, the regular fuzzing process will be conducted, and the fuzzing information will be recorded in the `records.csv` file in the AFL++ output directory.
 
+> In folder `resource-modi-aflpp`, we seperately provide the resources used to modify AFL++: `custom_post_run.c`, `set.h`, and `set.c`. Those files are not needed to run the modified AFL++ with FuzzBench, as they are already included in the modified AFL++ repository. However, they are provided for reference and can be used to understand how the fuzzing information is recorded.
+
 ## Integrating Modified AFL++ with FuzzBench
 
 To conduct the experiments on FuzzBench, we need to integrate the modified AFL++ with FuzzBench. Below are the instructions to integrate the modified AFL++ with FuzzBench:
@@ -76,9 +78,9 @@ $ make run-{blackbox,blackbox-no-reduction,greybox}-{benchmark}
 
 Under the `experiment-resources/benchmarks` directory, we provide the list of subject programs used in the experiments. 
 
-1. It contains eight subject programs used for discovery probability analysis (RQ1, 2, and 4): `sqlite3`, `freetyep2`, `libxml2`, `libjpeg`, `zlib`, `libpcap`, `jsoncpp`, and `libpng`. Those subject programs are from the FuzzBench benchmark suite (commit: `2920e74f192e1b7add95eb5ac49b0e0049d1c876`). 
+1. It contains eight subject programs used for discovery probability analysis (RQ1, 2, and 4): `sqlite3`, `freetyep2`, `libxml2`, `libjpeg`, `zlib`, `libpcap`, `jsoncpp`, and `libpng`. Those subject programs are from the FuzzBench benchmark suite (commit: `2920e74f192e1b7add95eb5ac49b0e0049d1c876`). Their directories are named as `cov_<subject>`, where `<subject>` is the name of the subject program.
 
-2. It also contains four subject programs used for residual risk analysis (RQ3): `assimp`, `file`, `harfbuzz`, and `libxml2`. Those subject programs are from the FuzzBench benchmark suite (branch: `new-exp`) and the previous study "Regression Greybox Fuzzing" by Zhu et al. (CCS'21).
+2. It also contains four subject programs used for residual risk analysis (RQ3): `assimp`, `file`, `harfbuzz`, and `libxml2`. Those subject programs are from the FuzzBench benchmark suite (branch: `new-exp`) and the previous study "Regression Greybox Fuzzing" by Zhu et al. (CCS'21). Their directories are named as `bug_<subject>`, where `<subject>` is the name of the subject program.
 
 We share the subject programs in case the FuzzBench benchmark suite is updated.
 

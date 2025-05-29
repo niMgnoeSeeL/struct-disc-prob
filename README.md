@@ -11,7 +11,14 @@ This replication repository contains the data, result, and scripts for the paper
 ├── README.md                       # This file
 ├── Experiment-Reproduction.md      # Instructions to reproduce the experiments
 ├── experiment-resources/           # Resources to reproduce the experiments;
-│                                   # it will be available after the paper is accepted
+│   ├── fuzzers/                    # Modified AFL++ fuzzer instances
+│   │   ├── blackbox/
+│   │   ├── blackbox-no-reduction/
+│   │   └── greybox/
+│   ├── subjects/                   # Subjects used in the experiments
+│   │   ├── cov_<subject>           # FuzzBench subjects for RQ1, RQ2, and RQ4
+│   │   └── bug_<subject>           # Subjects for RQ3
+│   └── resourse-modi-aflpp/        # Resources to modify AFL++
 ├── data/                           # Data from the experiments and used in the analysis
 │   ├── rq1-discovery-probability/
 │   ├── rq2-node-reduce/
