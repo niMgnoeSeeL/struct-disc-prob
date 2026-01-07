@@ -14,7 +14,7 @@ This replication repository contains the data, result, and scripts for the paper
 │   ├── Experiment-Reproduction.md  # Instructions to reproduce experiments
 │   ├── docker/                     # Docker-based setup for AFL++ runs + residual risk analysis
 │   │   ├── Dockerfile
-│   │   └── build-docker.sh
+│   │   └── commands.sh
 │   └── resources/                  # Resources to reproduce the experiments
 │       ├── fuzzers/                # Modified AFL++ fuzzer instances
 │       │   ├── blackbox/

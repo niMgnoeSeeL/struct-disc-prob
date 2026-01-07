@@ -57,7 +57,7 @@ We modified AFL++ to record the fuzzing information. The modified AFL++ is avail
 - `blackbox-no-reduction`: The branch contains the modified AFL++ to record the fuzzing information for blackbox fuzzing without the node reduction.
 - `greybox`: The branch contains the modified AFL++ to record the fuzzing information for greybox fuzzing.
 
-We also provide a Docker-based setup under `replication/docker` that builds AFL++ from a chosen branch (`AFLPP_BRANCH=blackbox|blackbox-no-reduction|greybox`) and prepares a single-run example. See `replication/docker/Dockerfile` and `replication/docker/build-docker.sh` for build/run commands.
+We also provide a Docker-based setup under `replication/docker` that builds AFL++ from a chosen branch (`AFLPP_BRANCH=blackbox|blackbox-no-reduction|greybox`) and prepares a single-run example. See `replication/docker/Dockerfile` and `replication/docker/commands.sh` for build/run commands.
 
 ### Build (manual)
 
