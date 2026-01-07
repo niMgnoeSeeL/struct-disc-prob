@@ -16,14 +16,14 @@ This replication repository contains the data, result, and scripts for the paper
 │   │   ├── Dockerfile
 │   │   └── commands.sh
 │   └── resources/                  # Resources to reproduce the experiments
+│       ├── modi-aflpp/             # Resources to modify AFL++.
 │       ├── fuzzers/                # Modified AFL++ fuzzer instances
 │       │   ├── blackbox/
 │       │   ├── blackbox-no-reduction/
 │       │   └── greybox/
-│       ├── benchmarks/             # Subjects used in the experiments
-│       │   ├── cov_<subject>       # FuzzBench subjects for RQ1, RQ2, RQ4
-│       │   └── bug_<subject>       # Subjects for RQ3
-│       └── resourse-modi-aflpp/    # Resources to modify AFL++
+│       └── benchmarks/             # Subjects used in the experiments
+│           ├── cov_<subject>       # FuzzBench subjects for RQ1, RQ2, RQ4
+│           └── bug_<subject>       # Subjects for RQ3
 ├── data/                           # Data from the experiments and analysis
 │   ├── rq1-discovery-probability/
 │   ├── rq2-node-reduce/
