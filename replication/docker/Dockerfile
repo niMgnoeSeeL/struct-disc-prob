@@ -26,7 +26,7 @@ RUN git checkout "${AFLPP_BRANCH}" \
  && make install
 
 WORKDIR /opt/AFLplusplus/custom_mutators/examples
-RUN gcc -shared -Wall -O3 -I/opt/AFLplusplus/include set.h set.c custom_post_run.c -o custom_post_run.so
+RUN gcc -shared -fPIC -Wall -O3 -I/opt/AFLplusplus/include set.h set.c custom_post_run.c -o custom_post_run.so
 
 ENV AFL_CUSTOM_MUTATOR_LIBRARY=/opt/AFLplusplus/custom_mutators/examples/custom_post_run.so
 ENV PATH=/opt/AFLplusplus:${PATH}
