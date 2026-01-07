@@ -1,8 +1,8 @@
-# Artifact of the paper "Structure-aware Residual Risk Analysis"
+# Artifact of the paper "Dependency-aware Residual Risk Analysis"
 
 ## Repository Description
 
-This replication repository contains the data, result, and scripts for the paper "Structure-aware Residual Risk Analysis" submitted at the 48th International Conference on Software Engineering (ICSE 2026). The artifact is intended to reproduce the results in the paper and to provide the tool to conduct the experiments on their own systems.
+This replication repository contains the data, result, and scripts for the paper "Dependency-aware Residual Risk Analysis" accepted at the 48th International Conference on Software Engineering (ICSE 2026). The artifact is intended to reproduce the results in the paper and to provide the tool to conduct the experiments on their own systems.
 
 ## Directory Structure
 
