@@ -43,7 +43,7 @@ RUN apt-get install -y wget curl # for Frida mode
 RUN apt-get install -y python3-pip # for Unicorn mode
 
 # Download modified afl++.
-RUN git clone -b <blackbox-no-reduction> https://anonymized/TBU.git /afl
+RUN git clone -b blackbox-no-reduction https://github.com/niMgnoeSeeL/aflpp-covrec.git /afl
 
 # Build without Python support as we don't need it.
 # Set AFL_NO_X86 to skip flaky tests.
