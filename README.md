@@ -12,11 +12,11 @@ This replication repository contains the data, result, and scripts for the paper
 ├── paper.pdf                       # Paper PDF
 ├── replication/                    # Experiment replication materials
 │   ├── Experiment-Reproduction.md  # Instructions to reproduce experiments
+│   ├── modi-aflpp/                 # Resources to modify AFL++.
 │   ├── docker/                     # Docker-based setup for AFL++ runs + residual risk analysis
 │   │   ├── Dockerfile
 │   │   └── commands.sh
-│   └── resources/                  # Resources to reproduce the experiments
-│       ├── modi-aflpp/             # Resources to modify AFL++.
+│   └── resources/                  # Resources to reproduce the experiments with FuzzBench
 │       ├── fuzzers/                # Modified AFL++ fuzzer instances
 │       │   ├── blackbox/
 │       │   ├── blackbox-no-reduction/
@@ -68,7 +68,7 @@ There are four Jupyter Notebooks, one for each research question. The notebooks 
   - Stop time estimation accuracy (RQ1-2): It generates
     - Boxplot of the observed empirical discovery probabilities during the fuzzing process (Figure 2 in the supplementary material)
     - Stop time estimation accuracy (Table 3 in the main paper)
-- `scripts/RQ2.ipynb`: This script generates the result in RQ2. The script reads the data from the `data/rq2-dp` folder and generates the results presented in the paper. It
+- `scripts/RQ2.ipynb`: This script generates the result in RQ2. The script reads the data from the `data/rq2-node-reduce` folder and generates the results presented in the paper. It
   - checks the number of nodes with and without the node removal (The first part of Table 3),
   - checks the time spent on compiling the subject programs (The second part of Table 3), and
   - checks the exec_per_sec of the fuzzing runs with and without the node removal (The third part of Table 3)
