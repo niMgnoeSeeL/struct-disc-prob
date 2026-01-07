@@ -13,9 +13,42 @@ If you only want to reproduce the paper's experiments, you can follow Part 2 dir
 
 ## Environment Setup
 
-Our implementation is built on top of AFL++ and FuzzBench. Therefore the environmental requirements are the same as for AFL++ and FuzzBench. Below are the documents that provide the instructions to set up the environment for AFL++ and FuzzBench:
+Our implementation is built on top of AFL++ and FuzzBench. Therefore the environment requirements are the same as for AFL++ and FuzzBench. Below are the documents that provide the instructions to set up the environment for AFL++ and FuzzBench:
 - [Build and install AFL++](https://aflplus.plus/building/)
 - [FuzzBench Prerequisites](https://google.github.io/fuzzbench/getting-started/prerequisites/) (Only for Part 2)
+- [FuzzBench repository](https://github.com/google/fuzzbench)
+
+### System Requirements
+
+Measured on the single-run Docker image (blackbox branch):
+- Docker image size: 7.44 GB (`aflpp-covrec-blackbox:latest`)
+- `/opt/AFLplusplus`: 2.7 GB
+- `/opt/libxml2`: 108 MB
+- Output dir after a short run: 460 KB (`/opt/libxml2/fuzz/out`)
+- Container memory (after 5s of `afl-fuzz`): 36.85 MiB (via `docker stats --no-stream`)
+
+Full FuzzBench reproduction requirements depend on the number of benchmarks, time budgets, and repetitions; measure on your target setup.
+
+FuzzBench does not publish fixed system requirements. Its local experiment guide notes that trials do not enforce resource limits (CPU/memory), and provides flags to limit runner and measurer CPU usage. See the FuzzBench local experiment guide for details:
+- https://github.com/google/fuzzbench/blob/master/docs/running-a-local-experiment/running_a_local_experiment.md
+
+### Reproducibility Scope
+
+- **Single-run sanity check**: Docker-based run in `replication/docker` builds AFL++ (branch selectable) and runs a sample target (`libxml2`) to produce `records.csv`.
+- **Full experiments**: FuzzBench integration using `replication/resources/fuzzers` and `replication/resources/benchmarks` to reproduce the paper's blackbox/blackbox-no-reduction/greybox experiments.
+
+### Expected Runtime / Cost
+
+These are typical ranges and depend on hardware:
+- Docker build (AFL++ + dependencies, single-run image): ~23 minutes (1381.8s measured).
+- Single-run example (libxml2): depends on fuzzing duration.
+- Full FuzzBench experiments: depends on the number of benchmarks, trials, and time budgets.
+
+### Output Data Locations
+
+- AFL++ custom post-run metrics: `records.csv` in the AFL++ output directory (`-o`).
+- Example Docker run: `/opt/libxml2/fuzz/out/records.csv` inside the container.
+- FuzzBench results: the standard FuzzBench output directories under your FuzzBench workspace.
 
 ## Part 1: Using Modified AFL++ to Record Fuzzing Information
 
@@ -50,7 +83,7 @@ $ export AFL_CUSTOM_MUTATOR_LIBRARY="${repo-root}/custom_mutators/examples/custo
 
 Follow the instructions in the AFL++ documentation to build and run the target program with AFL++. Then, the regular fuzzing process will be conducted, and the fuzzing information will be recorded in the `records.csv` file in the AFL++ output directory.
 
-> In folder `replication/resources/resourse-modi-aflpp`, we seperately provide the resources used to modify AFL++: `custom_post_run.c`, `set.h`, and `set.c`. Those files are not needed to run the modified AFL++ with FuzzBench, as they are already included in the modified AFL++ repository. However, they are provided for reference and can be used to understand how the fuzzing information is recorded.
+> In folder `replication/resources/resourse-modi-aflpp`, we separately provide the resources used to modify AFL++: `custom_post_run.c`, `set.h`, and `set.c`. Those files are not needed to run the modified AFL++ with FuzzBench, as they are already included in the modified AFL++ repository. However, they are provided for reference and can be used to understand how the fuzzing information is recorded.
 
 ## Part 2: Integrating Modified AFL++ with FuzzBench
 
@@ -86,7 +119,7 @@ $ make run-{blackbox,blackbox-no-reduction,greybox}-{benchmark}
 
 Under `replication/resources/benchmarks`, we provide the list of subject programs used in the experiments.
 
-1. It contains eight subject programs used for discovery probability analysis (RQ1, 2, and 4): `sqlite3`, `freetyep2`, `libxml2`, `libjpeg`, `zlib`, `libpcap`, `jsoncpp`, and `libpng`. Those subject programs are from the FuzzBench benchmark suite (commit: `2920e74f192e1b7add95eb5ac49b0e0049d1c876`). Their directories are named as `cov_<subject>`, where `<subject>` is the name of the subject program.
+1. It contains eight subject programs used for discovery probability analysis (RQ1, 2, and 4): `sqlite3`, `freetype2`, `libxml2`, `libjpeg`, `zlib`, `libpcap`, `jsoncpp`, and `libpng`. Those subject programs are from the FuzzBench benchmark suite (commit: `2920e74f192e1b7add95eb5ac49b0e0049d1c876`). Their directories are named as `cov_<subject>`, where `<subject>` is the name of the subject program.
 
 2. It also contains four subject programs used for residual risk analysis (RQ3): `assimp`, `file`, `harfbuzz`, and `libxml2`. Those subject programs are from the FuzzBench benchmark suite (branch: `new-exp`) and the previous study "Regression Greybox Fuzzing" by Zhu et al. (CCS'21). Their directories are named as `bug_<subject>`, where `<subject>` is the name of the subject program.
 

@@ -43,6 +43,10 @@ In our paper, we conducted blackbox and greybox fuzzing experiments on the FuzzB
 
 In the rest of this document, we describe how to reproduce the analysis results presented in the paper using Jupyter Notebooks on the collected data.
 
+## Citation
+
+Please cite the ICSE'26 paper if you use this artifact. See `CITATION.cff` for details and BibTeX.
+
 ## How to reproduce the analysis
 
 ### Requirements

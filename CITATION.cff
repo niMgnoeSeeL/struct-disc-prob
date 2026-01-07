@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+title: "Dependency-aware Residual Risk Analysis"
+message: "If you use this artifact, please cite the ICSE'26 paper."
+type: software
+version: "icse26-artifact"
+date-released: 2026-04-01
+authors:
+  - family-names: Lee
+    given-names: Seongmin
+  - family-names: Böhme
+    given-names: Marcel
+preferred-citation:
+  type: conference-paper
+  title: "Dependency-aware Residual Risk Analysis"
+  authors:
+    - family-names: Lee
+      given-names: Seongmin
+    - family-names: Böhme
+      given-names: Marcel
+  year: 2026
+  month: 4
+  collection-title: "Proceedings of the IEEE/ACM 48th International Conference on Software Engineering (ICSE'26)"
+  url: "https://camps.aptaracorp.com//ACM_PMS/PMS/ACM/ICSE26/141/3352d465-b8f9-11f0-957d-16ffd757ba29/OUT/icse26-141.html"
